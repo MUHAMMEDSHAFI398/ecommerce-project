@@ -24,10 +24,13 @@ const mongoose = require('mongoose');
         type: String,
         required: true,
         trim: true
+    },
+    isBlocked:{
+        type:Boolean,
+        default:false
     }
 
  })
 //userSchema.plugin(validator)
 const user = mongoose.model('user',userSchema);
-
  module.exports = user

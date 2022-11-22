@@ -15,7 +15,13 @@ const securepassword = async (password) => {
 }
 
 const getHome = (req, res) => {
-  res.render('user/index');
+  let user=req.session.user
+  if(user){
+    customer=true
+  }else{
+    customer=false
+  }
+  res.render('user/index',{customer});
 }
 const getUserLogin = (req, res) => {
   res.render('user/login')
@@ -52,6 +58,7 @@ const postLogin = async (req, res) => {
     if(userData){
       const passwordMatch = await bcrypt.compare(password, userData.password)
       if(passwordMatch){
+        req.session.user=req.body.email
         res.redirect('/');
       }else {
         res.render('user/login',{invalid:"invalid username or password"});
@@ -63,6 +70,11 @@ const postLogin = async (req, res) => {
    console.log(error)
   }
 }
+const userLogout = (req,res)=>{
+  req.session.destroy();
+    res.redirect('/');
+}
+
 
 
 
@@ -71,4 +83,4 @@ const postLogin = async (req, res) => {
 
 // await bcrypt.hash(req.body.password,10);
 
-module.exports = { getHome, getUserLogin, getUserSignup, postSignup, postLogin };
+module.exports = { getHome, getUserLogin, getUserSignup, postSignup, postLogin ,userLogout};
