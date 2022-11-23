@@ -17,5 +17,10 @@ adminRouter.post('/postAdminLogin', adminController.postAdminLogin);
 adminRouter.get('/admin_home', adminController.getAdminHome);
 adminRouter.get('/adminLogout', adminController.adminLogout);
 adminRouter.get('/userDetails', adminController.getAllusers);
+adminRouter.get('/blockuser/:id', adminController.blockUser);
+adminRouter.get('/unblockuser/:id', adminController.unblockUser);
+adminRouter.get('/addproducts', adminController.addproducts);
+adminRouter.get('/productdetails', adminController.productdetails);
+adminRouter.post('/postproduct',adminController.postProduct);
 
 module.exports=adminRouter;

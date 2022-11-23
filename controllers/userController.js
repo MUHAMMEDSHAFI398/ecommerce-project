@@ -52,23 +52,28 @@ const postLogin = async (req, res) => {
   const email = req.body.email
   const password = req.body.password
   const userData = await user.findOne({email:email});
-
   console.log(userData)
-  try {
-    if(userData){
-      const passwordMatch = await bcrypt.compare(password, userData.password)
-      if(passwordMatch){
-        req.session.user=req.body.email
-        res.redirect('/');
-      }else {
+
+  if(userData.isBlocked === false){
+    try {
+      if(userData){
+        const passwordMatch = await bcrypt.compare(password, userData.password)
+        if(passwordMatch){
+          req.session.user=req.body.email
+          res.redirect('/');
+        }else {
+          res.render('user/login',{invalid:"invalid username or password"});
+        }
+      }else{
         res.render('user/login',{invalid:"invalid username or password"});
       }
-    }else{
-      res.render('user/login',{invalid:"invalid username or password"});
+    } catch (error) {
+     console.log(error)
     }
-  } catch (error) {
-   console.log(error)
+  }else{
+    res.render('user/login',{userblock:"You are blocked"});
   }
+ 
 }
 const userLogout = (req,res)=>{
   req.session.destroy();

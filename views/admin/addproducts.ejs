@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,11 +89,45 @@
             </div>
           </div>
           <div class="col py-3">
-            
+
+            <div class="container mt-5 w-50 border ">
+                <form action="/admin/postproduct" method="post" id="form">
+                    <div class="d-flex justify-content-center">
+                        <h1>Add Product</h1>
+                    </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input type="text" name="product_name" id="product_name" class="form-control" />
+                    <label class="form-label" for="form3Example1c">Product name</label>
+                  </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input type="text" name="price" id="price" class="form-control" />
+                    <label class="form-label" for="form3Example1c">Price</label>
+                  </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input type="text" name="category" id="category" class="form-control" />
+                    <label class="form-label" for="form3Example1c">Category</label>
+                  </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input type="text" name="description" id="description" class="form-control" />
+                    <label class="form-label" for="form3Example1c">Description</label>
+                  </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input type="text" name="stock" id="stock" class="form-control" />
+                    <label class="form-label" for="form3Example1c">Stock</label>
+                  </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input class="form-control" type="file" name="product_image" id="product_image">
+                    <label for="formFile" class="form-label">Product image</label>
+                  </div>
+                  <div class="d-flex justify-content-center" >
+                    <button type="submit" class="btn btn-success btn-block mb-4" >Add product</button>
+                  </div>
+                  
+                </form>
+            </div>
    
           </div>
         </div>
       </div>
 </body>
 </html>
-

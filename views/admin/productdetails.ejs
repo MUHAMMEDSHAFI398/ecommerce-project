@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,11 +88,46 @@
             </div>
           </div>
           <div class="col py-3">
+
+            <h1>Product Details</h1>
+            <table class="table" id="table">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Actions</th>
             
+                  </tr>
+                </thead>
+                <tbody>
+                    <% let count = 1 %>
+                   <% product.forEach((products)=>{ %>
+                   <tr>
+                     <td><%= count %></td>
+                     <td><%=products.product_name %></td>
+                     <td><%=products.price %></td>
+                     <td><%=products.category %></td>
+                     <td><%=products.description %></td>
+                     <td><%=products.stock %></td>
+                     <td>
+                       <a href="" class="btn btn-danger">Edit</a>
+                       <a href="" class="btn btn-success">Delete</a>
+                     </td>
+                   </tr>
+                 <%  count++ %>
+                   <% }) %>
+             
+                   
+                 </tbody>
+            
+              </table>
    
           </div>
         </div>
       </div>
 </body>
 </html>
-

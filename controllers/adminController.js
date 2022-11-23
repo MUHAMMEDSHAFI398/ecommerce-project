@@ -1,7 +1,8 @@
 const express = require('express');
 const body = require('body-parser');
 const adminRouter = require('../routes/admin');
-const userDetails = require('../model/userModal')
+const user = require('../model/userModal')
+const products = require('../model/productModal');
 const admin = { email: 'admin@gmail.com', password: 'pass' }
 
 
@@ -42,20 +43,59 @@ const adminLogout = (req,res)=>{
 const getAllusers = async (req,res)=>{
     let admin=req.session.admin
     if(admin){
-        let users = await userDetails.find()
+        let users = await user.find()
         res.render('admin/userDetails',{ users })
     }else{
         res.redirect('/admin')
     }
 }
-// const blockUser = (req,res)=>{
-//     const id = req.params.id;
-//     console.log(id);
-//     userDetails.updateOne({_id:id},{$set:{isBlocked:true}}).then(()=>{
-//         res.redirect("admin/userDetails");
-//     })
-// }
+const blockUser = async (req,res)=>{
+    const id = req.params.id;
+    console.log(id);
+    await user.updateOne({_id:id},{$set:{isBlocked:true}}).then(()=>{
+        res.redirect("/admin/userDetails");
+    })
+}
+const unblockUser = async (req,res)=>{
+    const id = req.params.id;
+    // console.log(id);
+    await user.updateOne({_id:id},{$set:{isBlocked:false}}).then(()=>{
+        res.redirect("/admin/userDetails");
+    })
+}
+const addproducts = (req,res)=>{
+    res.render('admin/addproducts')
+}
+const productdetails = async (req,res)=>{
+    let admin=req.session.admin
+    if(admin){
+        let product = await products.find()
+        res.render("admin/productdetails",{product})
+    }else{
+        res.redirect('/admin')
+    }    
+}
+const postProduct = async (req,res)=>{
+    const Product = new products({
+        product_name: req.body.product_name,
+        price: req.body.price,
+        category: req.body.category,
+        description: req.body.description,
+        stock: req.body.stock
+      })
+      const productDetails = await Product.save()
+      res.redirect('/admin/productdetails')
+}
 
 
 
-module.exports = {getAdminLogin,postAdminLogin,getAdminHome,adminLogout,getAllusers}
+module.exports = {getAdminLogin,
+    postAdminLogin,
+    getAdminHome,
+    adminLogout,getAllusers,
+    blockUser,
+    unblockUser,
+    addproducts,
+    productdetails,
+    postProduct
+}
