@@ -22,5 +22,10 @@ adminRouter.get('/unblockuser/:id', adminController.unblockUser);
 adminRouter.get('/addproducts', adminController.addproducts);
 adminRouter.get('/productdetails', adminController.productdetails);
 adminRouter.post('/postproduct',adminController.postProduct);
+adminRouter.get('/editproduct', adminController.editProduct);
+adminRouter.get('/deleteproduct/:id', adminController.deleteProduct);
+adminRouter.get('/category', adminController.category);
+
+
 
 module.exports=adminRouter;

@@ -3,6 +3,7 @@ const app = express();
 const path=require('path');
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
+const fileUpload=require("express-fileupload")
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/ecommerce');
 const db = mongoose.connection;
@@ -24,7 +25,7 @@ app.use(session({
     cookie: { maxAge: 6000000 },
     resave: false,
 }))
-
+app.use(fileUpload());
 //to prevent storing cache
 app.use((req, res, next) => {
     res.set(

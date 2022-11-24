@@ -76,6 +76,7 @@ const productdetails = async (req,res)=>{
     }    
 }
 const postProduct = async (req,res)=>{
+    const image = req.files.product_image;
     const Product = new products({
         product_name: req.body.product_name,
         price: req.body.price,
@@ -84,12 +85,35 @@ const postProduct = async (req,res)=>{
         stock: req.body.stock
       })
       const productDetails = await Product.save()
-      res.redirect('/admin/productdetails')
+      if(productDetails){
+        let productId = productDetails._id;
+        image.mv('./public/adminimages/'+productId+'.jpg',(err)=>{
+            if(!err){
+                res.redirect('/admin/productdetails')
+            }else{
+                console.log(err)
+            }
+        } )
+      
+      }
+}
+const editProduct = async (req,res)=>{
+     res.render('admin/editproduct') 
+}
+const deleteProduct = async (req,res)=>{
+    const id = req.params.id;
+    await products.deleteOne({_id:id}).then(()=>{
+        res.redirect('/admin/productdetails')
+    })
+}
+const category =(req,res)=>{
+    res.render('admin/category')
 }
 
+ 
 
-
-module.exports = {getAdminLogin,
+module.exports = {
+    getAdminLogin,
     postAdminLogin,
     getAdminHome,
     adminLogout,getAllusers,
@@ -97,5 +121,9 @@ module.exports = {getAdminLogin,
     unblockUser,
     addproducts,
     productdetails,
-    postProduct
+    postProduct,
+    editProduct,
+    deleteProduct,
+    category
 }
+

@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,15 +48,15 @@
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="/admin/category"
-                    data-bs-toggle="collapse"
-                    class="nav-link px-0 align-middle"
-                  >
-                    <img src="/adminimages/pic2.jpg" alt="" style="width: 1rem" />
-                    <span class="ms-1 d-none d-sm-inline">category</span>
-                  </a>
-                </li>
+                    <a
+                      href="/admin/category"
+                      data-bs-toggle="collapse"
+                      class="nav-link px-0 align-middle"
+                    >
+                      <img src="/adminimages/pic2.jpg" alt="" style="width: 1rem" />
+                      <span class="ms-1 d-none d-sm-inline">category</span>
+                    </a>
+                  </li>
                 <li>
                   <a href="/admin/productdetails" class="nav-link px-0 align-middle">
                     <img
@@ -100,7 +99,44 @@
             </div>
           </div>
           <div class="col py-3">
-            <h1>Hi admin this is your home page</h1>
+
+            
+
+            <div class="container mt-5 w-50 border ">
+                <form action="" method="post" id="form" enctype="multipart/form-data" >
+                    <div class="d-flex justify-content-center">
+                        <h1>Edit Product</h1>
+                    </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input type="text" value="" name="product_name" id="product_name" class="form-control" />
+                    <label class="form-label"  for="form3Example1c">Product name</label>
+                  </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input type="text" value="" name="price" id="price" class="form-control" />
+                    <label class="form-label" for="form3Example1c">Price</label>
+                  </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input type="text" value="" name="category" id="category" class="form-control" />
+                    <label class="form-label" for="form3Example1c">Category</label>
+                  </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input type="text" value="" name="description" id="description" class="form-control" />
+                    <label class="form-label" for="form3Example1c">Description</label>
+                  </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input type="text" value="" name="stock" id="stock" class="form-control" />
+                    <label class="form-label" for="form3Example1c">Stock</label>
+                  </div>
+                  <div class="form-outline flex-fill mb-0 mt-2">
+                    <input class="form-control" type="file"  name="product_image" id="product_image">
+                    <label for="formFile" class="form-label">Product image</label>
+                  </div>
+                  <div class="d-flex justify-content-center" >
+                    <button type="submit" class="btn btn-success btn-block mb-4" >Edit product</button>
+                  </div>
+                  
+                </form>
+            </div>
             
    
           </div>
@@ -108,4 +144,3 @@
       </div>
 </body>
 </html>
-

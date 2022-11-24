@@ -47,6 +47,16 @@
                   </a>
                 </li>
                 <li>
+                  <a
+                    href="/admin/category"
+                    data-bs-toggle="collapse"
+                    class="nav-link px-0 align-middle"
+                  >
+                    <img src="/adminimages/pic2.jpg" alt="" style="width: 1rem" />
+                    <span class="ms-1 d-none d-sm-inline">category</span>
+                  </a>
+                </li>
+                <li>
                   <a href="/admin/productdetails" class="nav-link px-0 align-middle">
                     <img
                       src="/adminimages/pic3.jpg"
@@ -96,7 +106,7 @@
                     <th scope="col">No</th>
                     <th scope="col">name</th>
                     <th scope="col">email</th>
-                    <th scope="col">password</th>
+                    
                     <th scope="col">Mobile</th>
                     <th scope="col">Controlls</th>
             
@@ -109,7 +119,7 @@
                     <td><%= count %></td>
                     <td><%=user.name %></td>
                     <td><%=user.email %></td>
-                    <td><%=user.password %></td>
+                    
                     <td><%=user.phonenumber %></td>
                     <td>
                       <% if(user.isBlocked === false) { %>
