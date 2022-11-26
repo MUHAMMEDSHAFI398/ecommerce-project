@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
- const validator = require('mongoose-unique-validator');
+
 
  const userSchema = new mongoose.Schema({
 
@@ -23,7 +23,8 @@ const mongoose = require('mongoose');
     password:{
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        
     },
     isBlocked:{
         type:Boolean,
@@ -31,6 +32,6 @@ const mongoose = require('mongoose');
     }
 
  })
-//userSchema.plugin(validator)
+
 const user = mongoose.model('user',userSchema);
  module.exports = user

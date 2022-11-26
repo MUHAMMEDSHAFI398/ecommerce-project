@@ -19,6 +19,7 @@ userRouter.get('/userSignup',userController.getUserSignup);
 userRouter.post('/postSignup', userController.postSignup);
 userRouter.post('/postLogin', userController.postLogin);
 userRouter.get('/userLogout',userController.userLogout);
+userRouter.get('/shop',userController.getShopPage);
 
 
 module.exports=userRouter;

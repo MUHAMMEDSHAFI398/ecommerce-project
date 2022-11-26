@@ -3,6 +3,7 @@ const body = require('body-parser');
 const adminRouter = require('../routes/admin');
 const user = require('../model/userModal')
 const products = require('../model/productModal');
+const categories = require('../model/categoryModal');
 const admin = { email: 'admin@gmail.com', password: 'pass' }
 
 
@@ -13,8 +14,7 @@ const getAdminLogin = (req,res)=>{
         res.render('admin/admin_home')
     }else{
         res.render('admin/login')
-    }
-    
+    }  
 }
 const getAdminHome = (req,res)=>{
     let admin=req.session.admin
@@ -58,7 +58,6 @@ const blockUser = async (req,res)=>{
 }
 const unblockUser = async (req,res)=>{
     const id = req.params.id;
-    // console.log(id);
     await user.updateOne({_id:id},{$set:{isBlocked:false}}).then(()=>{
         res.redirect("/admin/userDetails");
     })
@@ -98,16 +97,69 @@ const postProduct = async (req,res)=>{
       }
 }
 const editProduct = async (req,res)=>{
-     res.render('admin/editproduct') 
+    const id =req.params.id;
+    const productData =await products.findOne({_id:id});
+     res.render('admin/editproduct',{productData}) 
 }
 const deleteProduct = async (req,res)=>{
     const id = req.params.id;
+    console.log(id);
     await products.deleteOne({_id:id}).then(()=>{
         res.redirect('/admin/productdetails')
     })
 }
-const category =(req,res)=>{
-    res.render('admin/category')
+const getcategory =async (req,res)=>{
+    let admin=req.session.admin
+    if(admin){
+        const Category = await categories.find()
+        res.render('admin/category' ,{Category})
+    }else{
+        res.redirect('/admin')
+    }
+    
+}
+const addCategory =async (req,res)=>{
+    const Category = new categories ({
+        category_name:req.body.category_name
+    })
+    await Category.save()
+    res.redirect('/admin/category')
+    
+}
+const editCategory = async (req,res)=>{
+    const id=req.params.id;
+    await categories.updateOne({_id:id},{$set:{
+        category_name:req.body.category_name
+    }});
+    res.redirect('/admin/category')
+}
+const deleteCategory = async(req,res)=>{
+    const id=req.params.id;
+    await categories.deleteOne({_id:id})
+    res.redirect('/admin/category')
+}
+const postEditProduct = async (req,res)=>{
+    const id = req.params.id;
+    await products.updateOne({_id:id},{$set:{
+        product_name: req.body.product_name,
+        price: req.body.price,
+        category: req.body.category,
+        description: req.body.description,
+        stock: req.body.stock
+    }});
+    if(req?.files?.product_image){
+    const image = req.files.product_image;
+    image.mv('./public/adminimages/'+id+'.jpg',(err)=>{
+        if(!err){
+            res.redirect('/admin/productdetails')
+        }else{
+            console.log(err)
+        }
+    })
+    }else{
+        res.redirect('/admin/productdetails')
+    }
+                         
 }
 
  
@@ -124,6 +176,11 @@ module.exports = {
     postProduct,
     editProduct,
     deleteProduct,
-    category
+    getcategory,
+    postEditProduct,
+    addCategory,
+    editCategory,
+    deleteCategory,
+    
 }
 

@@ -12,5 +12,5 @@ const mongoose = require('mongoose');
 
  })
 //userSchema.plugin(validator)
-const category = mongoose.model('category',categorySchema);
- module.exports = category
+const categories = mongoose.model('categories',categorySchema);
+ module.exports = categories

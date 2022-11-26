@@ -19,12 +19,16 @@ adminRouter.get('/adminLogout', adminController.adminLogout);
 adminRouter.get('/userDetails', adminController.getAllusers);
 adminRouter.get('/blockuser/:id', adminController.blockUser);
 adminRouter.get('/unblockuser/:id', adminController.unblockUser);
-adminRouter.get('/addproducts', adminController.addproducts);
 adminRouter.get('/productdetails', adminController.productdetails);
+adminRouter.get('/addproducts', adminController.addproducts);
 adminRouter.post('/postproduct',adminController.postProduct);
-adminRouter.get('/editproduct', adminController.editProduct);
+adminRouter.get('/editproduct/:id', adminController.editProduct);
+adminRouter.post('/post_editproduct/:id',adminController.postEditProduct);
 adminRouter.get('/deleteproduct/:id', adminController.deleteProduct);
-adminRouter.get('/category', adminController.category);
+adminRouter.get('/category', adminController.getcategory);
+adminRouter.post('/addcategory', adminController.addCategory);
+adminRouter.post('/editcategory/:id', adminController.editCategory);
+adminRouter.get('/deletecategory/:id', adminController.deleteCategory);
 
 
 

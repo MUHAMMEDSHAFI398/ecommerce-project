@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
- const validator = require('mongoose-unique-validator');
+
 
  const productSchema = new mongoose.Schema({
 
@@ -23,10 +23,11 @@ const mongoose = require('mongoose');
     },
     stock:{
         type: Number,
+        required: true,
         
     }
 
  })
-//userSchema.plugin(validator)
+
 const products = mongoose.model('products',productSchema);
  module.exports = products

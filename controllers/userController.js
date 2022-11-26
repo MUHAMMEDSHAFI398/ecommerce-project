@@ -31,6 +31,7 @@ const getUserSignup = (req, res) => {
 }
 
 const postSignup = async (req, res) => {
+  console.log("hello");
   console.log(Error);
   try {
     const spassword = await securepassword(req.body.password)
@@ -80,7 +81,12 @@ const userLogout = (req,res)=>{
     res.redirect('/');
 }
 
-
+const getShopPage = (req,res)=>{
+  let user=req.session.user
+  if(user) res.render('user/shop');
+  else res.render('user/login');
+     
+}
 
 
 
@@ -88,4 +94,4 @@ const userLogout = (req,res)=>{
 
 // await bcrypt.hash(req.body.password,10);
 
-module.exports = { getHome, getUserLogin, getUserSignup, postSignup, postLogin ,userLogout};
+module.exports = { getHome, getUserLogin, getUserSignup, postSignup, postLogin ,userLogout,getShopPage};
