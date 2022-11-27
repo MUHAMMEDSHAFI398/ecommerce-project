@@ -115,8 +115,7 @@ const getcategory =async (req,res)=>{
         res.render('admin/category' ,{Category})
     }else{
         res.redirect('/admin')
-    }
-    
+    }   
 }
 const addCategory =async (req,res)=>{
     const Category = new categories ({

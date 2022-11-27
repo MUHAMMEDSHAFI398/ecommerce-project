@@ -3,6 +3,7 @@ const body = require('body-parser');
 const userRouter = require('../routes/user');
 const user = require('../model/userModal');
 const bcrypt = require('bcrypt');
+const products = require('../model/productModal');
 
 
 const securepassword = async (password) => {
@@ -14,84 +15,95 @@ const securepassword = async (password) => {
   }
 }
 
-const getHome = (req, res) => {
-  let user=req.session.user
-  if(user){
-    customer=true
-  }else{
-    customer=false
-  }
-  res.render('user/index',{customer});
-}
-const getUserLogin = (req, res) => {
-  res.render('user/login')
-}
-const getUserSignup = (req, res) => {
-  res.render('user/Signup')
-}
+module.exports = {
 
-const postSignup = async (req, res) => {
-  console.log("hello");
-  console.log(Error);
-  try {
-    const spassword = await securepassword(req.body.password)
-    const User = new user({
-      name: req.body.name,
-      email: req.body.email,
-      phonenumber: req.body.phonenumber,
-      password: spassword
-    })
-    const userData = await User.save()
-    res.redirect('/')
-  } catch (error) {
-    console.log(error.message)
-    res.status(500).send(error)
-  }
-}
 
-const postLogin = async (req, res) => {
-  const email = req.body.email
-  const password = req.body.password
-  const userData = await user.findOne({email:email});
-  console.log(userData)
+  getHome: async (req, res) => {
+    let user = req.session.user
+    let product = await products.find()
+    if (user) {
+      customer = true
+    } else {
+      customer = false
+    }
+    res.render('user/index', { customer, product });
+  },
+  getUserLogin: (req, res) => {
+    res.render('user/login')
+  },
+  getUserSignup: (req, res) => {
+    res.render('user/Signup')
+  },
 
-  if(userData.isBlocked === false){
+  postSignup: async (req, res) => {
+    console.log("hello");
+    console.log(Error);
     try {
-      if(userData){
-        const passwordMatch = await bcrypt.compare(password, userData.password)
-        if(passwordMatch){
-          req.session.user=req.body.email
-          res.redirect('/');
-        }else {
-          res.render('user/login',{invalid:"invalid username or password"});
+      const spassword = await securepassword(req.body.password)
+      const User = new user({
+        name: req.body.name,
+        email: req.body.email,
+        phonenumber: req.body.phonenumber,
+        password: spassword
+      })
+      const userData = await User.save()
+      res.redirect('/')
+    } catch (error) {
+      console.log(error.message)
+      res.status(500).send(error)
+    }
+  },
+
+  postLogin: async (req, res) => {
+    const email = req.body.email
+    const password = req.body.password
+    const userData = await user.findOne({ email: email });
+    console.log(userData)
+
+
+    try {
+      if (userData) {
+        if (userData.isBlocked === false) {
+          const passwordMatch = await bcrypt.compare(password, userData.password)
+          if (passwordMatch) {
+            req.session.user = req.body.email
+            res.redirect('/');
+          } else {
+            res.render('user/login', { invalid: "invalid username or password" });
+          }
+        } else {
+          res.render('user/login', { userblock: "You are blocked" });
         }
-      }else{
-        res.render('user/login',{invalid:"invalid username or password"});
+      } else {
+        res.render('user/login', { invalid: "invalid username or password" });
       }
     } catch (error) {
-     console.log(error)
+      console.log(error)
     }
-  }else{
-    res.render('user/login',{userblock:"You are blocked"});
-  }
- 
-}
-const userLogout = (req,res)=>{
-  req.session.destroy();
+
+
+  },
+  userLogout: (req, res) => {
+    req.session.destroy();
     res.redirect('/');
+  },
+
+  getShopPage: async (req, res) => {
+    let user = req.session.user
+    let product = await products.find()
+    if (user) res.render('user/shop', { product });
+    else res.render('user/login');
+
+  },
+  getProductViewPage: async (req, res) => {
+    res.render('user/product_view');
+
+  }
+
 }
 
-const getShopPage = (req,res)=>{
-  let user=req.session.user
-  if(user) res.render('user/shop');
-  else res.render('user/login');
-     
-}
 
 
 
 
 
-// await bcrypt.hash(req.body.password,10);
-
-module.exports = { getHome, getUserLogin, getUserSignup, postSignup, postLogin ,userLogout,getShopPage};

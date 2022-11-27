@@ -20,6 +20,8 @@ userRouter.post('/postSignup', userController.postSignup);
 userRouter.post('/postLogin', userController.postLogin);
 userRouter.get('/userLogout',userController.userLogout);
 userRouter.get('/shop',userController.getShopPage);
+userRouter.get('/productview',userController.getProductViewPage);
+
 
 
 module.exports=userRouter;
