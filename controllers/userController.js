@@ -23,10 +23,11 @@ module.exports = {
     let product = await products.find()
     if (user) {
       customer = true
+      res.render('user/index', { customer, product });
     } else {
       customer = false
+      res.render('user/index', { customer, product });
     }
-    res.render('user/index', { customer, product });
   },
   getUserLogin: (req, res) => {
     res.render('user/login')
@@ -96,8 +97,18 @@ module.exports = {
 
   },
   getProductViewPage: async (req, res) => {
-    res.render('user/product_view');
-
+    let user = req.session.user
+    let id=req.params.id
+    let product = await products.findOne({_id:id})
+    if(user) res.render('user/product_view',{product});
+    else res.render('user/login');
+  
+  },
+  getCartPage: async (req,res)=>{
+    res.render('user/cart')
+  },
+  getCheckOutPage: async (req,res)=>{
+    res.render('user/checkout')
   }
 
 }

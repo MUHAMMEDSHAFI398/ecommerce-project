@@ -32,4 +32,5 @@ adminRouter.get('/deletecategory/:id', adminController.deleteCategory);
 
 
 
+
 module.exports=adminRouter;

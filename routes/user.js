@@ -21,6 +21,8 @@ userRouter.post('/postLogin', userController.postLogin);
 userRouter.get('/userLogout',userController.userLogout);
 userRouter.get('/shop',userController.getShopPage);
 userRouter.get('/productview',userController.getProductViewPage);
+userRouter.get('/cart',userController.getCartPage);
+userRouter.get('/checkout',userController.getCheckOutPage);
 
 
 

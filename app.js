@@ -19,12 +19,14 @@ app.set("views");
 //app.use(express.static("views"));
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,'public')))
+app.use(express.static(__dirname))
 app.use(session({
     secret: "thisismysecretkey",
     saveUninitialized: true,
     cookie: { maxAge: 6000000 },
     resave: false,
 }))
+app.use(cookieParser());
 app.use(fileUpload());
 //to prevent storing cache
 app.use((req, res, next) => {
@@ -32,7 +34,7 @@ app.use((req, res, next) => {
         "Cache-Control",
         "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
     );
-    next()
+    next();
 })
 
 app.use('/',userRouter);
