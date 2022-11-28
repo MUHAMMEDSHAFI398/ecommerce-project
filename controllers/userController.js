@@ -100,6 +100,7 @@ module.exports = {
     let user = req.session.user
     let id=req.params.id
     let product = await products.findOne({_id:id})
+    console.log(product)
     if(user) res.render('user/product_view',{product});
     else res.render('user/login');
   
@@ -108,7 +109,13 @@ module.exports = {
     res.render('user/cart')
   },
   getCheckOutPage: async (req,res)=>{
-    res.render('user/checkout')
+    let user = req.session.user
+    let id=req.params.id
+    let product = await products.findOne({_id:id})
+    console.log(product)
+    if(user) res.render('user/checkout',{product});
+    else res.render('user/login');
+    
   }
 
 }

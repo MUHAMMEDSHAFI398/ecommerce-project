@@ -19,7 +19,8 @@ app.set("views");
 //app.use(express.static("views"));
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,'public')))
-app.use(express.static(__dirname))
+
+
 app.use(session({
     secret: "thisismysecretkey",
     saveUninitialized: true,

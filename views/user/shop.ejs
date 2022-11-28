@@ -34,15 +34,15 @@
 
 			<div class="row product-lists">
 
-				<% product.forEach((product) =>{ %>
+				<% product.forEach((products) =>{ %>
 				<div class="col-lg-4 col-md-6 text-center strawberry">
 					<div class="single-product-item">
 						<div class="product-image">
-							<a href="/productview"><img style="width:300px; height:225px" src="/adminimages/<%=product._id%>.jpg" alt=""></a>
+							<a href="/productview/<%=products._id%>"><img style="width:300px; height:225px" src="/adminimages/<%=products._id%>.jpg" alt=""></a>
 							
 						</div>
-						<h3><%= product.product_name %></h3>
-						<p class="product-price"><span>Per Kg</span> <%= product.price %>₹ </p>
+						<h3><%= products.product_name %></h3>
+						<p class="product-price"><span>Per Kg</span> <%= products.price %>₹ </p>
 						<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
 					</div>
 				</div>

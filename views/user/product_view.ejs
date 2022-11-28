@@ -21,21 +21,22 @@
 			<div class="row">
 				<div class="col-md-5">
 					<div class="single-product-img">
-						<img src="assets/img/products/product-img-5.jpg" alt="">
+						<img src="/adminimages/<%=product._id%>.jpg" style="width: 443px; height: 443px;" alt="">
 					</div>
 				</div>
 				<div class="col-md-7">
 					<div class="single-product-content">
 						<h3>This is a good fruit for health</h3>
-						<p class="single-product-pricing"> ₹50/kg</p>
+						<h2><%=product.product_name%></h2>
+						<p class="single-product-pricing"> <%=product.price%>/kg</p>
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta sint dignissimos, rem commodi cum voluptatem quae reprehenderit repudiandae ea tempora incidunt ipsa, quisquam animi perferendis eos eum modi! Tempora, earum.</p>
 						<div class="single-product-form">
 							<form action="index.html">
 								<label for="">Enter quantity in Kg</label><br>
 								<input type="number" placeholder="0">
 							</form>
-							<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-							<p><strong>Categories: </strong>Fruits, Organic</p>
+							<a href="/cart/<%=product._id%>" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+							<p><strong>Category :</strong><%=product.category%></p>
 						</div>
 					
 					</div>
@@ -59,25 +60,25 @@
 	<!-- end copyright -->
 	
 	<!-- jquery -->
-	<script src="assets/js/jquery-1.11.3.min.js"></script>
+	<script src="http://localhost:5000/assets/js/jquery-1.11.3.min.js"></script>
 	<!-- bootstrap -->
-	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+	<script src="http://localhost:5000/assets/bootstrap/js/bootstrap.min.js"></script>
 	<!-- count down -->
-	<script src="assets/js/jquery.countdown.js"></script>
+	<script src="http://localhost:5000/assets/js/jquery.countdown.js"></script>
 	<!-- isotope -->
-	<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<script src="http://localhost:5000/assets/js/jquery.isotope-3.0.6.min.js"></script>
 	<!-- waypoints -->
-	<script src="assets/js/waypoints.js"></script>
+	<script src="http://localhost:5000/assets/js/waypoints.js"></script>
 	<!-- owl carousel -->
-	<script src="assets/js/owl.carousel.min.js"></script>
+	<script src="http://localhost:5000/assets/js/owl.carousel.min.js"></script>
 	<!-- magnific popup -->
-	<script src="assets/js/jquery.magnific-popup.min.js"></script>
+	<script src="http://localhost:5000/assets/js/jquery.magnific-popup.min.js"></script>
 	<!-- mean menu -->
-	<script src="assets/js/jquery.meanmenu.min.js"></script>
+	<script src="http://localhost:5000/assets/js/jquery.meanmenu.min.js"></script>
 	<!-- sticker js -->
-	<script src="assets/js/sticker.js"></script>
+	<script src="http://localhost:5000/assets/js/sticker.js"></script>
 	<!-- main js -->
-	<script src="assets/js/main.js"></script>
+	<script src="http://localhost:5000/assets/js/main.js"></script>
 
 </body>
 </html>
