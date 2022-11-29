@@ -27,25 +27,31 @@
 									<th class="product-remove"></th>
 									<th class="product-image">Product Image</th>
 									<th class="product-name">Name</th>
-									<th class="product-price">Price</th>
-									<th class="product-quantity">Quantity</th>
+									<th class="product-price">Price/kg</th>
+									<th class="product-quantity">Quantity in kg</th>
 									<th class="product-total">Total</th>
 								</tr>
 							</thead>
 							<tbody>
 
-								
+							<% productData.forEach((product)=>{ %>	
 
 								<tr class="table-body-row">
-									<td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
-									<td class="product-image"><img src="/assets/img/products/product-img-1.jpg" alt=""></td>
-									<td class="product-name"></td>
-									<td class="product-price">$85</td>
-									<td class="product-quantity"><input type="number" placeholder="0"></td>
+									<td class="product-remove"><button ><i class="far fa-window-close"></i></button></td>
+									<td class="product-image"><img src="/adminimages/<%= product.productDetail._id %>.jpg" alt=""></td>
+									<td class="product-name"><%= product.productDetail.product_name %></td>
+									<td class="product-price"><%= product.productDetail.price%></td>
+									<td class="product-quantity">
+
+										<button class="cart-item-count mr-3" onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)" >+</button>
+										<input id="quantity" min="0" name="quantity" value="<%= product.productQuantity%>" type="" class="form-control form-control-sm" />
+									    <button class="cart-item-count mr-3" onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)">-</button>
+									    
+									</td>
 									<td class="product-total">1</td>
 								</tr>
-								
-								
+							   	
+							<% }) %>	
 							</tbody>
 						</table>
 					</div>
@@ -126,6 +132,27 @@
 	<script src="http://localhost:5000/assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="http://localhost:5000/assets/js/main.js"></script>
+
+
+	<script>
+		function changeQuantity(cartId, productId, count) {
+			
+      let quantity = parseInt(document.getElementById("quantity").innerHTML);
+      $.ajax({
+        url: "/changeQuantity",
+        data: {
+          cart: cartId,
+          product: productId,
+          count: count,
+        },
+        method: "post",
+        success: () => {
+          document.getElementById("quantity").innerHTML = quantity + count;
+          location.reload();
+        },
+      });
+    }
+	</script>
 
 </body>
 </html>

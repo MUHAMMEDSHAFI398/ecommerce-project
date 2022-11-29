@@ -21,8 +21,11 @@ userRouter.post('/postLogin', userController.postLogin);
 userRouter.get('/userLogout',userController.userLogout);
 userRouter.get('/shop',userController.getShopPage);
 userRouter.get('/productview/:id',userController.getProductViewPage);
-userRouter.get('/cart/:id',userController.getCartPage);
+userRouter.get('/cart/:id',userController.addToCart);
 userRouter.get('/checkout',userController.getCheckOutPage);
+userRouter.get('/viewcart',userController.viewCart);
+userRouter.post('/changeQuantity',userController.changeQuantity);
+
 
 
 

@@ -62,8 +62,9 @@ const unblockUser = async (req,res)=>{
         res.redirect("/admin/userDetails");
     })
 }
-const addproducts = (req,res)=>{
-    res.render('admin/addproducts')
+const addproducts = async (req,res)=>{
+    let category =  await categories.find()
+    res.render('admin/addproducts',{category})
 }
 const productdetails = async (req,res)=>{
     let admin=req.session.admin
