@@ -43,7 +43,7 @@
 						</div>
 						<h3><%= products.product_name %></h3>
 						<p class="product-price"><span>Per Kg</span> <%= products.price %>₹ </p>
-						<a href="/cart/<%= products._id %>" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+						<a href="/productview/<%=products._id%>" class="btn btn-success">Buy now</a>
 					</div>
 				</div>
 				<% }) %>

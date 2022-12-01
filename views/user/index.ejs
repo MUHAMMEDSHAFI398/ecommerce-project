@@ -131,7 +131,7 @@
 							<p class="product-price"> <%= product[i].price %>₹  </p>
 							<h6>Per kg</h6>
 							 <% if(customer) { %>
-							<a href="/cart/<%=product[i]._id%>" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+							<a href="/productview/<%= product[i]._id %>" class="btn btn-success">Buy now</a>
 							<% }else { %>
 							<a href="/userLogin" class="btn btn-success">Buy now</a>
 							<% } %>

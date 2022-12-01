@@ -1,5 +1,5 @@
 <%- include('../partials/user_header')%>
-	
+
 	<!-- breadcrumb-section -->
 	<div class="breadcrumb-section breadcrumb-bg">
 		<div class="container">
@@ -24,7 +24,7 @@
 						<table class="cart-table">
 							<thead class="cart-table-head">
 								<tr class="table-head-row">
-									<th class="product-remove"></th>
+									<th class="product-remove">Remove</th>
 									<th class="product-image">Product Image</th>
 									<th class="product-name">Name</th>
 									<th class="product-price">Price/kg</th>
@@ -34,24 +34,39 @@
 							</thead>
 							<tbody>
 
-							<% productData.forEach((product)=>{ %>	
+								<% productData.forEach((product)=>{ %>
 
-								<tr class="table-body-row">
-									<td class="product-remove"><button ><i class="far fa-window-close"></i></button></td>
-									<td class="product-image"><img src="/adminimages/<%= product.productDetail._id %>.jpg" alt=""></td>
-									<td class="product-name"><%= product.productDetail.product_name %></td>
-									<td class="product-price"><%= product.productDetail.price%></td>
-									<td class="product-quantity">
+									<tr class="table-body-row">
+										<td class="product-remove"><button onclick="removeProduct('<%= product._id %>','<%= product.productDetail._id %>')" ><i class="far fa-window-close"></i></button>
+										</td>
+										<td class="product-image"><img
+												src="/adminimages/<%= product.productDetail._id %>.jpg" alt=""></td>
+										<td class="product-name">
+											<%= product.productDetail.product_name %>
+										</td>
+										<td class="product-price">
+											<%= product.productDetail.price%> ₹
+										</td>
+										<td class="product-quantity">
 
-										<button class="cart-item-count mr-3" onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)" >+</button>
-										<input id="quantity" min="0" name="quantity" value="<%= product.productQuantity%>" type="" class="form-control form-control-sm" />
-									    <button class="cart-item-count mr-3" onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)">-</button>
-									    
-									</td>
-									<td class="product-total">1</td>
-								</tr>
-							   	
-							<% }) %>	
+											<button class="cart-item-count mr-3"
+												onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)">+</button>
+											<input id="quantity" min="0" name="quantity"
+												value="<%= product.productQuantity%>" type=""
+												class="form-control form-control-sm" />
+											<button
+												class="cart-item-count mr-3" '<% if(product.productQuantity === 1){ %> style="pointer-events: none; cursor: not-allowed;" <% } %>'
+												onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)">-</button>
+
+										</td>
+									      <% var a= product.productDetail.price%> 
+										  <% var b= product.productQuantity%>
+										  <% var c=a*b %>
+										 	
+										<td class="product-total"><%=c %> ₹</td>
+									</tr>
+
+									<% }) %>
 							</tbody>
 						</table>
 					</div>
@@ -69,20 +84,23 @@
 							<tbody>
 								<tr class="total-data">
 									<td><strong>Subtotal: </strong></td>
-									<td>$500</td>
+									<% if(locals.sum){%>
+									<td><%=sum%> ₹</td>
+									<%}%>
 								</tr>
 								<tr class="total-data">
 									<td><strong>Shipping: </strong></td>
-									<td>$45</td>
+									<td>0 ₹ (Free delivery)</td>
 								</tr>
 								<tr class="total-data">
 									<td><strong>Total: </strong></td>
-									<td>$545</td>
+									<% if(locals.sum){%>
+									<td><%=sum%> ₹</td>
+									<%}%>
 								</tr>
 							</tbody>
 						</table>
 						<div class="cart-buttons">
-							<a href="cart.html" class="boxed-btn">Update Cart</a>
 							<a href="/checkout" class="boxed-btn black">Check Out</a>
 						</div>
 					</div>
@@ -107,52 +125,40 @@
 
 	<!-- footer -->
 	<%- include('../partials/user_footer')%>
-	<!-- end footer -->
-	
-	<!-- copyright -->
-	<!-- end copyright -->
-	
-	<!-- jquery -->
-	<script src="http://localhost:5000/assets/js/jquery-1.11.3.min.js"></script>
-	<!-- bootstrap -->
-	<script src="http://localhost:5000/assets/bootstrap/js/bootstrap.min.js"></script>
-	<!-- count down -->
-	<script src="http://localhost:5000/assets/js/jquery.countdown.js"></script>
-	<!-- isotope -->
-	<script src="http://localhost:5000/assets/js/jquery.isotope-3.0.6.min.js"></script>
-	<!-- waypoints -->
-	<script src="http://localhost:5000/assets/js/waypoints.js"></script>
-	<!-- owl carousel -->
-	<script src="http://localhost:5000/assets/js/owl.carousel.min.js"></script>
-	<!-- magnific popup -->
-	<script src="http://localhost:5000/assets/js/jquery.magnific-popup.min.js"></script>
-	<!-- mean menu -->
-	<script src="http://localhost:5000/assets/js/jquery.meanmenu.min.js"></script>
-	<!-- sticker js -->
-	<script src="http://localhost:5000/assets/js/sticker.js"></script>
-	<!-- main js -->
-	<script src="http://localhost:5000/assets/js/main.js"></script>
+		<!-- end footer -->
+
+		<!-- copyright -->
+		<!-- end copyright -->
+
+		<!-- jquery -->
+		<script src="http://localhost:5000/assets/js/jquery-1.11.3.min.js"></script>
+		<!-- bootstrap -->
+		<script src="http://localhost:5000/assets/bootstrap/js/bootstrap.min.js"></script>
+		<!-- count down -->
+		<script src="http://localhost:5000/assets/js/jquery.countdown.js"></script>
+		<!-- isotope -->
+		<script src="http://localhost:5000/assets/js/jquery.isotope-3.0.6.min.js"></script>
+		<!-- waypoints -->
+		<script src="http://localhost:5000/assets/js/waypoints.js"></script>
+		<!-- owl carousel -->
+		<script src="http://localhost:5000/assets/js/owl.carousel.min.js"></script>
+		<!-- magnific popup -->
+		<script src="http://localhost:5000/assets/js/jquery.magnific-popup.min.js"></script>
+		<!-- mean menu -->
+		<script src="http://localhost:5000/assets/js/jquery.meanmenu.min.js"></script>
+		<!-- sticker js -->
+		<script src="http://localhost:5000/assets/js/sticker.js"></script>
+		<!-- main js -->
+		<script src="http://localhost:5000/assets/js/main.js"></script>
+		<!-- ajax request -->
+		<script src="http://localhost:5000/assets/js/ajaxrequests.js"></script>
+
+		<script>
+			function tottal()
+		</script>
 
 
-	<script>
-		function changeQuantity(cartId, productId, count) {
-			
-      let quantity = parseInt(document.getElementById("quantity").innerHTML);
-      $.ajax({
-        url: "/changeQuantity",
-        data: {
-          cart: cartId,
-          product: productId,
-          count: count,
-        },
-        method: "post",
-        success: () => {
-          document.getElementById("quantity").innerHTML = quantity + count;
-          location.reload();
-        },
-      });
-    }
-	</script>
 
-</body>
-</html>
+		</body>
+
+		</html>

@@ -25,7 +25,8 @@ userRouter.get('/cart/:id',userController.addToCart);
 userRouter.get('/checkout',userController.getCheckOutPage);
 userRouter.get('/viewcart',userController.viewCart);
 userRouter.post('/changeQuantity',userController.changeQuantity);
-
+userRouter.post('/removeProduct',userController. removeProduct);
+userRouter.get('/viewprofile',userController.viewProfile);
 
 
 

@@ -31,11 +31,9 @@
 						<p class="single-product-pricing"> <%=product.price%>/kg</p>
 						<p><%=product.description%></p>
 						<div class="single-product-form">
-							<form action="index.html">
-								<label for="">Enter quantity in Kg</label><br>
-								<input type="number" placeholder="0">
-							</form>
-							<a href="/cart/<%=product._id%>" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+							
+							
+							<a href="/cart/<%= product._id %>" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
 							<p><strong>Category :</strong><%=product.category%></p>
 						</div>
 					

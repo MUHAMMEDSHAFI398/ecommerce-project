@@ -21,9 +21,9 @@ module.exports = {
 
 
   getHome: async (req, res) => {
-    let user = req.session.user
+    let session = req.session.user
     let product = await products.find()
-    if (user) {
+    if (session) {
       customer = true
       res.render('user/index', { customer, product });
     } else {
@@ -92,26 +92,21 @@ module.exports = {
   },
 
   getShopPage: async (req, res) => {
-    let user = req.session.user
+    let session = req.session.user
     let product = await products.find()
-    if (user) res.render('user/shop', { product });
+    if (session) res.render('user/shop', { product });
     else res.render('user/login');
 
   },
   getProductViewPage: async (req, res) => {
-    let user = req.session.user
+    let session = req.session.user
     let id=req.params.id
     let product = await products.findOne({_id:id})
-    if(user) res.render('user/product_view',{product});
+    if(session) res.render('user/product_view',{product});
     else res.render('user/login');
   
   },
-  // addToCart: async (req,res)=>{
-  //   let session = req.session.user
-  //   let userDocumet = await user.findOne({email:session})
-  //   let proid=req.params.id
-  //   res.render('user/cart')
-  // },
+ 
   addToCart: async (req, res) => {
     const id = req.params.id;
     const objId = mongoose.Types.ObjectId(id);
@@ -136,13 +131,14 @@ module.exports = {
           { userId: userData._id, "product.productId": objId },
           { $inc: { "product.$.quantity": 1 } }
         );
-        res.redirect("/");
+        res.redirect("/viewcart");
       } else {
         cart
           .updateOne({ userId: userData._id }, { $push: { product: proObj } })
           .then(() => {
-            // res.json({ status: true });
-            res.redirect("/");
+
+            res.redirect("/viewcart");
+            
           });
       }
     } else {
@@ -157,17 +153,18 @@ module.exports = {
       });
       newCart.save().then(() => {
         
-        res.redirect("/");
-        // res.json({ status: true });
-        console.log('hoi')
+        res.redirect("/viewcart");
+        
+        
       });
     }
     
   },
   viewCart: async (req, res) => {
     const session = req.session.user;
-    const userData = await user.findOne({ email: session });
-    const productData = await cart
+    if(session){
+      const userData = await user.findOne({ email: session });
+      const productData = await cart
       .aggregate([
         {
           $match: { userId: userData.id },
@@ -196,11 +193,22 @@ module.exports = {
             productDetail: { $arrayElemAt: ["$productDetail", 0] },
           },
         },
+        {
+          $addFields:{
+            productPrice:{
+              $multiply:["$productQuantity", "$productDetail.price"]
+            }
+          }
+        }
       ])
       .exec();
-      count = productData.length;
-      console.log(count)
-    res.render("user/cart", { productData});
+      const sum = productData.reduce((accumulator, object) => {
+        return accumulator + object.productPrice;
+      }, 0);
+      
+    res.render("user/cart", { productData, sum });
+    }
+    
   },
   changeQuantity:async(req,res)=>{
     
@@ -225,30 +233,75 @@ module.exports = {
     
      
   },
-  // removeProduct:async(req,res)=>{
-  //   const data = req.body;
-  //   const objId = mongoose.Types.ObjectId(data.product);
-  //   await cart.aggregate([
-  //     {
-  //       $unwind:"$product"
-  //     }
-  //   ])
-  //   await cart
-  //     .updateOne(
-  //       { _id: data.cart, "product.productId": objId },
-  //       { $pull: { product: { productId: objId } } }
-  //     )
-  //     .then(() => {
-  //       res.json({status:true});
-  //     });
-  // },
+  removeProduct:async(req,res)=>{
+    const data = req.body;
+    const objId = mongoose.Types.ObjectId(data.product);
+    await cart.aggregate([
+      {
+        $unwind:"$product"
+      }
+    ])
+    await cart
+      .updateOne(
+        { _id: data.cart, "product.productId": objId },
+        { $pull: { product: { productId: objId } } }
+      )
+      .then(() => {
+        res.json({status:true});
+      });
+  },
   getCheckOutPage: async (req,res)=>{
-    let session = req.session.user
-    let id=req.params.id
-    let product = await products.findOne({_id:id})
-    if(session) res.render('user/checkout',{product});
-    else res.render('user/login');
+    const session = req.session.user;
+    if(session){
+      const userData = await user.findOne({ email: session });
+      const productData = await cart
+      .aggregate([
+        {
+          $match: { userId: userData.id },
+        },
+        {
+          $unwind: "$product",
+        },
+        {
+          $project: {
+            productItem: "$product.productId",
+            productQuantity: "$product.quantity",
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "productItem",
+            foreignField: "_id",
+            as: "productDetail",
+          },
+        },
+        {
+          $project: {
+            productItem: 1,
+            productQuantity: 1,
+            productDetail: { $arrayElemAt: ["$productDetail", 0] },
+          },
+        },
+        {
+          $addFields:{
+            productPrice:{
+              $multiply:["$productQuantity", "$productDetail.price"]
+            }
+          }
+        }
+      ])
+      .exec();
+      const sum = productData.reduce((accumulator, object) => {
+        return accumulator + object.productPrice;
+      }, 0);
+      
+    res.render("user/checkout", { productData, sum });
+    }
     
+  },
+  viewProfile: async(req,res)=>{
+    res.render('user/profile')
   }
 
 }
