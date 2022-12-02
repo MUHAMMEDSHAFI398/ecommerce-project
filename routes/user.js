@@ -27,7 +27,9 @@ userRouter.get('/viewcart',userController.viewCart);
 userRouter.post('/changeQuantity',userController.changeQuantity);
 userRouter.post('/removeProduct',userController. removeProduct);
 userRouter.get('/viewprofile',userController.viewProfile);
-
+userRouter.get('/editprofile',userController.editProfile);
+userRouter.get('/otp',userController.getOtpPage);
+userRouter.post('/otp',userController.postOtp);
 
 
 module.exports=userRouter;

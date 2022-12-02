@@ -1,11 +1,6 @@
-const express = require('express');
-const body = require('body-parser');
-const adminRouter = require('../routes/admin');
 const user = require('../model/userModal')
 const products = require('../model/productModal');
 const categories = require('../model/categoryModal');
-const admin = { email: 'admin@gmail.com', password: 'pass' }
-
 
 
 const getAdminLogin = (req,res)=>{
@@ -25,9 +20,9 @@ const getAdminHome = (req,res)=>{
     }
 }
 const postAdminLogin = (req,res)=>{
-    if (req.body.email === admin.email && req.body.password === admin.password) {
+    if (req.body.email === process.env.admin_email && req.body.password === process.env.admin_pass) {
         
-        req.session.admin = admin.email
+        req.session.admin = process.env.admin_email
         res.redirect('/admin/admin_home')
     } else {
         res.render('admin/login',{ invalid : 'invalid username or password '})

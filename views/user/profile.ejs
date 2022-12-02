@@ -16,7 +16,7 @@
     </div>
     <!-- end breadcrumb section -->
 
-    <!-- body -->
+    <!-- middle -->
     <div class="container mt-5 mb-5 d-flex justify-content-center">
         <div class="col-lg-8">
           <div class="card mb-4">
@@ -26,7 +26,7 @@
                   <p class="mb-0">Name</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0"></p>
+                  <p class="text-muted mb-0"><%=userData.name%></p>
                 </div>
               </div>
               <hr />
@@ -37,7 +37,7 @@
                   <p class="mb-0">Email</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0"></p>
+                  <p class="text-muted mb-0"><%=userData.email%></p>
                 </div>
               </div>
               <hr />
@@ -46,7 +46,7 @@
                   <p class="mb-0">Mobile</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0"></p>
+                  <p class="text-muted mb-0"><%=userData.phonenumber%></p>
                 </div>
               </div>
               <hr />
@@ -55,7 +55,7 @@
                   <p class="mb-0">Password</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0"></p>
+                  <p class="text-muted mb-0">........</p>
                 </div>
               </div>
               <hr />
@@ -80,18 +80,11 @@
                 <div class="col-sm-3">
                     
                         <div class="d-flex justify-content-center mt-4 ">
-                            <button type="submit" class="btn btn-success btn-block mb-4">Edit profile</button>
+                            <a href="/editprofile"><button type="submit" class="btn btn-success btn-block mb-4">Edit profile</button></a>
                           </div>
                            
                     
-                  <!-- <a href="/editAccount"
-                    ><button
-                      type="button"
-                      class="btn btn-dark btn-block btn-lg"
-                      data-mdb-ripple-color="dark"
-                    >
-                      Edit Profile
-                    </button></a -->
+                
                   
                 </div>
               </div>
@@ -100,7 +93,7 @@
         </div>
       </div>
 
-    <!-- Endbody -->
+    <!-- Endmiddle -->
 
     <!-- footer -->
     <%- include('../partials/user_footer')%>

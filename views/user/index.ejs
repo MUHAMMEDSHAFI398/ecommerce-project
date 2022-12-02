@@ -120,18 +120,18 @@
 
 			<div class="row">
 
-				<% for(i=0;i< 6; i++){ %>
+				<% for(i=0;i< 5; i++){ %>
 					<div class="col-lg-4 col-md-6 text-center">
 						<div class="single-product-item">
 							<div class="product-image">
-								<img style="width:300px; height:225px" src="/adminimages/<%=product[i]._id%>.jpg" alt="">
+								<img style="width:300px; height:225px" src="/adminimages/<%=product[i]?._id%>.jpg" alt="">
 							</div>
-							<h3><%= product[i].product_name %></h3>
+							<h3><%= product[i]?.product_name %></h3>
 							
-							<p class="product-price"> <%= product[i].price %>₹  </p>
+							<p class="product-price"> <%= product[i]?.price %>₹  </p>
 							<h6>Per kg</h6>
 							 <% if(customer) { %>
-							<a href="/productview/<%= product[i]._id %>" class="btn btn-success">Buy now</a>
+							<a href="/productview/<%= product[i]?._id %>" class="btn btn-success">Buy now</a>
 							<% }else { %>
 							<a href="/userLogin" class="btn btn-success">Buy now</a>
 							<% } %>
