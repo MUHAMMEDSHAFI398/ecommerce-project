@@ -6,7 +6,7 @@ const categories = require('../model/categoryModal');
 const getAdminLogin = (req,res)=>{
     let admin=req.session.admin
     if(admin){
-        res.render('admin/admin_home')
+        res.render('admin/adminHome')
     }else{
         res.render('admin/login')
     }  
@@ -14,7 +14,7 @@ const getAdminLogin = (req,res)=>{
 const getAdminHome = (req,res)=>{
     let admin=req.session.admin
     if(admin){
-        res.render('admin/admin_home')
+        res.render('admin/adminHome')
     }else{
         res.render('admin/login')
     }
@@ -23,7 +23,7 @@ const postAdminLogin = (req,res)=>{
     if (req.body.email === process.env.admin_email && req.body.password === process.env.admin_pass) {
         
         req.session.admin = process.env.admin_email
-        res.redirect('/admin/admin_home')
+        res.redirect('/admin/adminHome')
     } else {
         res.render('admin/login',{ invalid : 'invalid username or password '})
         

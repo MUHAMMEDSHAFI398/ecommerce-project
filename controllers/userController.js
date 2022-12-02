@@ -3,7 +3,9 @@ const bcrypt = require('bcrypt');
 const products = require('../model/productModal');
 const cart = require('../model/cartModal');
 const mongoose = require("mongoose");
-const mailer = require("../middlewares/otpValidation")
+const mailer = require("../middlewares/otpValidation");
+
+
 
 let name;
 let email;
@@ -136,10 +138,9 @@ module.exports = {
   },
 
   getShopPage: async (req, res) => {
-    let session = req.session.user
+    
     let product = await products.find()
-    if (session) res.render('user/shop', { product });
-    else res.render('user/login');
+    res.render('user/shop', { product });
 
   },
   getProductViewPage: async (req, res) => {

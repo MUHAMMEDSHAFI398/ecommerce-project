@@ -7,17 +7,14 @@ const fileUpload=require("express-fileupload");
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
 const dotenv = require("dotenv");
-dotenv.config()
-
 const dbconnect = require("./config/connection");
 dbconnect.dbconnect();
 app.listen(process.env.PORTNO, () => {
     console.log("server started listening to port 5000");
   });
 
-
+dotenv.config()
 app.set("views");
-//app.use(express.static("views"));
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,'public')))
 
