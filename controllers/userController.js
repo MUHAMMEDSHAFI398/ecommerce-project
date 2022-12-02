@@ -32,7 +32,7 @@ module.exports = {
     } else {
       customer = false
       res.render('user/index', { customer, product });
-    }
+    } 
   },
 
   getUserLogin: (req, res) => {
@@ -70,7 +70,7 @@ module.exports = {
           console.log(err)
         } else {
           console.log("otp redirect");
-          res.redirect('/otp');
+          res.redirect('/otpPage');
         }
       })
     }
@@ -99,7 +99,7 @@ module.exports = {
 
     } else {
 
-      res.redirect('/otp');
+      res.render('user/otp',{invalid:'invalid otp'});
     }
   },
 
@@ -141,15 +141,14 @@ module.exports = {
     
     let product = await products.find()
     res.render('user/shop', { product });
-
+    
   },
   getProductViewPage: async (req, res) => {
-    let session = req.session.user
+      
     let id = req.params.id
     let product = await products.findOne({ _id: id })
-    if (session) res.render('user/product_view', { product });
-    else res.render('user/login');
-
+    res.render('user/product_view', { product });
+    
   },
 
   addToCart: async (req, res) => {
@@ -206,8 +205,8 @@ module.exports = {
 
   },
   viewCart: async (req, res) => {
-    const session = req.session.user;
-    if (session) {
+    
+      const session = req.session.user;
       const userData = await user.findOne({ email: session });
       const productData = await cart
         .aggregate([
@@ -252,13 +251,12 @@ module.exports = {
       }, 0);
 
       res.render("user/cart", { productData, sum });
-    }
+    
 
   },
   changeQuantity: async (req, res) => {
 
     const data = req.body;
-    console.log(data)
     const objId = mongoose.Types.ObjectId(data.product);
     await cart
       .aggregate([
@@ -296,8 +294,7 @@ module.exports = {
       });
   },
   getCheckOutPage: async (req, res) => {
-    let session = req.session.user;
-    if (session) {
+      let session = req.session.user;
       const userData = await user.findOne({ email: session });
       const productData = await cart
         .aggregate([
@@ -343,18 +340,15 @@ module.exports = {
 
 
       res.render("user/checkout", { productData, sum });
-    }
+    
 
   },
   viewProfile: async (req, res) => {
-    const session = req.session.user;
-    if (session) {
-      let userData = await user.findOne({ email: session })
-      res.render('user/profile', { userData })
-    } else {
-      res.redirect('/')
-    }
 
+    const session = req.session.user;
+    let userData = await user.findOne({ email: session })
+    res.render('user/profile', { userData })
+    
   },
   editProfile: (req, res) => {
     res.render('user/editprofile')

@@ -11,19 +11,13 @@ const getAdminLogin = (req,res)=>{
         res.render('admin/login')
     }  
 }
-const getAdminHome = (req,res)=>{
-    let admin=req.session.admin
-    if(admin){
-        res.render('admin/adminHome')
-    }else{
-        res.render('admin/login')
-    }
-}
+
+
 const postAdminLogin = (req,res)=>{
     if (req.body.email === process.env.admin_email && req.body.password === process.env.admin_pass) {
         
         req.session.admin = process.env.admin_email
-        res.redirect('/admin/adminHome')
+        res.redirect('/admin')
     } else {
         res.render('admin/login',{ invalid : 'invalid username or password '})
         
@@ -36,15 +30,14 @@ const adminLogout = (req,res)=>{
 }
 
 const getAllusers = async (req,res)=>{
-    let admin=req.session.admin
-    if(admin){
-        let users = await user.find()
-        res.render('admin/userDetails',{ users })
-    }else{
-        res.redirect('/admin')
-    }
+
+    let users = await user.find()
+    res.render('admin/userDetails',{ users })
+
 }
+
 const blockUser = async (req,res)=>{
+
     const id = req.params.id;
     console.log(id);
     await user.updateOne({_id:id},{$set:{isBlocked:true}}).then(()=>{
@@ -62,13 +55,10 @@ const addproducts = async (req,res)=>{
     res.render('admin/addproducts',{category})
 }
 const productdetails = async (req,res)=>{
-    let admin=req.session.admin
-    if(admin){
-        let product = await products.find()
-        res.render("admin/productdetails",{product})
-    }else{
-        res.redirect('/admin')
-    }    
+   
+    let product = await products.find()
+    res.render("admin/productdetails",{product})
+      
 }
 const postProduct = async (req,res)=>{
     const image = req.files.product_image;
@@ -93,11 +83,14 @@ const postProduct = async (req,res)=>{
       }
 }
 const editProduct = async (req,res)=>{
+
     const id =req.params.id;
     const productData =await products.findOne({_id:id});
-     res.render('admin/editproduct',{productData}) 
+    res.render('admin/editproduct',{productData}) 
+
 }
 const deleteProduct = async (req,res)=>{
+
     const id = req.params.id;
     console.log(id);
     await products.deleteOne({_id:id}).then(()=>{
@@ -105,33 +98,35 @@ const deleteProduct = async (req,res)=>{
     })
 }
 const getcategory =async (req,res)=>{
-    let admin=req.session.admin
-    if(admin){
-        const Category = await categories.find()
-        res.render('admin/category' ,{Category})
-    }else{
-        res.redirect('/admin')
-    }   
+    
+    const Category = await categories.find()
+    res.render('admin/category' ,{Category})
+      
 }
 const addCategory =async (req,res)=>{
+
     const Category = new categories ({
-        category_name:req.body.category_name
+      category_name:req.body.category_name
     })
     await Category.save()
     res.redirect('/admin/category')
     
 }
 const editCategory = async (req,res)=>{
+
     const id=req.params.id;
     await categories.updateOne({_id:id},{$set:{
         category_name:req.body.category_name
     }});
     res.redirect('/admin/category')
+
 }
 const deleteCategory = async(req,res)=>{
+
     const id=req.params.id;
     await categories.deleteOne({_id:id})
     res.redirect('/admin/category')
+
 }
 const postEditProduct = async (req,res)=>{
     const id = req.params.id;
@@ -160,9 +155,9 @@ const postEditProduct = async (req,res)=>{
  
 
 module.exports = {
+    
     getAdminLogin,
     postAdminLogin,
-    getAdminHome,
     adminLogout,getAllusers,
     blockUser,
     unblockUser,

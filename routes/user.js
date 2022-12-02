@@ -11,23 +11,23 @@ userRouter.use(bodyParser.urlencoded({extended: true}));
 
 
 
-userRouter.get('/', userController.getHome);
-userRouter.get('/userLogin',userController.getUserLogin);
-userRouter.get('/userSignup',userController.getUserSignup);
-userRouter.post('/postSignup', userController.postSignup);
+userRouter.get('/' , userController.getHome);
+userRouter.get('/userLogin', userController.getUserLogin);
 userRouter.post('/postLogin', userController.postLogin);
-userRouter.get('/userLogout',userController.userLogout);
-userRouter.get('/shop',verifyLogin.verifyLoginUser ,userController.getShopPage);
-userRouter.get('/productview/:id',userController.getProductViewPage);
-userRouter.get('/cart/:id',userController.addToCart);
-userRouter.get('/checkout',userController.getCheckOutPage);
-userRouter.get('/viewCart',userController.viewCart);
+userRouter.get('/userSignup', userController.getUserSignup);
+userRouter.post('/postSignup', userController.postSignup);
+userRouter.get('/userLogout', userController.userLogout);
+userRouter.get('/shop', verifyLogin.verifyLoginUser ,userController.getShopPage);
+userRouter.get('/productview/:id', verifyLogin.verifyLoginUser , userController.getProductViewPage);
+userRouter.get('/cart/:id', userController.addToCart);
+userRouter.get('/checkout',verifyLogin.verifyLoginUser , userController.getCheckOutPage);
+userRouter.get('/viewCart',verifyLogin.verifyLoginUser , userController.viewCart);
 userRouter.post('/changeQuantity',userController.changeQuantity);
-userRouter.post('/removeProduct',userController. removeProduct);
-userRouter.get('/viewProfile',userController.viewProfile);
-userRouter.get('/editProfile',userController.editProfile);
-userRouter.get('/otp',userController.getOtpPage);
-userRouter.post('/otp',userController.postOtp);
+userRouter.post('/removeProduct', userController. removeProduct);
+userRouter.get('/viewProfile',verifyLogin.verifyLoginUser , userController.viewProfile);
+userRouter.get('/editProfile',verifyLogin.verifyLoginUser , userController.editProfile);
+userRouter.get('/otpPage', userController.getOtpPage);
+userRouter.post('/otp', userController.postOtp);
 
 
 module.exports=userRouter;
