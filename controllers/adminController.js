@@ -3,64 +3,64 @@ const products = require('../model/productModal');
 const categories = require('../model/categoryModal');
 
 
-const getAdminLogin = (req,res)=>{
-    let admin=req.session.admin
-    if(admin){
+
+const getAdminLogin = (req, res) => {
+    let admin = req.session.admin
+    if (admin) {
         res.render('admin/adminHome')
-    }else{
-        res.render('admin/login')
-    }  
-}
-
-
-const postAdminLogin = (req,res)=>{
-    if (req.body.email === process.env.admin_email && req.body.password === process.env.admin_pass) {
-        
-        req.session.admin = process.env.admin_email
-        res.redirect('/admin')
     } else {
-        res.render('admin/login',{ invalid : 'invalid username or password '})
-        
+        res.render('admin/login')
     }
 }
 
-const adminLogout = (req,res)=>{
-    req.session.destroy();
-      res.redirect('/admin');
+
+const postAdminLogin = (req, res) => {
+    if (req.body.email === process.env.admin_email && req.body.password === process.env.admin_pass) {
+
+        req.session.admin = process.env.admin_email
+        res.redirect('/admin')
+    } else {
+        res.render('admin/login', { invalid: 'invalid username or password ' })
+
+    }
 }
 
-const getAllusers = async (req,res)=>{
+const adminLogout = (req, res) => {
+    req.session.destroy();
+    res.redirect('/admin');
+}
+
+const getAllusers = async (req, res) => {
 
     let users = await user.find()
-    res.render('admin/userDetails',{ users })
+    res.render('admin/userDetails', { users })
 
 }
 
-const blockUser = async (req,res)=>{
+const blockUser = async (req, res) => {
 
     const id = req.params.id;
-    console.log(id);
-    await user.updateOne({_id:id},{$set:{isBlocked:true}}).then(()=>{
+    await user.updateOne({ _id: id }, { $set: { isBlocked: true } }).then(() => {
         res.redirect("/admin/userDetails");
     })
 }
-const unblockUser = async (req,res)=>{
+const unblockUser = async (req, res) => {
     const id = req.params.id;
-    await user.updateOne({_id:id},{$set:{isBlocked:false}}).then(()=>{
+    await user.updateOne({ _id: id }, { $set: { isBlocked: false } }).then(() => {
         res.redirect("/admin/userDetails");
     })
 }
-const addproducts = async (req,res)=>{
-    let category =  await categories.find()
-    res.render('admin/addproducts',{category})
+const addproducts = async (req, res) => {
+    let category = await categories.find()
+    res.render('admin/addproducts', { category })
 }
-const productdetails = async (req,res)=>{
-   
+const productdetails = async (req, res) => {
+
     let product = await products.find()
-    res.render("admin/productdetails",{product})
-      
+    res.render("admin/productdetails", { product })
+
 }
-const postProduct = async (req,res)=>{
+const postProduct = async (req, res) => {
     const image = req.files.product_image;
     const Product = new products({
         product_name: req.body.product_name,
@@ -68,97 +68,153 @@ const postProduct = async (req,res)=>{
         category: req.body.category,
         description: req.body.description,
         stock: req.body.stock
-      })
-      const productDetails = await Product.save()
-      if(productDetails){
+    })
+    const productDetails = await Product.save()
+    if (productDetails) {
         let productId = productDetails._id;
-        image.mv('./public/adminimages/'+productId+'.jpg',(err)=>{
-            if(!err){
+        image.mv('./public/adminimages/' + productId + '.jpg', (err) => {
+            if (!err) {
                 res.redirect('/admin/productdetails')
-            }else{
+            } else {
                 console.log(err)
             }
-        } )
-      
-      }
-}
-const editProduct = async (req,res)=>{
+        })
 
-    const id =req.params.id;
-    const productData =await products.findOne({_id:id});
-    res.render('admin/editproduct',{productData}) 
-
+    }
 }
-const deleteProduct = async (req,res)=>{
+const editProduct = async (req, res) => {
 
     const id = req.params.id;
-    console.log(id);
-    await products.deleteOne({_id:id}).then(()=>{
-        res.redirect('/admin/productdetails')
-    })
+    let category = await categories.find()
+    const productData = await products.findOne({ _id: id });
+    res.render('admin/editproduct', { productData, category })
+
 }
-const getcategory =async (req,res)=>{
+const deleteProduct = async (req, res) => {
     
+    const id = req.params.id;
+    await products.updateOne({ _id: id }, { $set: { delete: true } })
+    res.redirect('/admin/productdetails')
+
+}
+const restoreProduct = async (req,res)=>{
+
+    const id = req.params.id;
+    await products.updateOne({ _id: id }, { $set: { delete: false } })
+    res.redirect('/admin/productdetails')
+}
+const getcategory = async (req, res) => {
+
     const Category = await categories.find()
-    res.render('admin/category' ,{Category})
-      
-}
-const addCategory =async (req,res)=>{
 
-    const Category = new categories ({
-      category_name:req.body.category_name
-    })
-    await Category.save()
-    res.redirect('/admin/category')
-    
-}
-const editCategory = async (req,res)=>{
+    const categoryExist = req.session.categoryExist
+    req.session.categoryExist = ""
 
-    const id=req.params.id;
-    await categories.updateOne({_id:id},{$set:{
-        category_name:req.body.category_name
-    }});
-    res.redirect('/admin/category')
+    const fieldEmpty = req.session.fieldEmpty
+    req.session.fieldEmpty = ""
+
+    const editCategoryExist =req.session.editCategoryExist
+    req.session.editCategoryExist = ""
+
+    const editFieldEmpty = req.session.editFieldEmpty
+    req.session.editFieldEmpty=""
+
+    res.render('admin/category', { Category, fieldEmpty, categoryExist,editFieldEmpty ,editCategoryExist})
 
 }
-const deleteCategory = async(req,res)=>{
+const addCategory = async (req, res) => {
 
-    const id=req.params.id;
-    await categories.deleteOne({_id:id})
-    res.redirect('/admin/category')
+    if (req.body.category_name) {
+        const category_name = req.body.category_name
+        const category = await categories.findOne({ category_name: category_name })
 
-}
-const postEditProduct = async (req,res)=>{
-    const id = req.params.id;
-    await products.updateOne({_id:id},{$set:{
-        product_name: req.body.product_name,
-        price: req.body.price,
-        category: req.body.category,
-        description: req.body.description,
-        stock: req.body.stock
-    }});
-    if(req?.files?.product_image){
-    const image = req.files.product_image;
-    image.mv('./public/adminimages/'+id+'.jpg',(err)=>{
-        if(!err){
-            res.redirect('/admin/productdetails')
-        }else{
-            console.log(err)
+        if (category) {
+            req.session.categoryExist = "Category already exist"
+            res.redirect('/admin/category')
+        } else {
+            const Category = new categories({
+                category_name: req.body.category_name
+            })
+            await Category.save()
+            res.redirect('/admin/category')
         }
-    })
+    } else {
+        req.session.fieldEmpty = "Field can not be empty"
+        res.redirect('/admin/category')
+    }
+
+
+
+
+}
+const editCategory = async (req, res) => {
+
+    if (req.body.category_name) {
+
+        const category_name = req.body.category_name
+        const id = req.params.id;
+        const category = await categories.findOne({ category_name: category_name })
+        if (category) {
+
+            req.session.editCategoryExist = "Category already exist"
+            res.redirect('/admin/category')
+
+        } else {
+            await categories.updateOne({ _id: id }, {
+                $set: {
+                    category_name: req.body.category_name
+                }
+            });
+            res.redirect('/admin/category')
+        }
     }else{
+        req.session.editFieldEmpty = "Edit field can not be empty"
+        res.redirect('/admin/category')
+    }
+
+
+}
+const deleteCategory = async (req, res) => {
+
+    const id = req.params.id;
+    await categories.deleteOne({ _id: id })
+    res.redirect('/admin/category')
+
+}
+const postEditProduct = async (req, res) => {
+
+    const id = req.params.id;
+    await products.updateOne({ _id: id }, {
+        $set: {
+            product_name: req.body.product_name,
+            price: req.body.price,
+            category: req.body.category,
+            description: req.body.description,
+            stock: req.body.stock
+        }
+    });
+    if (req?.files?.product_image) {
+        const image = req.files.product_image;
+        image.mv('./public/adminimages/' + id + '.jpg', (err) => {
+            if (!err) {
+                res.redirect('/admin/productdetails')
+            } else {
+                console.log(err)
+            }
+        })
+    } else {
         res.redirect('/admin/productdetails')
     }
-                         
+
 }
 
- 
+
 
 module.exports = {
-    
+
     getAdminLogin,
     postAdminLogin,
-    adminLogout,getAllusers,
+    adminLogout, getAllusers,
     blockUser,
     unblockUser,
     addproducts,
@@ -171,6 +227,12 @@ module.exports = {
     addCategory,
     editCategory,
     deleteCategory,
-    
+    restoreProduct
+
 }
+
+
+
+
+  
 

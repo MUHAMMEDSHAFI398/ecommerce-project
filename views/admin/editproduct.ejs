@@ -24,10 +24,13 @@
 
             </div>
             <div class="form-outline flex-fill mb-0 mt-3">
-              <label class="form-label" for="form3Example1c">Category</label>
-              <input type="text" value="<%= productData.category %>" name="category" id="category"
-                class="form-control" />
-
+              <select class="form-select " name="category" id="category"   aria-label="Default select example">
+                <option selected disabled >Category</option>
+                <% category.forEach((categories)=> {%>
+                <option value="<%=categories.category_name%>" ><%=categories.category_name%></option>
+                <% }) %>
+                
+              </select>
             </div>
             <div class="form-outline flex-fill mb-0 mt-3">
               <label class="form-label" for="form3Example1c">Description</label>

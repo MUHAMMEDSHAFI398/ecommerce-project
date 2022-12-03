@@ -25,7 +25,11 @@ const mongoose = require('mongoose');
         type: Number,
         required: true,
         
-    }
+    },
+    delete: {
+        type: Boolean,
+        default: false,
+      }
 
  })
 

@@ -23,6 +23,7 @@ adminRouter.post('/postProduct',adminController.postProduct);
 adminRouter.get('/editProduct/:id', verifyLogin.verifyLoginAdmin , adminController.editProduct);
 adminRouter.post('/postEditProduct/:id',adminController.postEditProduct);
 adminRouter.get('/deleteProduct/:id', adminController.deleteProduct);
+adminRouter.get('/restoreProduct/:id', adminController.restoreProduct);
 adminRouter.get('/category', verifyLogin.verifyLoginAdmin , adminController.getcategory);
 adminRouter.post('/addCategory', adminController.addCategory);
 adminRouter.post('/editCategory/:id', adminController.editCategory);

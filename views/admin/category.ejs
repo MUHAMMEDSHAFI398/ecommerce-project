@@ -9,7 +9,24 @@
         <form action="/admin/addCategory" method="post" id="form" class="mt-5">
           <input type="text" name="category_name" placeholder="Add new category">
           <button type="submit" class="btn btn-success" >Submit</button>
+          <% if(locals.fieldEmpty){%>
+          <p class="text-danger"><%=fieldEmpty%></p>
+          <% } %>
+          <% if(locals.categoryExist){%>
+          <p class="text-danger"><%=categoryExist%></p>
+          <% } %>
         </form>
+        <div class="d-flex align-items-center justify-content-center">
+          <% if(locals.editFieldEmpty){%>
+            <p class="text-danger"><%=editFieldEmpty%></p>
+            <% } %>
+        </div>
+        <div class="d-flex align-items-center justify-content-center">
+          <% if(locals.editCategoryExist){%>
+            <p class="text-danger"><%=editCategoryExist%></p>
+            <% } %>
+        </div>
+        
         <table class="table" id="table">
           <thead>
             <tr>
@@ -20,6 +37,7 @@
               
             </tr>
           </thead>
+          
 
           <tbody>
             <% count=1 %>

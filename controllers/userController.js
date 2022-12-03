@@ -45,7 +45,7 @@ module.exports = {
 
   postSignup: async (req, res) => {
    
-    console.log("hello");
+    
     const spassword = await securepassword(req.body.password)
     name = req.body.name,
       email = req.body.email,

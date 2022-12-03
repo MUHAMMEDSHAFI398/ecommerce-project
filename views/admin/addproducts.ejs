@@ -71,15 +71,15 @@
               <h1>Add Product</h1>
             </div>
             <div class="form-outline flex-fill mb-0 mt-4">
-              <input type="text" placeholder="Product name" name="product_name" id="product_name"
+              <input type="text" required placeholder="Product name" name="product_name" id="product_name"
                 class="form-control" />
             </div>
             <div class="form-outline flex-fill mb-0 mt-4">
-              <input type="text" placeholder="Price per kg" name="price" id="price" class="form-control" />
+              <input type="text" required placeholder="Price per kg" name="price" id="price" class="form-control" />
             </div>
             <div class="form-outline flex-fill mb-0 mt-4">
               
-              <select class="form-select " name="category" id="category"   aria-label="Default select example">
+              <select required class="form-select " name="category" id="category"   aria-label="Default select example">
                 <option selected disabled >Category</option>
                 <% category.forEach((categories)=> {%>
                 <option value="<%=categories.category_name%>" ><%=categories.category_name%></option>
@@ -88,13 +88,13 @@
               </select>
             </div>
             <div class="form-outline flex-fill mb-0 mt-4">
-              <input type="text" placeholder="Description" name="description" id="description" class="form-control" />
+              <input type="text" required  placeholder="Description" name="description" id="description" class="form-control" />
             </div>
             <div class="form-outline flex-fill mb-0 mt-4">
-              <input type="text" placeholder="Stock in Kg" name="stock" id="stock" class="form-control" />
+              <input type="text" required  placeholder="Stock in Kg" name="stock" id="stock" class="form-control" />
             </div>
             <div class="form-outline flex-fill mb-0 mt-4">
-              <input class="form-control" placeholder="Product image" type="file" name="product_image"
+              <input class="form-control" required  placeholder="Product image" type="file" name="product_image"
                 id="product_image">
             </div>
             <div class="d-flex justify-content-center mt-4 ">
