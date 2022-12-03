@@ -25,7 +25,7 @@ module.exports = {
 
   getHome: async (req, res) => {
     let session = req.session.user
-    let product = await products.find()
+    let product = await products.find({delete:false})
     if (session) {
       customer = true
       res.render('user/index', { customer, product });
@@ -139,7 +139,7 @@ module.exports = {
 
   getShopPage: async (req, res) => {
     
-    let product = await products.find()
+    let product = await products.find({delete:false})
     res.render('user/shop', { product });
     
   },

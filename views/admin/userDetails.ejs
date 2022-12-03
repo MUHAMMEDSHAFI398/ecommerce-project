@@ -1,62 +1,76 @@
 <!-- admin sidebar -->
 <%- include('../partials/admin-sidebar')%>
-<!-- end admin sidebar -->
-      <div class="col py-3">
+  <!-- end admin sidebar -->
+  <div class="col py-3">
 
-        <div class="d-flex align-items-center justify-content-center">
-          <h1 class="text-decoration-underline">User details</h1>
-        </div>
-        <table class="table mt-5" id="table">
-          <thead>
-            <tr>
-              <th scope="col">No</th>
-              <th scope="col">name</th>
-              <th scope="col">email</th>
-              <th scope="col">Mobile</th>
-              <th scope="col">Controlls</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <% let count=1 %>
-              <% users.forEach((user)=>{ %>
-                <tr>
-                  <td>
-                    <%= count %>
-                  </td>
-                  <td>
-                    <%=user.name %>
-                  </td>
-                  <td>
-                    <%=user.email %>
-                  </td>
-
-                  <td>
-                    <%=user.phonenumber %>
-                  </td>
-                  <td>
-                    <% if(user.isBlocked===false) { %>
-                      <a href="/admin/blockUser/<%= user._id%>" class="btn btn-danger">Block</a>
-                      <% }else{ %>
-                        <a href="/admin/unblockUser/<%= user._id%>" class="btn btn-success">Unblock</a>
-                        <%}%>
-
-                  </td>
-                </tr>
-                <% count++ %>
-                  <% }) %>
-
-
-          </tbody>
-        </table>
-
-      </div>
+    <div class="d-flex align-items-center justify-content-center">
+      <h1 class="text-decoration-underline">User details</h1>
     </div>
+    <table class="table mt-5" id="table">
+      <thead>
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">name</th>
+          <th scope="col">email</th>
+          <th scope="col">Mobile</th>
+          <th scope="col">Controlls</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <% let count=1 %>
+          <% users.forEach((user)=>{ %>
+            <tr>
+              <td>
+                <%= count %>
+              </td>
+              <td>
+                <%=user.name %>
+              </td>
+              <td>
+                <%=user.email %>
+              </td>
+
+              <td>
+                <%=user.phonenumber %>
+              </td>
+              <td>
+                <% if(user.isBlocked===false) { %>
+                  <a href="/admin/blockUser/<%= user._id%>" class="btn btn-danger">Block</a>
+                  <% }else{ %>
+                    <a href="/admin/unblockUser/<%= user._id%>" class="btn btn-success">Unblock</a>
+                    <%}%>
+
+              </td>
+            </tr>
+            <% count++ %>
+              <% }) %>
+
+
+      </tbody>
+    </table>
+
+  </div>
+  </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
     crossorigin="anonymous"></script>
 
-</body>
 
-</html>
+  <!-- data table -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('#table').DataTable();
+    });
+  </script>
+
+  <!--end data table -->
+
+  </body>
+
+  </html>
