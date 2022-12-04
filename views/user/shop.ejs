@@ -25,6 +25,12 @@
                         <ul>
                             <li class="active" data-filter="*">All</li>
                             <li data-filter=".strawberry">Strawberry</li>
+							<li data-filter=".strawberry">Strawberry</li>
+							<li data-filter=".strawberry">Strawberry</li>
+							<li data-filter=".strawberry">Strawberry</li>
+							<li data-filter=".strawberry">Strawberry</li>
+							<li data-filter=".strawberry">Strawberry</li>
+							<li data-filter=".strawberry">Strawberry</li>
                             <li data-filter=".berry">Berry</li>
                             <li data-filter=".lemon">Lemon</li>
                         </ul>
@@ -41,8 +47,10 @@
 							<a href="/productview/<%=products._id%>"><img style="width:300px; height:225px" src="/adminimages/<%=products._id%>.jpg" alt=""></a>
 							
 						</div>
-						<h3><%= products.product_name %></h3>
-						<p class="product-price"><span>Per Kg</span> <%= products.price %>₹ </p>
+						<p class="product-price"><%= products?.product_name %></p>
+						<p><%= products?.category.category_name %></p>
+						<p class="product-price"> <%= products?.price %>₹  </p>
+						<h5>Per kg</h5>
 						<a href="/productview/<%=products._id%>" class="btn btn-success">Buy now</a>
 					</div>
 				</div>

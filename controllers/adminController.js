@@ -56,16 +56,18 @@ const addproducts = async (req, res) => {
 }
 const productdetails = async (req, res) => {
 
-    let product = await products.find()
+    let product = await products.find().populate('category')
     res.render("admin/productdetails", { product })
 
 }
 const postProduct = async (req, res) => {
+
+    let categoryId =req.body.category
     const image = req.files.product_image;
     const Product = new products({
         product_name: req.body.product_name,
         price: req.body.price,
-        category: req.body.category,
+        category: categoryId,
         description: req.body.description,
         stock: req.body.stock
     })

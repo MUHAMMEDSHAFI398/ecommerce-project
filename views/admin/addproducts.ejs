@@ -21,7 +21,7 @@
               <select required class="form-select " name="category" id="category"   aria-label="Default select example">
                 <option selected disabled >Category</option>
                 <% category.forEach((categories)=> {%>
-                <option value="<%=categories.category_name%>" ><%=categories.category_name%></option>
+                <option value="<%=categories._id%>" ><%=categories.category_name%></option>
                 <% }) %>
                 
               </select>

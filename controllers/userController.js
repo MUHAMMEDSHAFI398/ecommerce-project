@@ -25,14 +25,13 @@ module.exports = {
 
   getHome: async (req, res) => {
     let session = req.session.user
-    let product = await products.find({delete:false})
+    let product = await products.find({delete:false}).populate('category')
     if (session) {
-      customer = true
-      res.render('user/index', { customer, product });
+      customer = true  
     } else {
-      customer = false
-      res.render('user/index', { customer, product });
+      customer = false 
     } 
+    res.render('user/index', { customer, product });
   },
 
   getUserLogin: (req, res) => {
@@ -107,7 +106,7 @@ module.exports = {
     const email = req.body.email
     const password = req.body.password
     const userData = await user.findOne({ email: email });
-    console.log(userData)
+    
 
 
     try {
@@ -139,14 +138,14 @@ module.exports = {
 
   getShopPage: async (req, res) => {
     
-    let product = await products.find({delete:false})
+    let product = await products.find({delete:false}).populate('category')
     res.render('user/shop', { product });
     
   },
   getProductViewPage: async (req, res) => {
       
     let id = req.params.id
-    let product = await products.findOne({ _id: id })
+    let product = await products.findOne({ _id: id }).populate('category')
     res.render('user/product_view', { product });
     
   },

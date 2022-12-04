@@ -32,7 +32,7 @@
 						<p><%=product.description%></p>
 						<div class="single-product-form">						
 							<a href="/cart/<%= product._id %>" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-							<p><strong>Category :</strong><%=product.category%></p>
+							<p><strong>Category :</strong><%= product?.category.category_name %></p>
 						</div>
 					
 					</div>

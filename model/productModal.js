@@ -14,8 +14,8 @@ const mongoose = require('mongoose');
         required: true, 
     },
     category: {
-        type: String,
-        required: true,
+        type: mongoose.SchemaTypes.ObjectId,
+        ref:'categories'
     },
     description:{
         type: String,

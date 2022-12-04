@@ -127,7 +127,7 @@
 								<img style="width:300px; height:225px" src="/adminimages/<%=products?._id%>.jpg" alt="">
 							</div>
 							<p class="product-price"><%= products?.product_name %></p>
-							 <p><%= products?.category %></p>
+							 <p><%= products?.category.category_name %></p>
 							<p class="product-price"> <%= products?.price %>₹  </p>
 							<h5>Per kg</h5>
 							 <% if(customer) { %>
