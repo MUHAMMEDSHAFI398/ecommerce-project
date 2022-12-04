@@ -11,6 +11,8 @@ let name;
 let email;
 let phonenumber;
 let password;
+let countInCart
+
 
 const securepassword = async (password) => {
   try {
@@ -31,7 +33,7 @@ module.exports = {
     } else {
       customer = false 
     } 
-    res.render('user/index', { customer, product });
+    res.render('user/index', { customer, product ,countInCart});
   },
 
   getUserLogin: (req, res) => {
@@ -139,14 +141,14 @@ module.exports = {
   getShopPage: async (req, res) => {
     
     let product = await products.find({delete:false}).populate('category')
-    res.render('user/shop', { product });
+    res.render('user/shop', { product,countInCart });
     
   },
   getProductViewPage: async (req, res) => {
       
     let id = req.params.id
     let product = await products.findOne({ _id: id }).populate('category')
-    res.render('user/product_view', { product });
+    res.render('user/product_view', { product ,countInCart});
     
   },
 
@@ -249,7 +251,9 @@ module.exports = {
         return accumulator + object.productPrice;
       }, 0);
 
-      res.render("user/cart", { productData, sum });
+      countInCart=productData.length;
+
+      res.render("user/cart", { productData, sum ,countInCart});
     
 
   },
@@ -338,7 +342,7 @@ module.exports = {
       }, 0);
 
 
-      res.render("user/checkout", { productData, sum });
+      res.render("user/checkout", { productData, sum ,countInCart });
     
 
   },
@@ -346,11 +350,11 @@ module.exports = {
 
     const session = req.session.user;
     let userData = await user.findOne({ email: session })
-    res.render('user/profile', { userData })
+    res.render('user/profile', { userData ,countInCart})
     
   },
   editProfile: (req, res) => {
-    res.render('user/editprofile')
+    res.render('user/editprofile',{countInCart})
   }
 
 }

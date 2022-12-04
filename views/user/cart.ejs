@@ -37,7 +37,9 @@
 								<% productData.forEach((product)=>{ %>
 
 									<tr class="table-body-row">
-										<td class="product-remove"><button onclick="removeProduct('<%= product._id %>','<%= product.productDetail._id %>')" ><i class="far fa-window-close"></i></button>
+										<td class="product-remove"><button
+												onclick="removeProduct('<%= product._id %>','<%= product.productDetail._id %>')"><i
+													class="far fa-window-close"></i></button>
 										</td>
 										<td class="product-image"><img
 												src="/adminimages/<%= product.productDetail._id %>.jpg" alt=""></td>
@@ -49,21 +51,30 @@
 										</td>
 										<td class="product-quantity">
 
-											<button class="cart-item-count mr-3"
-												onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)">+</button>
-											<input  id="quantity" min="0" name="quantity"
-												value="<%= product.productQuantity%>" type=""
-												class="form-control form-control-sm" />
-											<button
-												class="cart-item-count mr-3" '<% if(product.productQuantity === 1){ %> style="pointer-events: none; cursor: not-allowed;" <% } %>'
-												onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)">-</button>
+											<div class="container d-flex">
+												<button
+													class="cart-item-count  mr-3" '<% if(product.productQuantity === 1){ %> style="pointer-events: none; cursor: not-allowed;" <% } %>'
+													onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)">-</button>
+
+												<input readonly style="width: 25px; height: 35px; border-color: black;"
+													id="quantity" min="0" name="quantity"
+													value="<%= product.productQuantity%>" type=""
+													class="form-control form-control-sm " />
+
+												<button class="cart-item-count ml-3 mr-3"
+													onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)">+</button>
+
+
+											</div>
 
 										</td>
-									      <% var a= product.productDetail.price%> 
-										  <% var b= product.productQuantity%>
-										  <% var c=a*b %>
-										 	
-										<td class="product-total"><%=c %> ₹</td>
+										<% var a=product.productDetail.price%>
+											<% var b=product.productQuantity%>
+												<% var c=a*b %>
+
+													<td class="product-total">
+														<%=c %> ₹
+													</td>
 									</tr>
 
 									<% }) %>
@@ -85,8 +96,10 @@
 								<tr class="total-data">
 									<td><strong>Subtotal: </strong></td>
 									<% if(locals.sum){%>
-									<td><%=sum%> ₹</td>
-									<%}%>
+										<td>
+											<%=sum%> ₹
+										</td>
+										<%}%>
 								</tr>
 								<tr class="total-data">
 									<td><strong>Shipping: </strong></td>
@@ -95,8 +108,10 @@
 								<tr class="total-data">
 									<td><strong>Total: </strong></td>
 									<% if(locals.sum){%>
-									<td><%=sum%> ₹</td>
-									<%}%>
+										<td>
+											<%=sum%> ₹
+										</td>
+										<%}%>
 								</tr>
 							</tbody>
 						</table>
@@ -105,7 +120,7 @@
 						</div>
 					</div>
 
-					<div class="coupon-section">
+					<!-- <div class="coupon-section">
 						<h3>Apply Coupon</h3>
 						<div class="coupon-form-wrap">
 							<form action="index.html">
@@ -113,7 +128,7 @@
 								<p><input type="submit" value="Apply"></p>
 							</form>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
