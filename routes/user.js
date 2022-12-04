@@ -16,6 +16,8 @@ userRouter.get('/userLogin', userController.getUserLogin);
 userRouter.post('/postLogin', userController.postLogin);
 userRouter.get('/userSignup', userController.getUserSignup);
 userRouter.post('/postSignup', userController.postSignup);
+userRouter.get('/otpPage', userController.getOtpPage);
+userRouter.post('/otp', userController.postOtp);
 userRouter.get('/userLogout', userController.userLogout);
 userRouter.get('/shop', verifyLogin.verifyLoginUser ,userController.getShopPage);
 userRouter.get('/productview/:id', verifyLogin.verifyLoginUser , userController.getProductViewPage);
@@ -26,9 +28,7 @@ userRouter.post('/changeQuantity',userController.changeQuantity);
 userRouter.post('/removeProduct', userController. removeProduct);
 userRouter.get('/viewProfile',verifyLogin.verifyLoginUser , userController.viewProfile);
 userRouter.get('/editProfile',verifyLogin.verifyLoginUser , userController.editProfile);
-userRouter.get('/otpPage', userController.getOtpPage);
-userRouter.post('/otp', userController.postOtp);
-
+userRouter.post('/postEditProfile', userController.postEditProfile);
 
 module.exports=userRouter;
 

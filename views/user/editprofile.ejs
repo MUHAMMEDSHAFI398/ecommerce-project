@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-lg-8 offset-lg-2 text-center">
                     <div class="breadcrumb-text">
-                        <h1>Edit your profile</h1>
+                        <h1>Update your profile</h1>
                     </div>
                 </div>
             </div>
@@ -20,44 +20,49 @@
      <!-- middle section -->
      <div  class="mt-150 mb-150">
       <div class="container mt-5 w-50 border ">
-        <form action="" method="post" id="form" >
+
+        <form action="/postEditProfile" method="post" id="form" >
+
           <div class="d-flex justify-content-center">
             <h3>Update your profile</h3>
           </div>
+
           <div class="form-outline flex-fill mb-0 mt-4">
-            <input type="text" placeholder="Name" name="name" id="product_name"
+            <input type="text" value="<%=userData.name%>" placeholder="Name" name="name" id="product_name"
               class="form-control" />
           </div>
+          
           <div class="form-outline flex-fill mb-0 mt-4">
-            <input type="text" placeholder="Email" name="email" id="email" class="form-control" />
-          </div>
-          <div class="form-outline flex-fill mb-0 mt-4">
-            <input type="text" placeholder="Phone" name="phonenumber" id="phone" class="form-control" />
+            <input type="text" value="<%=userData.phonenumber%>" placeholder="Phone" name="phonenumber" id="phone" class="form-control" />
             
           </div>
+
           <div class="form-outline flex-fill mb-0 mt-4">
             <label for="">Full adress</label>
-            <input type="text" placeholder="House name" name="housename" id="housename" class="form-control" />
+            <input type="text" value="<%= userData?.addressDetails[0]?.housename %>" placeholder="House name" name="housename" id="housename" class="form-control" />
           </div>
+
           <div class="form-outline flex-fill mb-0 mt-4">
-            <input type="text" placeholder="Area" name="area" id="area" class="form-control" />
+            <input type="text" value="<%= userData?.addressDetails[0]?.area%>" placeholder="Area" name="area" id="area" class="form-control" />
           </div>
+
           <div class="form-outline flex-fill mb-0 mt-4">
-            <input type="text" placeholder="Landmark" name="landmark" id="landmark" class="form-control" />
+            <input type="text" value="<%= userData?.addressDetails[0]?.landmark%>"  placeholder="Landmark" name="landmark" id="landmark" class="form-control" />
           </div>
 
           <div class="d-flex form-outline flex-fill mb-0 mt-4">
-            <input type="text" placeholder="District" name="district" id="district" class="form-control" />
-            <input type="text" placeholder="State" name="state" id="state" class="form-control" />
+            <input type="text" value="<%= userData?.addressDetails[0]?.district%>" placeholder="District" name="district" id="district" class="form-control" />
+            <input type="text" value="<%= userData?.addressDetails[0]?.state%>" placeholder="State" name="state" id="state" class="form-control" />
             
           </div>
+
           <div class="d-flex form-outline flex-fill mb-0 mt-4">
-            <input type="text" placeholder="Pin code" name="pin" id="pin" class="form-control" />
-            <input type="text" placeholder="Post office" name="postoffice" id="postoffice" class="form-control" />
+            <input type="text" value="<%= userData?.addressDetails[0]?.postoffice%>" placeholder="Post office" name="postoffice" id="postoffice" class="form-control" />
+            <input type="text" value="<%= userData?.addressDetails[0]?.pin%>" placeholder="Pin code" name="pin" id="pin" class="form-control" />
             
           </div>
          
-          <div class="d-flex justify-content-center mt-4 ">
+          <div class="d-flex justify-content-center mb-4 mt-4 ">
             <button type="submit" class="btn btn-success ">Update</button>
           </div>
 

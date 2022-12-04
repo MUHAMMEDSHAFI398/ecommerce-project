@@ -27,13 +27,13 @@ module.exports = {
 
   getHome: async (req, res) => {
     let session = req.session.user
-    let product = await products.find({delete:false}).populate('category')
+    let product = await products.find({ delete: false }).populate('category')
     if (session) {
-      customer = true  
+      customer = true
     } else {
-      customer = false 
-    } 
-    res.render('user/index', { customer, product ,countInCart});
+      customer = false
+    }
+    res.render('user/index', { customer, product, countInCart });
   },
 
   getUserLogin: (req, res) => {
@@ -45,8 +45,8 @@ module.exports = {
   },
 
   postSignup: async (req, res) => {
-   
-    
+
+
     const spassword = await securepassword(req.body.password)
     name = req.body.name,
       email = req.body.email,
@@ -67,7 +67,7 @@ module.exports = {
     } else {
       mailer.mailTransporter.sendMail(mailDetails, function (err, data) {
         if (err) {
-          
+
           console.log(err)
         } else {
           console.log("otp redirect");
@@ -100,7 +100,7 @@ module.exports = {
 
     } else {
 
-      res.render('user/otp',{invalid:'invalid otp'});
+      res.render('user/otp', { invalid: 'invalid otp' });
     }
   },
 
@@ -108,7 +108,7 @@ module.exports = {
     const email = req.body.email
     const password = req.body.password
     const userData = await user.findOne({ email: email });
-    
+
 
 
     try {
@@ -139,17 +139,17 @@ module.exports = {
   },
 
   getShopPage: async (req, res) => {
-    
-    let product = await products.find({delete:false}).populate('category')
-    res.render('user/shop', { product,countInCart });
-    
+
+    let product = await products.find({ delete: false }).populate('category')
+    res.render('user/shop', { product, countInCart });
+
   },
   getProductViewPage: async (req, res) => {
-      
+
     let id = req.params.id
     let product = await products.findOne({ _id: id }).populate('category')
-    res.render('user/product_view', { product ,countInCart});
-    
+    res.render('user/product_view', { product, countInCart });
+
   },
 
   addToCart: async (req, res) => {
@@ -206,55 +206,55 @@ module.exports = {
 
   },
   viewCart: async (req, res) => {
-    
-      const session = req.session.user;
-      const userData = await user.findOne({ email: session });
-      const productData = await cart
-        .aggregate([
-          {
-            $match: { userId: userData.id },
+
+    const session = req.session.user;
+    const userData = await user.findOne({ email: session });
+    const productData = await cart
+      .aggregate([
+        {
+          $match: { userId: userData.id },
+        },
+        {
+          $unwind: "$product",
+        },
+        {
+          $project: {
+            productItem: "$product.productId",
+            productQuantity: "$product.quantity",
           },
-          {
-            $unwind: "$product",
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "productItem",
+            foreignField: "_id",
+            as: "productDetail",
           },
-          {
-            $project: {
-              productItem: "$product.productId",
-              productQuantity: "$product.quantity",
-            },
+        },
+        {
+          $project: {
+            productItem: 1,
+            productQuantity: 1,
+            productDetail: { $arrayElemAt: ["$productDetail", 0] },
           },
-          {
-            $lookup: {
-              from: "products",
-              localField: "productItem",
-              foreignField: "_id",
-              as: "productDetail",
-            },
-          },
-          {
-            $project: {
-              productItem: 1,
-              productQuantity: 1,
-              productDetail: { $arrayElemAt: ["$productDetail", 0] },
-            },
-          },
-          {
-            $addFields: {
-              productPrice: {
-                $multiply: ["$productQuantity", "$productDetail.price"]
-              }
+        },
+        {
+          $addFields: {
+            productPrice: {
+              $multiply: ["$productQuantity", "$productDetail.price"]
             }
           }
-        ])
-        .exec();
-      const sum = productData.reduce((accumulator, object) => {
-        return accumulator + object.productPrice;
-      }, 0);
+        }
+      ])
+      .exec();
+    const sum = productData.reduce((accumulator, object) => {
+      return accumulator + object.productPrice;
+    }, 0);
 
-      countInCart=productData.length;
+    countInCart = productData.length;
 
-      res.render("user/cart", { productData, sum ,countInCart});
-    
+    res.render("user/cart", { productData, sum, countInCart });
+
 
   },
   changeQuantity: async (req, res) => {
@@ -297,64 +297,96 @@ module.exports = {
       });
   },
   getCheckOutPage: async (req, res) => {
-      let session = req.session.user;
-      const userData = await user.findOne({ email: session });
-      const productData = await cart
-        .aggregate([
-          {
-            $match: { userId: userData.id },
+    let session = req.session.user;
+    const userData = await user.findOne({ email: session });
+    const productData = await cart
+      .aggregate([
+        {
+          $match: { userId: userData.id },
+        },
+        {
+          $unwind: "$product",
+        },
+        {
+          $project: {
+            productItem: "$product.productId",
+            productQuantity: "$product.quantity",
           },
-          {
-            $unwind: "$product",
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "productItem",
+            foreignField: "_id",
+            as: "productDetail",
           },
-          {
-            $project: {
-              productItem: "$product.productId",
-              productQuantity: "$product.quantity",
-            },
+        },
+        {
+          $project: {
+            productItem: 1,
+            productQuantity: 1,
+            productDetail: { $arrayElemAt: ["$productDetail", 0] },
           },
-          {
-            $lookup: {
-              from: "products",
-              localField: "productItem",
-              foreignField: "_id",
-              as: "productDetail",
-            },
-          },
-          {
-            $project: {
-              productItem: 1,
-              productQuantity: 1,
-              productDetail: { $arrayElemAt: ["$productDetail", 0] },
-            },
-          },
-          {
-            $addFields: {
-              productPrice: {
-                $multiply: ["$productQuantity", "$productDetail.price"]
-              }
+        },
+        {
+          $addFields: {
+            productPrice: {
+              $multiply: ["$productQuantity", "$productDetail.price"]
             }
           }
-        ])
-        .exec();
-      const sum = productData.reduce((accumulator, object) => {
-        return accumulator + object.productPrice;
-      }, 0);
+        }
+      ])
+      .exec();
+    const sum = productData.reduce((accumulator, object) => {
+      return accumulator + object.productPrice;
+    }, 0);
 
 
-      res.render("user/checkout", { productData, sum ,countInCart });
-    
+    res.render("user/checkout", { productData, sum, countInCart });
+
 
   },
   viewProfile: async (req, res) => {
 
     const session = req.session.user;
     let userData = await user.findOne({ email: session })
-    res.render('user/profile', { userData ,countInCart})
-    
+    res.render('user/profile', { userData, countInCart })
+
   },
-  editProfile: (req, res) => {
-    res.render('user/editprofile',{countInCart})
+  editProfile: async (req, res) => {
+    const session = req.session.user;
+    let userData = await user.findOne({ email: session })
+    res.render('user/editprofile', { userData, countInCart })
+  },
+  postEditProfile: async (req, res) => {
+    
+    const session = req.session.user;
+    await user.updateOne(
+      { email: session },
+      {
+        $set: {
+
+          name: req.body.name,
+          phonenumber: req.body.phonenumber,
+          addressDetails: [
+            {
+              housename: req.body.housename,
+              area: req.body.area,
+              landmark: req.body.landmark,
+              district: req.body.district,
+              state: req.body.state,
+              postoffice: req.body.postoffice,
+              pin: req.body.pin
+
+
+            }
+          ]
+
+        }
+      }
+    );
+    
+    res.redirect('/viewProfile')
   }
 
 }
