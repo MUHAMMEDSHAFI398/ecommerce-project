@@ -5,11 +5,6 @@ const adminController = require('../controllers/adminController');
 const verifyLogin = require("../middlewares/session");
 
 
-const bodyParser = require('body-parser');
-adminRouter.use(bodyParser.json());
-adminRouter.use(bodyParser.urlencoded({extended: true}));
-
-
 
 adminRouter.get('/', adminController.getAdminLogin);
 adminRouter.post('/postAdminLogin', adminController.postAdminLogin);

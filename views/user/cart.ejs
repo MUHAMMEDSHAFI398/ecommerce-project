@@ -33,7 +33,7 @@
 								</tr>
 							</thead>
 							<tbody>
-
+<% let count = 0 %>
 								<% productData.forEach((product)=>{ %>
 
 									<tr class="table-body-row">
@@ -56,11 +56,8 @@
 													class="cart-item-count  mr-3" '<% if(product.productQuantity === 1){ %> style="pointer-events: none; cursor: not-allowed;" <% } %>'
 													onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)">-</button>
 
-												<input readonly style="width: 25px; height: 35px; border-color: black;"
-													id="quantity" min="0" name="quantity"
-													value="<%= product.productQuantity%>" type=""
-													class="form-control form-control-sm " />
-
+												<p id="<%= product.productDetail._id %>" min="0" name="quantity"><%= product.productQuantity%></p>
+												
 												<button class="cart-item-count ml-3 mr-3"
 													onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)">+</button>
 
@@ -76,7 +73,7 @@
 														<%=c %> ₹
 													</td>
 									</tr>
-
+<% count++ %>
 									<% }) %>
 							</tbody>
 						</table>

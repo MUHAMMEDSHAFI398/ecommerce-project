@@ -15,7 +15,7 @@ function removeProduct(cartId, productId) {
 
   function changeQuantity(cartId, productId, count) {
 			
-    let quantity = parseInt(document.getElementById("quantity").innerHTML);
+    let quantity = parseInt(document.getElementById(productId).innerHTML);
     $.ajax({
       url: "/changeQuantity",
       data: {
@@ -25,8 +25,8 @@ function removeProduct(cartId, productId) {
       },
       method: "post",
       success: () => {
-        document.getElementById("quantity").innerHTML = quantity + count;
-        location.reload();
+        document.getElementById(productId).innerHTML = quantity + count;
+        
       },
     });
   }

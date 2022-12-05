@@ -5,12 +5,6 @@ const verifyLogin = require("../middlewares/session");
 
 
 
-const bodyParser = require('body-parser');
-userRouter.use(bodyParser.json());
-userRouter.use(bodyParser.urlencoded({extended: true}));
-
-
-
 userRouter.get('/' , userController.getHome);
 userRouter.get('/userLogin', userController.getUserLogin);
 userRouter.post('/postLogin', userController.postLogin);
@@ -29,6 +23,10 @@ userRouter.post('/removeProduct', userController. removeProduct);
 userRouter.get('/viewProfile',verifyLogin.verifyLoginUser , userController.viewProfile);
 userRouter.get('/editProfile',verifyLogin.verifyLoginUser , userController.editProfile);
 userRouter.post('/postEditProfile', userController.postEditProfile);
+userRouter.post('/addNewAddress', userController.addNewAddress);
+
+
+
 
 module.exports=userRouter;
 

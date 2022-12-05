@@ -1,5 +1,5 @@
 <%- include('../partials/user_header')%>
-	
+
 	<!-- breadcrumb-section -->
 	<div class="breadcrumb-section breadcrumb-bg">
 		<div class="container">
@@ -19,7 +19,7 @@
 	<div class="checkout-section mt-150 mb-150">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-8">
+				<!-- <div class="col-lg-8">
 					<div class="checkout-accordion-wrap">
 						<div class="accordion" id="accordionExample">
 						  <div class="card single-accordion">
@@ -80,6 +80,127 @@
 						</div>
 
 					</div>
+				</div> -->
+
+				<div class="col-md-8 order-md-1">
+					<section>
+						<div class="container">
+							<form action="/fi" method="post">
+							<label class="col-xs-3 control-label">Select Shipping Address</label>
+
+							<select class="form-select mt-2" required name="address" style="width: 20rem">
+								<% userData.addressDetails.forEach((address)=>{%>
+									<option  name="address">
+										<%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,
+													<%=address.area %>, <%= address.district %>,<%= address.pin %>,
+																<%=address.state %>
+									</option>
+								<% }) %>
+							</select>
+
+							<div class="d-block my-3">
+								<div class="custom-control custom-radio">
+									<input id="credit" name="paymentMethod" type="radio" value="COD"
+										class="custom-control-input" checked required />
+									<label class="custom-control-label" for="credit">COD</label>
+								</div>
+								<div class="custom-control custom-radio">
+									<input id="debit" name="paymentMethod" type="radio" value="Online"
+										class="custom-control-input" required />
+									<label class="custom-control-label" for="debit">Online</label>
+								</div>
+								<!-- <a href=""> -->
+									<button type="submit" class="btn btn-secondary mt-5">
+										Place order
+									</button>
+								<!-- </a> -->
+							</div>
+							</form>
+
+
+							<button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+								data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+								Add new address
+							</button>
+							<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+								aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h1 class="modal-title fs-5" id="exampleModalLabel">
+												Add new Address
+											</h1>
+											<button type="button" class="btn-close" data-bs-dismiss="modal"
+												aria-label="Close"></button>
+										</div>
+										<form action="/addNewAddress" method="post">
+											<div class="modal-body">
+												<div class="mb-3">
+													<label for="recipient-name"
+														class="col-form-label">Housename:</label>
+													<input required type="text" class="form-control" id="housename"
+														name="housename" />
+													<p id="houseError" style="color: red"></p>
+												</div>
+												<div class="mb-3">
+													<label for="recipient-name" class="col-form-label">Area:</label>
+													<input required type="text" class="form-control" id="area"
+														name="area" />
+													<p id="areaError" style="color: red"></p>
+												</div>
+												<div class="mb-3">
+													<label for="recipient-name" class="col-form-label">Landmark:</label>
+													<input required type="text" class="form-control" id="landmark"
+														name="landmark" />
+													<p id="landmarkError" style="color: red"></p>
+												</div>
+												<div class="mb-3">
+													<div class="row">
+														<div class="col-md-6 mb-3">
+															<label for="firstName">District</label>
+															<input required type="text" class="form-control"
+																id="district" name="district" />
+															<p id="stateError" style="color: red"></p>
+														</div>
+														<div class="col-md-6 mb-3">
+															<label for="lastName">State</label>
+															<input required type="text" class="form-control" id="state"
+																name="state" />
+															<p id="pincodeError" style="color: red"></p>
+														</div>
+													</div>
+												</div>
+												<div class="mb-3">
+													<div class="row">
+														<div class="col-md-6 mb-3">
+															<label for="firstName">Post office</label>
+															<input required type="text" class="form-control"
+																id="postoffice" name="postoffice" />
+															<p id="stateError" style="color: red"></p>
+														</div>
+														<div class="col-md-6 mb-3">
+															<label for="lastName">Pincode</label>
+															<input required type="text" class="form-control" id="pin"
+																name="pin" />
+															<p id="pincodeError" style="color: red"></p>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+													Close
+												</button>
+												<button type="submit" value="submit" class="btn btn-primary">
+													Add
+												</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
 				</div>
 
 				<div class="col-lg-4">
@@ -97,23 +218,29 @@
 									<td>Total</td>
 								</tr>
 								<% productData.forEach((product)=>{%>
-								<tr>
-									<td><%= product.productDetail.product_name %> (<%= product.productQuantity%>kg)</td>
-									      <% var a= product.productDetail.price%> 
-										  <% var b= product.productQuantity%>
-										  <% var c=a*b %>
-									<td><%= c %> ₹</td>
-								</tr>
-								<% }) %>
-								<tr>
-									<td>Total</td>
-									<td><%=sum%> ₹</td>
-									
-								</tr>								
+									<tr>
+										<td>
+											<%= product.productDetail.product_name %> (<%= product.productQuantity%>kg)
+										</td>
+										<% var a=product.productDetail.price%>
+											<% var b=product.productQuantity%>
+												<% var c=a*b %>
+													<td>
+														<%= c %> ₹
+													</td>
+									</tr>
+									<% }) %>
+										<tr>
+											<td>Total</td>
+											<td>
+												<%=sum%> ₹
+											</td>
+
+										</tr>
 							</tbody>
-						
+
 						</table>
-						<a href="#" class="boxed-btn">Place Order</a>
+
 					</div>
 				</div>
 			</div>
@@ -122,37 +249,43 @@
 	<!-- end check out section -->
 
 	<!-- logo carousel -->
-	
+
 	<!-- end logo carousel -->
 
 	<!-- footer -->
 	<%- include('../partials/user_footer')%>
-	<!-- end footer -->
-	
-	<!-- copyright -->
-	
-	<!-- end copyright -->
-	
-	<!-- jquery -->
-	<script src="assets/js/jquery-1.11.3.min.js"></script>
-	<!-- bootstrap -->
-	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-	<!-- count down -->
-	<script src="assets/js/jquery.countdown.js"></script>
-	<!-- isotope -->
-	<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
-	<!-- waypoints -->
-	<script src="assets/js/waypoints.js"></script>
-	<!-- owl carousel -->
-	<script src="assets/js/owl.carousel.min.js"></script>
-	<!-- magnific popup -->
-	<script src="assets/js/jquery.magnific-popup.min.js"></script>
-	<!-- mean menu -->
-	<script src="assets/js/jquery.meanmenu.min.js"></script>
-	<!-- sticker js -->
-	<script src="assets/js/sticker.js"></script>
-	<!-- main js -->
-	<script src="assets/js/main.js"></script>
+		<!-- end footer -->
 
-</body>
-</html>
+		<!-- copyright -->
+
+		<!-- end copyright -->
+
+		<!-- jquery -->
+		<script src="assets/js/jquery-1.11.3.min.js"></script>
+		<!-- bootstrap -->
+		<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+		<!-- count down -->
+		<script src="assets/js/jquery.countdown.js"></script>
+		<!-- isotope -->
+		<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+		<!-- waypoints -->
+		<script src="assets/js/waypoints.js"></script>
+		<!-- owl carousel -->
+		<script src="assets/js/owl.carousel.min.js"></script>
+		<!-- magnific popup -->
+		<script src="assets/js/jquery.magnific-popup.min.js"></script>
+		<!-- mean menu -->
+		<script src="assets/js/jquery.meanmenu.min.js"></script>
+		<!-- sticker js -->
+		<script src="assets/js/sticker.js"></script>
+		<!-- main js -->
+		<script src="assets/js/main.js"></script>
+
+		<!-- bootstrap script -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+			crossorigin="anonymous"></script>
+
+		</body>
+
+		</html>

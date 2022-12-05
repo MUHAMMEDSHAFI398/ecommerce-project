@@ -261,7 +261,7 @@ module.exports = {
 
     const data = req.body;
     const objId = mongoose.Types.ObjectId(data.product);
-    await cart
+    cart
       .aggregate([
         {
           $unwind: "$product",
@@ -270,7 +270,7 @@ module.exports = {
       .then((data) => {
         console.log(data);
       });
-    await cart.updateOne(
+    cart.updateOne(
       { _id: data.cart, "product.productId": objId },
       { $inc: { "product.$.quantity": data.count } }
     ).then(() => {
@@ -295,6 +295,49 @@ module.exports = {
       .then(() => {
         res.json({ status: true });
       });
+  },
+
+  viewProfile: async (req, res) => {
+
+    const session = req.session.user;
+    let userData = await user.findOne({ email: session })
+    res.render('user/profile', { userData, countInCart })
+
+  },
+  editProfile: async (req, res) => {
+    const session = req.session.user;
+    let userData = await user.findOne({ email: session })
+    res.render('user/editprofile', { userData, countInCart })
+  },
+  postEditProfile: async (req, res) => {
+
+    const session = req.session.user;
+    await user.updateOne(
+      { email: session },
+      {
+        $set: {
+
+          name: req.body.name,
+          phonenumber: req.body.phonenumber,
+          addressDetails: [
+            {
+              housename: req.body.housename,
+              area: req.body.area,
+              landmark: req.body.landmark,
+              district: req.body.district,
+              state: req.body.state,
+              postoffice: req.body.postoffice,
+              pin: req.body.pin
+
+
+            }
+          ]
+
+        }
+      }
+    );
+
+    res.redirect('/viewProfile')
   },
   getCheckOutPage: async (req, res) => {
     let session = req.session.user;
@@ -342,51 +385,26 @@ module.exports = {
     }, 0);
 
 
-    res.render("user/checkout", { productData, sum, countInCart });
+    res.render("user/checkout", { productData, sum, countInCart, userData });
 
 
   },
-  viewProfile: async (req, res) => {
+  addNewAddress: async (req, res) => {
+    const session = req.session.user
+    const addObj = {
 
-    const session = req.session.user;
-    let userData = await user.findOne({ email: session })
-    res.render('user/profile', { userData, countInCart })
+      housename: req.body.housename,
+      area: req.body.area,
+      landmark: req.body.landmark,
+      district: req.body.district,
+      state: req.body.state,
+      postoffice: req.body.postoffice,
+      pin: req.body.pin
 
-  },
-  editProfile: async (req, res) => {
-    const session = req.session.user;
-    let userData = await user.findOne({ email: session })
-    res.render('user/editprofile', { userData, countInCart })
-  },
-  postEditProfile: async (req, res) => {
-    
-    const session = req.session.user;
-    await user.updateOne(
-      { email: session },
-      {
-        $set: {
-
-          name: req.body.name,
-          phonenumber: req.body.phonenumber,
-          addressDetails: [
-            {
-              housename: req.body.housename,
-              area: req.body.area,
-              landmark: req.body.landmark,
-              district: req.body.district,
-              state: req.body.state,
-              postoffice: req.body.postoffice,
-              pin: req.body.pin
-
-
-            }
-          ]
-
-        }
-      }
-    );
-    
-    res.redirect('/viewProfile')
+    }
+    console.log(addObj)
+    await user.updateOne({email:session},{$push:{addressDetails:addObj}})
+    res.redirect('/checkout')
   }
 
 }
