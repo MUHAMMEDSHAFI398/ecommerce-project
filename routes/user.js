@@ -24,6 +24,9 @@ userRouter.get('/viewProfile',verifyLogin.verifyLoginUser , userController.viewP
 userRouter.get('/editProfile',verifyLogin.verifyLoginUser , userController.editProfile);
 userRouter.post('/postEditProfile', userController.postEditProfile);
 userRouter.post('/addNewAddress', userController.addNewAddress);
+userRouter.post("/placeOrder", verifyLogin.verifyLoginUser, userController.placeOrder);
+userRouter.get("/orderDetails", verifyLogin.verifyLoginUser, userController.orderDetails);
+userRouter.get('/orderSuccess',verifyLogin.verifyLoginUser,userController.orderSuccess);
 
 
 

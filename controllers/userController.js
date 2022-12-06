@@ -4,14 +4,18 @@ const products = require('../model/productModal');
 const cart = require('../model/cartModal');
 const mongoose = require("mongoose");
 const mailer = require("../middlewares/otpValidation");
+const order = require('../model/orderModal');
+const moment = require("moment");
 
+moment().format();
 
 
 let name;
 let email;
 let phonenumber;
 let password;
-let countInCart
+let countInCart;
+
 
 
 const securepassword = async (password) => {
@@ -403,11 +407,95 @@ module.exports = {
 
     }
     console.log(addObj)
-    await user.updateOne({email:session},{$push:{addressDetails:addObj}})
+    await user.updateOne({ email: session }, { $push: { addressDetails: addObj } })
     res.redirect('/checkout')
+  },
+  placeOrder: async (req, res) => {
+
+    const session = req.session.user;
+    const userData = await user.findOne({ email: session })
+    const cartData = await cart.findOne({ userId: userData._id });
+    const status = req.body.paymentMethod === "COD" ? "placed" : "pending";
+   
+    if (cartData) {
+      
+      const productData = await cart
+        .aggregate([
+          {
+            $match: { userId: userData.id },
+          },
+          {
+            $unwind: "$product",
+          },
+          {
+            $project: {
+              productItem: "$product.productId",
+              productQuantity: "$product.quantity",
+            },
+          },
+          {
+            $lookup: {
+              from: "products",
+              localField: "productItem",
+              foreignField: "_id",
+              as: "productDetail",
+            },
+          },
+          {
+            $project: {
+              productItem: 1,
+              productQuantity: 1,
+              productDetail: { $arrayElemAt: ["$productDetail", 0] },
+            },
+          },
+          {
+            $addFields: {
+              productPrice: {
+                $multiply: ["$productQuantity", "$productDetail.price"]
+              }
+            }
+          }
+        ])
+        .exec();
+      const sum = productData.reduce((accumulator, object) => {
+        return accumulator + object.productPrice;
+      }, 0);
+
+      const orderData = await order.create({
+        userId: userData._id,
+        name: userData.name,
+        phonenumber: userData.phonenumber,
+        address: req.body.address,
+        orderItems: cartData.product,
+        totalAmount: sum,
+        paymentMethod: req.body.paymentMethod,
+        orderStatus: status,
+        orderDate: moment().format("MMM Do YY"),
+        deliveryDate: moment().add(3, "days").format("MMM Do YY"),
+      })
+      console.log(orderData)
+      await cart.deleteOne({ userId: userData._id });
+      if (req.body.paymentMethod === "COD") {
+        res.json({ success: true });
+      }
+
+    } else {
+      
+      res.redirect("/viewCart");
+    }
+
+    
+  },
+  orderSuccess: async (req, res) => {
+
+    res.render('user/orderSuccess')
+  },
+  orderDetails: async (req, res) => {
+    res.render('user/orderDetails')
   }
 
 }
+
 
 
 

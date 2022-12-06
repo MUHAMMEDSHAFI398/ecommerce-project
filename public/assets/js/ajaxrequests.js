@@ -24,9 +24,10 @@ function removeProduct(cartId, productId) {
         count: count,
       },
       method: "post",
-      success: () => {
+      success: (response) => {
         document.getElementById(productId).innerHTML = quantity + count;
-        
+        // document.getElementsByClassName('subtotal').innerText=response.sum
+        console.log(response);
       },
     });
   }

@@ -33,7 +33,7 @@
 								</tr>
 							</thead>
 							<tbody>
-<% let count = 0 %>
+
 								<% productData.forEach((product)=>{ %>
 
 									<tr class="table-body-row">
@@ -73,7 +73,7 @@
 														<%=c %> ₹
 													</td>
 									</tr>
-<% count++ %>
+
 									<% }) %>
 							</tbody>
 						</table>
@@ -94,19 +94,21 @@
 									<td><strong>Subtotal: </strong></td>
 									<% if(locals.sum){%>
 										<td>
-											<%=sum%> ₹
+											<p class="subtotal"><%=sum%> ₹</p>
 										</td>
 										<%}%>
 								</tr>
 								<tr class="total-data">
 									<td><strong>Shipping: </strong></td>
-									<td>0 ₹ (Free delivery)</td>
+									<% if(locals.sum){%>
+									<td><%=0 %></td>
+									<%}%>
 								</tr>
 								<tr class="total-data">
 									<td><strong>Total: </strong></td>
 									<% if(locals.sum){%>
 										<td>
-											<%=sum%> ₹
+											<p class="subtotal"> <%=sum%> ₹</p>
 										</td>
 										<%}%>
 								</tr>
