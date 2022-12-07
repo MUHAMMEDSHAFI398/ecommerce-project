@@ -416,9 +416,9 @@ module.exports = {
     const userData = await user.findOne({ email: session })
     const cartData = await cart.findOne({ userId: userData._id });
     const status = req.body.paymentMethod === "COD" ? "placed" : "pending";
-   
+
     if (cartData) {
-      
+
       const productData = await cart
         .aggregate([
           {
@@ -473,26 +473,122 @@ module.exports = {
         orderDate: moment().format("MMM Do YY"),
         deliveryDate: moment().add(3, "days").format("MMM Do YY"),
       })
-      console.log(orderData)
       await cart.deleteOne({ userId: userData._id });
       if (req.body.paymentMethod === "COD") {
         res.json({ success: true });
       }
 
     } else {
-      
+
       res.redirect("/viewCart");
     }
 
-    
+
   },
   orderSuccess: async (req, res) => {
 
     res.render('user/orderSuccess')
   },
   orderDetails: async (req, res) => {
-    res.render('user/orderDetails')
+    const session = req.session.user
+    const userData = await user.findOne({ email: session });
+    const productData = await order.aggregate([
+      {
+        $match: { userId: userData._id }
+      },
+      {
+        $unwind: "$orderItems",
+      },
+      {
+        $project: {
+          userId: "$userId",
+          name: "$name",
+          address: "$address",
+          totalAmount: "$totalAmount",
+          paymentMethod: "$paymentMethod",
+          paymentStatus: "$paymentStatus",
+          orderDate: "$orderDate",
+          deliveryDate: "$delivaryuDate",
+          productItem: "$orderItems.productId",
+          productQuantity: "$orderItems.quantity"
+        }
+      },
+      {
+        $lookup: {
+          from: "productdetails",
+          localField: "productItem",
+          foreignField: "_id",
+          as: "productDetail",
+        }
+      },
+      {
+        $project: {
+
+          userId: 1,
+          name: 1,
+          phonenumber: 1,
+          address: 1,
+          totalAmount: 1,
+          paymentMethod: 1,
+          paymentStatus: 1,
+          orderDate: 1,
+          deliveryDate: 1,
+          productItem: 1,
+          productQuantity: 1,
+          productDetail: { $arrayElemAt: ["$productDetail", 0] }
+
+        }
+      },
+      {
+        $addFields: {
+          productPrice: {
+            $multiply: ["$productQuantity", "$productDetail.price"],
+          }
+        }
+      }
+    ]);
+    order.find({ userId: userData._id }).then((orderDetails)=>{
+      res.render('user/orderDetails',{productData,orderDetails,countInCart})
+    })
+
+    
+  },
+  orderedProduct: async (req,res)=>{
+    const id = req.params.id;
+    const objId = mongoose.Types.ObjectId(id);
+    const productData= await order.aggregate([
+      {
+        $match: { _id: objId },
+      },
+      {
+        $unwind: "$orderItems",
+      },
+      {
+        $project: {
+          productItem: "$orderItems.productId",
+          productQuantity: "$orderItems.quantity",
+        }
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "productItem",
+          foreignField: "_id",
+          as: "productDetail",
+        }
+      },
+      {
+        $project: {
+          productItem: 1,
+          productQuantity: 1,
+          productDetail: { $arrayElemAt: ["$productDetail", 0] },
+        } 
+      }
+    ]);
+    console.log(productData)
+    res.render('user/orderedProduct',{productData,countInCart})
   }
+
 
 }
 

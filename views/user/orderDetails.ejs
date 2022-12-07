@@ -23,8 +23,8 @@
         <thead>
             <tr>
                 <th scope="col">Order date</th>
-                <th scope="col">Adsress</th>
-                <th scope="col">payment method</th>
+                
+                <th scope="col">Payment method</th>
                 <th scope="col">Payment status</th>
                 <th scope="col">Order status</th>
                 <th scope="col">Amount</th>
@@ -35,18 +35,23 @@
             </tr>
         </thead>
         <tbody>
-
+            <% orderDetails.forEach((order)=>{ %>  
             <tr>
-                <td>f</td>
-                <td>hn</td>
-                <td>gh</td>
-                <td>ghf</td>
-                <td>fgh</td>
-                <td>fgh</td>
-                <td>fgh</td>
-                <td>fgh</td>
+                <td><%= order.orderDate %></td>
                 
+                <td><%= order.paymentMethod %></td>
+                <td><%= order.paymentStatus %></td>
+                <td><%= order.orderStatus %></td>
+                <td> <%= order.totalAmount %></td>
+                <td><%= order.deliveryDate %></td>
+                <td>
+                    <a href="" class="btn btn-danger">Cancel</a>
+                    <a href="/orderedProduct/<%= order._id %>" class="btn btn-secondary">View</a>
+                    
+
+                </td>      
             </tr>
+            <% }) %> 
 
 
 

@@ -63,6 +63,7 @@ const productdetails = async (req, res) => {
 const postProduct = async (req, res) => {
 
     let categoryId =req.body.category
+    
     const image = req.files.product_image;
     const Product = new products({
         product_name: req.body.product_name,

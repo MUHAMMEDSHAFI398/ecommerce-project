@@ -53,7 +53,7 @@
 
 											<div class="container d-flex">
 												<button
-													class="cart-item-count  mr-3" '<% if(product.productQuantity === 1){ %> style="pointer-events: none; cursor: not-allowed;" <% } %>'
+													class="cart-item-count  mr-3" 
 													onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)">-</button>
 
 												<p id="<%= product.productDetail._id %>" min="0" name="quantity"><%= product.productQuantity%></p>
