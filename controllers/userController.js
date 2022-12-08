@@ -5,7 +5,8 @@ const cart = require('../model/cartModal');
 const mongoose = require("mongoose");
 const mailer = require("../middlewares/otpValidation");
 const order = require('../model/orderModal');
-const wishlist =require('../model/whishlist')
+const wishlist = require('../model/whishlist')
+const categories = require('../model/categoryModal')
 const moment = require("moment");
 moment().format();
 
@@ -143,9 +144,9 @@ module.exports = {
   },
 
   getShopPage: async (req, res) => {
-
+    let category = await categories.find()
     let product = await products.find({ delete: false }).populate('category')
-    res.render('user/shop', { product, countInCart });
+    res.render('user/shop', { product, countInCart, category });
 
   },
   getProductViewPage: async (req, res) => {
@@ -214,7 +215,7 @@ module.exports = {
   //   const id = req.params.id;
   //   const objId = mongoose.Types.ObjectId(id);
   //   const session = req.session.user;
-    
+
   //   let proObj = {
   //     productId: objId,
   //   };
@@ -228,7 +229,7 @@ module.exports = {
   //     );
 
   // }
-  
+
   viewCart: async (req, res) => {
 
     const session = req.session.user;
@@ -300,7 +301,7 @@ module.exports = {
     ).then(() => {
       next();
     })
-    
+
 
 
   },
@@ -323,7 +324,7 @@ module.exports = {
   },
   totalAmount: async (req, res) => {
 
-    
+
     let session = req.session.user;
     const userData = await user.findOne({ email: session });
     const productData = await cart.aggregate([
@@ -338,7 +339,7 @@ module.exports = {
           productItem: "$product.productId",
           productQuantity: "$product.quantity",
         },
-      }, 
+      },
       {
         $lookup: {
           from: "products",
@@ -619,12 +620,10 @@ module.exports = {
     //     }
     //   }
     // ]);
-    let hi =await order.find()
-    console.log(hi);
     order.find({ userId: userData._id }).then((orderDetails) => {
       res.render('user/orderDetails', { orderDetails, countInCart })
     })
-    
+
 
 
   },
@@ -652,24 +651,48 @@ module.exports = {
           as: "productDetail",
         }
       },
+
       {
         $project: {
           productItem: 1,
           productQuantity: 1,
           productDetail: { $arrayElemAt: ["$productDetail", 0] },
         }
-      }
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'productDetail.category',
+          foreignField: "_id",
+          as: "category_name"
+        }
+      },
+      {
+        $unwind: "$category_name"
+      },
+
     ]);
-    
+
     res.render('user/orderedProduct', { productData, countInCart })
+
   },
 
   cancelOrder: async (req, res) => {
     const data = req.params.id;
     await order.updateOne({ _id: data }, { $set: { orderStatus: "cancelled" } })
     res.redirect("/orderDetails");
-      
+
   },
+
+  getCategoryWisePage: async (req, res) => {
+
+    const id = req.params.id
+    const category = await categories.find();
+    const product = await products.find({ category: id, delete: false }).populate('category')
+    console.log(product);
+    res.render('user/shop', { product, countInCart, category })
+
+  }
 
 
 }

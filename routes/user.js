@@ -29,6 +29,7 @@ userRouter.get("/orderDetails", verifyLogin.verifyLoginUser, userController.orde
 userRouter.get('/orderSuccess',verifyLogin.verifyLoginUser,userController.orderSuccess);
 userRouter.get('/orderedProduct/:id',verifyLogin.verifyLoginUser,userController.orderedProduct);
 userRouter.get('/cancelOrder/:id', userController.cancelOrder);
+userRouter.get('/category/:id', userController.getCategoryWisePage);
 
 
 
