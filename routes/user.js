@@ -18,7 +18,7 @@ userRouter.get('/productview/:id', verifyLogin.verifyLoginUser , userController.
 userRouter.get('/cart/:id', userController.addToCart);
 userRouter.get('/checkout',verifyLogin.verifyLoginUser , userController.getCheckOutPage);
 userRouter.get('/viewCart',verifyLogin.verifyLoginUser , userController.viewCart);
-userRouter.post('/changeQuantity',userController.changeQuantity);
+userRouter.post('/changeQuantity',userController.changeQuantity,userController.totalAmount);
 userRouter.post('/removeProduct', userController. removeProduct);
 userRouter.get('/viewProfile',verifyLogin.verifyLoginUser , userController.viewProfile);
 userRouter.get('/editProfile',verifyLogin.verifyLoginUser , userController.editProfile);
@@ -28,6 +28,7 @@ userRouter.post("/placeOrder", verifyLogin.verifyLoginUser, userController.place
 userRouter.get("/orderDetails", verifyLogin.verifyLoginUser, userController.orderDetails);
 userRouter.get('/orderSuccess',verifyLogin.verifyLoginUser,userController.orderSuccess);
 userRouter.get('/orderedProduct/:id',verifyLogin.verifyLoginUser,userController.orderedProduct);
+userRouter.get('/cancelOrder/:id', userController.cancelOrder);
 
 
 

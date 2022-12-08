@@ -1,5 +1,5 @@
 function removeProduct(cartId, productId) {
-    console.log("man")
+    
     $.ajax({
       url: "/removeProduct",
       data: {
@@ -26,7 +26,8 @@ function removeProduct(cartId, productId) {
       method: "post",
       success: (response) => {
         document.getElementById(productId).innerHTML = quantity + count;
-        // document.getElementsByClassName('subtotal').innerText=response.sum
+        document.getElementById("sum").innerText = response.productData[0].total+"₹";
+        document.getElementById("netamount").innerText = response.productData[0].total+"₹";
         console.log(response);
       },
     });

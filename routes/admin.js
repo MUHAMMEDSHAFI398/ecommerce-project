@@ -23,6 +23,7 @@ adminRouter.get('/category', verifyLogin.verifyLoginAdmin , adminController.getc
 adminRouter.post('/addCategory', adminController.addCategory);
 adminRouter.post('/editCategory/:id', adminController.editCategory);
 adminRouter.get('/deleteCategory/:id', adminController.deleteCategory);
+adminRouter.get('/order',verifyLogin.verifyLoginAdmin , adminController.getOrders);
 
 
 

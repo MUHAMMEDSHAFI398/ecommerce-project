@@ -1,6 +1,7 @@
 const user = require('../model/userModal')
 const products = require('../model/productModal');
 const categories = require('../model/categoryModal');
+const order =require('../model/orderModal')
 
 
 
@@ -210,6 +211,33 @@ const postEditProduct = async (req, res) => {
     }
 
 }
+const getOrders = async (req,res)=>{
+
+   let orderDetails= await order.aggregate([
+        {
+          $lookup: {
+            from: "products",
+            localField: "orderItems.productId",
+            foreignField: "_id",
+            as: "product",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+      ])
+        res.render("admin/orders", { orderDetails });
+      
+      console.log(orderDetails );
+      
+      
+    
+}
 
 
 
@@ -230,7 +258,8 @@ module.exports = {
     addCategory,
     editCategory,
     deleteCategory,
-    restoreProduct
+    restoreProduct,
+    getOrders
 
 }
 
