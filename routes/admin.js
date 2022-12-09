@@ -24,6 +24,9 @@ adminRouter.post('/addCategory', adminController.addCategory);
 adminRouter.post('/editCategory/:id', adminController.editCategory);
 adminRouter.get('/deleteCategory/:id', adminController.deleteCategory);
 adminRouter.get('/order',verifyLogin.verifyLoginAdmin , adminController.getOrders);
+adminRouter.get('/orderedProduct/:id',verifyLogin.verifyLoginAdmin , adminController.getOrderedProduct);
+adminRouter.post('/orderStatuschange/:id',verifyLogin.verifyLoginAdmin , adminController.orderStatuschange);
+
 
 
 

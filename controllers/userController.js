@@ -149,6 +149,14 @@ module.exports = {
     res.render('user/shop', { product, countInCart, category });
 
   },
+  getCategoryWisePage: async (req, res) => {
+
+    const id = req.params.id
+    const category = await categories.find();
+    const product = await products.find({ category: id, delete: false }).populate('category')
+    res.render('user/shop', { product, countInCart, category })
+
+  },
   getProductViewPage: async (req, res) => {
 
     let id = req.params.id
@@ -479,7 +487,7 @@ module.exports = {
       pin: req.body.pin
 
     }
-    console.log(addObj)
+    
     await user.updateOne({ email: session }, { $push: { addressDetails: addObj } })
     res.redirect('/checkout')
   },
@@ -563,67 +571,12 @@ module.exports = {
     res.render('user/orderSuccess')
   },
   orderDetails: async (req, res) => {
+
     const session = req.session.user
     const userData = await user.findOne({ email: session });
-    // const productData = await order.aggregate([
-    //   {
-    //     $match: { userId: userData._id }
-    //   },
-    //   {
-    //     $unwind: "$orderItems",
-    //   },
-    //   {
-    //     $project: {
-    //       userId: "$userId",
-    //       name: "$name",
-    //       address: "$address",
-    //       totalAmount: "$totalAmount",
-    //       paymentMethod: "$paymentMethod",
-    //       paymentStatus: "$paymentStatus",
-    //       orderDate: "$orderDate",
-    //       deliveryDate: "$delivaryuDate",
-    //       productItem: "$orderItems.productId",
-    //       productQuantity: "$orderItems.quantity"
-    //     }
-    //   },
-    //   {
-    //     $lookup: {
-    //       from: "productdetails",
-    //       localField: "productItem",
-    //       foreignField: "_id",
-    //       as: "productDetail",
-    //     }
-    //   },
-    //   {
-    //     $project: {
-
-    //       userId: 1,
-    //       name: 1,
-    //       phonenumber: 1,
-    //       address: 1,
-    //       totalAmount: 1,
-    //       paymentMethod: 1,
-    //       paymentStatus: 1,
-    //       orderDate: 1,
-    //       deliveryDate: 1,
-    //       productItem: 1,
-    //       productQuantity: 1,
-    //       productDetail: { $arrayElemAt: ["$productDetail", 0] }
-
-    //     }
-    //   },
-    //   {
-    //     $addFields: {
-    //       productPrice: {
-    //         $multiply: ["$productQuantity", "$productDetail.price"],
-    //       }
-    //     }
-    //   }
-    // ]);
     order.find({ userId: userData._id }).then((orderDetails) => {
       res.render('user/orderDetails', { orderDetails, countInCart })
     })
-
 
 
   },
@@ -684,15 +637,7 @@ module.exports = {
 
   },
 
-  getCategoryWisePage: async (req, res) => {
-
-    const id = req.params.id
-    const category = await categories.find();
-    const product = await products.find({ category: id, delete: false }).populate('category')
-    console.log(product);
-    res.render('user/shop', { product, countInCart, category })
-
-  }
+ 
 
 
 }
