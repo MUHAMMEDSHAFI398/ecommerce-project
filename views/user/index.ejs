@@ -131,6 +131,7 @@
 							<p class="product-price"> <%= products?.price %>₹  </p>
 							<h5>Per kg</h5>
 							 <% if(customer) { %>
+							<a href="/wishlist/<%= products?._id %>"><img style="width:30px; height:30px"  src="/adminimages/wishnew.png" alt=""></a>
 							<a href="/productview/<%= products?._id %>" class="btn btn-success">Buy now</a>
 							
 							<% }else { %>

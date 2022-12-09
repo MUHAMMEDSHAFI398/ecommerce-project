@@ -16,7 +16,7 @@ let email;
 let phonenumber;
 let password;
 let countInCart;
-
+let countInWishlist;
 
 
 const securepassword = async (password) => {
@@ -38,7 +38,7 @@ module.exports = {
     } else {
       customer = false
     }
-    res.render('user/index', { customer, product, countInCart });
+    res.render('user/index', { customer, product, countInCart,countInWishlist });
   },
 
   getUserLogin: (req, res) => {
@@ -146,7 +146,7 @@ module.exports = {
   getShopPage: async (req, res) => {
     let category = await categories.find()
     let product = await products.find({ delete: false }).populate('category')
-    res.render('user/shop', { product, countInCart, category });
+    res.render('user/shop', { product, countInCart, category ,countInWishlist });
 
   },
   getCategoryWisePage: async (req, res) => {
@@ -154,14 +154,14 @@ module.exports = {
     const id = req.params.id
     const category = await categories.find();
     const product = await products.find({ category: id, delete: false }).populate('category')
-    res.render('user/shop', { product, countInCart, category })
+    res.render('user/shop', { product, countInCart, category,countInWishlist })
 
   },
   getProductViewPage: async (req, res) => {
 
     let id = req.params.id
     let product = await products.findOne({ _id: id }).populate('category')
-    res.render('user/product_view', { product, countInCart });
+    res.render('user/product_view', { product, countInCart ,countInWishlist});
 
   },
 
@@ -218,26 +218,6 @@ module.exports = {
     }
 
   },
-  // addToWishList: async (req,res)=>{
-
-  //   const id = req.params.id;
-  //   const objId = mongoose.Types.ObjectId(id);
-  //   const session = req.session.user;
-
-  //   let proObj = {
-  //     productId: objId,
-  //   };
-  //   const userData = await user.findOne({ email: session });
-  //   const userId = mongoose.Types.ObjectId(userData._id);
-  //   const userWishlist = await wishlist.findOne({ userId: userId });
-
-  //   if (userWishlist) {
-  //     let proExist = userWishlist.product.findIndex(
-  //       (product) => product.productId == id
-  //     );
-
-  // }
-
   viewCart: async (req, res) => {
 
     const session = req.session.user;
@@ -286,10 +266,98 @@ module.exports = {
 
     countInCart = productData.length;
 
-    res.render("user/cart", { productData, sum, countInCart });
+    res.render("user/cart", { productData, sum, countInCart,countInWishlist });
 
 
   },
+  addToWishlist: async (req, res) => {
+
+    const id = req.params.id;
+    const objId = mongoose.Types.ObjectId(id);
+    const session = req.session.user;
+
+    let proObj = {
+      productId: objId,
+    };
+    const userData = await user.findOne({ email: session });
+    const userWishlist = await wishlist.findOne({ userId: userData._id });
+    console.log(userData);
+    console.log(userWishlist);
+
+    if (userWishlist) {
+
+      let proExist = userWishlist.product.findIndex(
+        (product) => product.productId == id
+      );
+      if (proExist != -1) {
+        
+        res.redirect('/shop')
+      }else{
+
+        wishlist.updateOne(
+          { userId: userData._id }, { $push: { product: proObj } }
+        ).then(() => {
+          res.redirect('/shop')
+          });
+      }
+    }else{
+      const newWishlist = new wishlist({
+        userId: userData._id,
+        product: [
+          {
+            productId: objId,
+            
+          },
+        ],
+      });
+      newWishlist.save().then(() => {
+        res.redirect('/shop')
+      });
+    }
+
+  },
+  viewWishlist: async (req,res)=>{
+
+    const session = req.session.user;
+    const userData = await user.findOne({ email: session })
+    const userId = mongoose.Types.ObjectId(userData._id);;
+    
+    const wishlistData = await wishlist
+      .aggregate([
+        {
+          $match: { userId: userId }
+        },
+        {
+          $unwind: "$product",
+        },
+        {
+          $project: {
+            productItem: "$product.productId",
+           
+          }
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "productItem",
+            foreignField: "_id",
+            as: "productDetail",
+          }
+        },
+        {
+          $project: {
+            productItem: 1,
+            productDetail: { $arrayElemAt: ["$productDetail", 0] }
+          }
+        }
+        
+      ])
+      countInWishlist=wishlistData.length
+      res.render('user/wishlist',{wishlistData,countInWishlist,countInCart})
+      
+  },
+
+ 
   changeQuantity: async (req, res, next) => {
 
     const data = req.body;
@@ -386,13 +454,13 @@ module.exports = {
 
     const session = req.session.user;
     let userData = await user.findOne({ email: session })
-    res.render('user/profile', { userData, countInCart })
+    res.render('user/profile', { userData, countInCart ,countInWishlist})
 
   },
   editProfile: async (req, res) => {
     const session = req.session.user;
     let userData = await user.findOne({ email: session })
-    res.render('user/editprofile', { userData, countInCart })
+    res.render('user/editprofile', { userData, countInCart,countInWishlist })
   },
   postEditProfile: async (req, res) => {
 
@@ -487,7 +555,7 @@ module.exports = {
       pin: req.body.pin
 
     }
-    
+
     await user.updateOne({ email: session }, { $push: { addressDetails: addObj } })
     res.redirect('/checkout')
   },
@@ -568,14 +636,14 @@ module.exports = {
   },
   orderSuccess: async (req, res) => {
 
-    res.render('user/orderSuccess')
+    res.render('user/orderSuccess',{countInWishlist})
   },
   orderDetails: async (req, res) => {
 
     const session = req.session.user
     const userData = await user.findOne({ email: session });
     order.find({ userId: userData._id }).then((orderDetails) => {
-      res.render('user/orderDetails', { orderDetails, countInCart })
+      res.render('user/orderDetails', { orderDetails, countInCart,countInWishlist })
     })
 
 
@@ -626,7 +694,7 @@ module.exports = {
 
     ]);
 
-    res.render('user/orderedProduct', { productData, countInCart })
+    res.render('user/orderedProduct', { productData, countInCart,countInWishlist })
 
   },
 
@@ -637,7 +705,7 @@ module.exports = {
 
   },
 
- 
+
 
 
 }

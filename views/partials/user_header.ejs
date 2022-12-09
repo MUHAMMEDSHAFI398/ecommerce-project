@@ -10,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
+
     <!-- title -->
     <title>Fruitkha - Slider Version</title>
 
@@ -80,18 +81,24 @@
                                     <% if(customer) {%>
                                         <a href="/viewProfile"><img height="17px" width="17px"
                                                 src="/adminimages/pro.png" alt=""></a>
+                                        <a href="/viewWishlist">
+                                            <% if(locals.countInWishlist) {%>
+                                            <span class="badge rounded-pill badge-notification bg-danger"><%=countInCart%></span>
+                                            <% } %>
+                                            <i class="fa fa-heart" aria-hidden="true"></i>
+                                        </a>
+
                                         <a class="shopping-cart" href="/viewCart">
                                             <% if(locals.countInCart) {%>
-                                                <span class="badge rounded-pill badge-notification bg-danger">
-                                                    <%=countInCart%>
-                                                </span>
-                                                <% } %>
-                                                    <i class="fas fa-shopping-cart"></i>
+                                            <span class="badge rounded-pill badge-notification bg-danger"><%=countInCart%></span>
+                                            <% } %>
+                                            <i class="fas fa-shopping-cart"></i>
                                         </a>
-                                        <% } %>
-                                            <a class="mobile-hide search-bar-icon" href="#"><i
-                                                    class="fas fa-search"></i></a>
 
+                                    <% } %>
+                                        <a class="mobile-hide search-bar-icon" href="#">
+                                            <i class="fas fa-search"></i></a>
+                                                    
                                 </div>
                             </li>
                         </ul>
