@@ -173,10 +173,18 @@ module.exports = {
     deleteCategory : async (req, res) => {
 
         const id = req.params.id;
-        await categories.deleteOne({ _id: id })
+        await categories.updateOne({ _id: id }, { $set: { delete: true } })
         res.redirect('/admin/category')
     
     },
+    restoreCategory : async (req, res) => {
+
+        const id = req.params.id;
+        await categories.updateOne({ _id: id }, { $set: { delete: false } })
+        res.redirect('/admin/category')
+    
+    },
+    
     postEditProduct : async (req, res) => {
 
         const id = req.params.id;
@@ -205,7 +213,8 @@ module.exports = {
     },
     getOrders : async (req,res)=>{
 
-        let orderDetails= await order.aggregate([
+         order.aggregate([
+            
              {
                $lookup: {
                  from: "products",
@@ -222,10 +231,22 @@ module.exports = {
                  as: "user",
                },
              },
-           ])
-             res.render("admin/orders", { orderDetails });
+             {
+                $sort:{
+                    createdAt:-1
+                }
+             },
+             
+           ]).then((orderDetails)=>{
+            res.render("admin/orders", { orderDetails });
+            
+           })
+            
            
-        //    console.log(orderDetails );     
+
+            
+           
+                
          
      },
      getOrderedProduct: async (req,res)=>{
@@ -242,6 +263,10 @@ module.exports = {
             $project: {
               productItem: "$orderItems.productId",
               productQuantity: "$orderItems.quantity",
+              address:1,
+              name:1,
+              phonenumber:1
+              
             }
           },
           {
@@ -257,6 +282,9 @@ module.exports = {
             $project: {
               productItem: 1,
               productQuantity: 1,
+              address:1,
+              name:1,
+              phonenumber:1,
               productDetail: { $arrayElemAt: ["$productDetail", 0] },
             }
           },
@@ -274,6 +302,7 @@ module.exports = {
     
         ]);
         res.render('admin/orderedProduct',{productData})
+        
      },
      orderStatuschange: async (req,res)=>{
          const id = req.params.id;

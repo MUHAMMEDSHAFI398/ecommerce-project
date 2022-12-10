@@ -270,6 +270,23 @@ module.exports = {
 
 
   },
+  removeProduct: async (req, res) => {
+    const data = req.body;
+    const objId = mongoose.Types.ObjectId(data.product);
+    await cart.aggregate([
+      {
+        $unwind: "$product"
+      }
+    ])
+    await cart
+      .updateOne(
+        { _id: data.cart, "product.productId": objId },
+        { $pull: { product: { productId: objId } } }
+      )
+      .then(() => {
+        res.json({ status: true });
+      });
+  },
   addToWishlist: async (req, res) => {
 
     const id = req.params.id;
@@ -291,13 +308,13 @@ module.exports = {
       );
       if (proExist != -1) {
         
-        res.redirect('/shop')
+        res.redirect('/viewWishlist')
       }else{
 
         wishlist.updateOne(
           { userId: userData._id }, { $push: { product: proObj } }
         ).then(() => {
-          res.redirect('/shop')
+          res.redirect('/viewWishlist')
           });
       }
     }else{
@@ -311,7 +328,7 @@ module.exports = {
         ],
       });
       newWishlist.save().then(() => {
-        res.redirect('/shop')
+        res.redirect('/viewWishlist')
       });
     }
 
@@ -356,6 +373,23 @@ module.exports = {
       res.render('user/wishlist',{wishlistData,countInWishlist,countInCart})
       
   },
+  removeFromWishlist: async (req, res) => {
+    const data = req.body;
+    const objId = mongoose.Types.ObjectId(data.productId);
+    await wishlist.aggregate([
+      {
+        $unwind: "$product",
+      },
+    ]);
+    await wishlist
+      .updateOne(
+        { _id: data.wishlistId, "product.productId": objId },
+        { $pull: { product: { productId: objId } } }
+      )
+      .then(() => {
+        res.json({ status: true });
+      });
+  },
 
  
   changeQuantity: async (req, res, next) => {
@@ -381,23 +415,7 @@ module.exports = {
 
 
   },
-  removeProduct: async (req, res) => {
-    const data = req.body;
-    const objId = mongoose.Types.ObjectId(data.product);
-    await cart.aggregate([
-      {
-        $unwind: "$product"
-      }
-    ])
-    await cart
-      .updateOne(
-        { _id: data.cart, "product.productId": objId },
-        { $pull: { product: { productId: objId } } }
-      )
-      .then(() => {
-        res.json({ status: true });
-      });
-  },
+
   totalAmount: async (req, res) => {
 
 
@@ -538,7 +556,7 @@ module.exports = {
     }, 0);
 
 
-    res.render("user/checkout", { productData, sum, countInCart, userData });
+    res.render("user/checkout", { productData, sum, countInCart,countInWishlist, userData });
 
 
   },
@@ -620,8 +638,10 @@ module.exports = {
         paymentMethod: req.body.paymentMethod,
         orderStatus: status,
         orderDate: moment().format("MMM Do YY"),
-        deliveryDate: moment().add(3, "days").format("MMM Do YY"),
+        deliveryDate: moment().add(3, "days").format("MMM Do YY")
       })
+      
+      
       await cart.deleteOne({ userId: userData._id });
       if (req.body.paymentMethod === "COD") {
         res.json({ success: true });
@@ -636,13 +656,13 @@ module.exports = {
   },
   orderSuccess: async (req, res) => {
 
-    res.render('user/orderSuccess',{countInWishlist})
+    res.render('user/orderSuccess',{countInCart,countInWishlist})
   },
   orderDetails: async (req, res) => {
 
     const session = req.session.user
     const userData = await user.findOne({ email: session });
-    order.find({ userId: userData._id }).then((orderDetails) => {
+    order.find({ userId: userData._id }).sort({createdAt:-1}).then((orderDetails) => {
       res.render('user/orderDetails', { orderDetails, countInCart,countInWishlist })
     })
 

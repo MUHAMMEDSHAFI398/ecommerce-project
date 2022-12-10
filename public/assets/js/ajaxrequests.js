@@ -32,3 +32,18 @@ function removeProduct(cartId, productId) {
       },
     });
   }
+
+  function removeFromWishlist(wishlistId, productId) {
+    $.ajax({
+      url: "/removeFromWishlist",
+      method: "post",
+      data: {
+        wishlistId,
+        productId,
+      },
+      success: () => {
+      location.reload();
+        
+      },
+    });
+  }

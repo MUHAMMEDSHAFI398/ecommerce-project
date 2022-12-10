@@ -16,6 +16,7 @@ userRouter.get('/userLogout', userController.userLogout);
 userRouter.get('/shop', verifyLogin.verifyLoginUser ,userController.getShopPage);
 userRouter.get('/wishlist/:id', verifyLogin.verifyLoginUser ,userController.addToWishlist);
 userRouter.get('/viewWishlist', verifyLogin.verifyLoginUser ,userController.viewWishlist);
+userRouter.post('/removeFromWishlist', verifyLogin.verifyLoginUser ,userController.removeFromWishlist);
 userRouter.get('/category/:id', userController.getCategoryWisePage);
 userRouter.get('/productview/:id', verifyLogin.verifyLoginUser , userController.getProductViewPage);
 userRouter.get('/cart/:id', userController.addToCart);

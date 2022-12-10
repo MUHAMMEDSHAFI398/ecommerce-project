@@ -55,6 +55,10 @@ const orderSchema = new Schema(
             type: String,
         },
     },
+    {
+        timestamps:true
+    }
+   
    
 );
 

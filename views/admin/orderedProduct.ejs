@@ -6,7 +6,21 @@
 
         <div class="container">
             <div class="mb-100 mt-100">
-                <table class="table table-striped">
+
+                <div class="d-flex justify-content-center">
+                    <div class="bg-light" style="height: 170px;width: 400px;">
+                        <div class=" d-flex justify-content-center">
+                            <h6 class="text-decoration-underline">Delivery address for this order</h6>
+                        </div>
+                        <% let phone='Ph:' %> 
+                        <div class="ms-3">
+                            <p><%=productData[0].name %>,<br><%=productData[0].address %>,<br><%=phone %> <%=productData[0].phonenumber %></p>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <table class="table table-success table-striped">
                     <thead>
                         <tr>
                             <th scope="col">Image</th>

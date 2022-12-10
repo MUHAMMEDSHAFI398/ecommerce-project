@@ -30,32 +30,36 @@
 									<th class="product-image">Product Image</th>
 									<th class="product-name">Name</th>
 									<th class="product-price">Price/kg</th>
-									<th class="product-quantity">Description</th>
+									<th class="product-quantity">Add to cart</th>
 
 								</tr>
 							</thead>
 							<tbody>
-                            
-								<% wishlistData.forEach((product)=>{ %> 
-								<tr class="table-body-row">
-									<td class="product-remove"><button><i class="far fa-window-close"></i></button>
 
-									</td>
-									<td class="product-image"><img src="/adminimages/<%= product.productDetail._id %>.jpg" alt="">
-									</td>
+								<% wishlistData.forEach((product)=>{ %>
+									<tr class="table-body-row">
+										<td class="product-remove"><button
+												onclick="removeFromWishlist('<%= product._id %>','<%= product.productDetail._id %>')"><i
+													class="far fa-window-close"></i></button>
 
-									<td class="product-name">
-										<%= product.productDetail.product_name %>
-									</td>
-									<td class="product-price">
-										<%= product.productDetail.price %>
-									</td>
-									<td class="product-quantity">
-										<%= product.productDetail.description %>
-									</td>
+										</td>
+										<td class="product-image"><img
+												src="/adminimages/<%= product.productDetail._id %>.jpg" alt="">
+										</td>
 
-								</tr>
-								<% }) %> 
+										<td class="product-name">
+											<%= product.productDetail.product_name %>
+										</td>
+										<td class="product-price">
+											₹ <%= product.productDetail.price %>
+										</td>
+										<td class="product-quantity">
+											<a class="bt btn-warning" href="/cart/<%= product.productDetail._id %>">Add to cart</a>
+											
+										</td>
+
+									</tr>
+									<% }) %>
 							</tbody>
 						</table>
 					</div>
@@ -105,9 +109,10 @@
 		<!-- ajax request -->
 		<script src="http://localhost:5000/assets/js/ajaxrequests.js"></script>
 
-		<!-- <script>
-        function tottal()
-    </script> -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+
 
 
 

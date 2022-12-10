@@ -9,16 +9,17 @@
                 <div class=" mt-100 mb-5 d-flex align-items-center justify-content-center">
                     <h3 class="text-decoration-underline">Order details</h3>
                 </div>
-                <table class="table table-striped mb-100" id="table">
+                <table class="table table-success table-striped mb-100" id="table">
                     <thead>
                         <tr>
                             <th scope="col">Customer name</th>
-                            <th scope="col">Delivery <br> address</th>
+                            
                             <th scope="col">Order date</th>
                             <th scope="col">Payment method</th>
                             <th scope="col">Payment status</th>
                             <th scope="col">Order status</th>
-                            <th scope="col">Total <br>amount</th>
+                            <th scope="col">Delivery  date</th>
+                            <th scope="col">Total amount</th>
                             <th scope="col">Order controlls</th>
 
 
@@ -30,9 +31,7 @@
                                 <td>
                                     <%= order.name %>
                                 </td>
-                                <td>
-                                    <%= order.address %>
-                                </td>
+                                
                                 <td>
                                     <%= order.orderDate %>
                                 </td>
@@ -44,6 +43,9 @@
                                 </td>
                                 <td>
                                     <%= order.orderStatus %>
+                                </td>
+                                <td>
+                                    <%= order.deliveryDate %>
                                 </td>
                                 <td>₹ <%= order.totalAmount %>
                                 </td>
@@ -130,15 +132,7 @@
 
 
     <!-- data table -->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            $('#table').DataTable();
-        });
-    </script>
+   
 
     <!--end data table -->
 

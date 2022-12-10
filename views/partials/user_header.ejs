@@ -82,16 +82,16 @@
                                         <a href="/viewProfile"><img height="17px" width="17px"
                                                 src="/adminimages/pro.png" alt=""></a>
                                         <a href="/viewWishlist">
-                                            <% if(locals.countInWishlist) {%>
-                                            <span class="badge rounded-pill badge-notification bg-danger"><%=countInCart%></span>
-                                            <% } %>
+                                        
+                                            <span class="badge rounded-pill badge-notification bg-danger"><%=countInWishlist%></span>
+               
                                             <i class="fa fa-heart" aria-hidden="true"></i>
                                         </a>
 
                                         <a class="shopping-cart" href="/viewCart">
-                                            <% if(locals.countInCart) {%>
+                                   
                                             <span class="badge rounded-pill badge-notification bg-danger"><%=countInCart%></span>
-                                            <% } %>
+                              
                                             <i class="fas fa-shopping-cart"></i>
                                         </a>
 
