@@ -1,3 +1,4 @@
+
 function removeProduct(cartId, productId) {
     
     $.ajax({
@@ -8,7 +9,13 @@ function removeProduct(cartId, productId) {
       },
       method: "post",
       success: () => {
-        location.reload();
+        Swal.fire({
+          title: "Product removed from cart!",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(function () {
+          location.reload();
+        });
       },
     });
   }
@@ -42,8 +49,14 @@ function removeProduct(cartId, productId) {
         productId,
       },
       success: () => {
-      location.reload();
-        
+        Swal.fire({
+          title: "Product removed from wishlist!",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(function (){
+          location.reload();
+        })
+
       },
     });
   }

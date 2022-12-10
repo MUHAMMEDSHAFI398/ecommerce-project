@@ -1,89 +1,115 @@
 <%- include('../partials/user_header')%>
 
-    <!-- breadcrumb-section -->
-    <div class="breadcrumb-section breadcrumb-bg">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 offset-lg-2 text-center">
-                    <div class="breadcrumb-text">
+  <!-- breadcrumb-section -->
+  <div class="breadcrumb-section breadcrumb-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2 text-center">
+          <div class="breadcrumb-text">
 
-                        <h1>Order details</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end breadcrumb section -->
-
-
-    <!-- Middle section -->
-      <div class="container">
-        <div class="mb-100 mt-100">
-            <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Image</th>
-                    <th scope="col">Product name</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Ordered quantity</th>
-                    <th scope="col">Price/kg</th>
-                    <th scope="col">Total</th>
-                    
-                  </tr>
-                </thead>
-                <tbody>
-                    <% productData.forEach((order)=>{ %>
-                  <tr>
-                    <td><img style="height: 60px; width: 60px;" src="/adminimages/<%= order.productDetail._id %>.jpg" class="img-fluid" alt="" /></td>
-                    <td><%= order.productDetail.product_name %></td>
-                    <td><%= order.category_name.category_name%></td>
-                    <td><%= order.productQuantity %> kg</td>
-                    <% var a=order.productQuantity%>
-                    <% var b=order.productDetail.price%>
-                    <% var c=a*b %>
-                    <td><%=order.productDetail.price%> ₹</td>
-                    <td><%=c %> ₹ ( for <%= order.productQuantity%> kg )</td>
-                    
-                  </tr>
-                  <% }) %> 
-                 
-                </tbody>
-              </table>
-    
+            <h1>Order details</h1>
           </div>
         </div>
-        
-
-    
-    <!--End Middle section -->
-
-    <!-- footer -->
-    <%- include('../partials/user_footer')%>
-        <!-- end footer -->
+      </div>
+    </div>
+  </div>
+  <!-- end breadcrumb section -->
 
 
+  <!-- Middle section -->
+  <div class="container">
+    <div class="mb-100 mt-100">
 
-        <!-- jquery -->
-        <script src="http://localhost:5000/assets/js/jquery-1.11.3.min.js"></script>
-        <!-- bootstrap -->
-        <script src="http://localhost:5000/assets/bootstrap/js/bootstrap.min.js"></script>
-        <!-- count down -->
-        <script src="http://localhost:5000/assets/js/jquery.countdown.js"></script>
-        <!-- isotope -->
-        <script src="http://localhost:5000/assets/js/jquery.isotope-3.0.6.min.js"></script>
-        <!-- waypoints -->
-        <script src="http://localhost:5000/assets/js/waypoints.js"></script>
-        <!-- owl carousel -->
-        <script src="http://localhost:5000/assets/js/owl.carousel.min.js"></script>
-        <!-- magnific popup -->
-        <script src="http://localhost:5000/assets/js/jquery.magnific-popup.min.js"></script>
-        <!-- mean menu -->
-        <script src="http://localhost:5000/assets/js/jquery.meanmenu.min.js"></script>
-        <!-- sticker js -->
-        <script src="http://localhost:5000/assets/js/sticker.js"></script>
-        <!-- main js -->
-        <script src="http://localhost:5000/assets/js/main.js"></script>
+      <div class="d-flex justify-content-center">
+        <div class="bg-light" style="height: 170px;width: 400px;">
 
-        </body>
+          <div class=" d-flex justify-content-center">
+            <h6 class="text-decoration-underline">Delivery address for this order</h6>
+          </div>
+                <% let phone='Ph:' %>
+          <div class="ms-3">
+              <p><%=productData[0].name %>,<br><%=productData[0].address %>,<br><%=phone %> <%=productData[0].phonenumber %></p>
+          </div>
 
-</html>
+        </div>
+      </div>
+
+      <table class="table table-success table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Product name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Ordered quantity</th>
+            <th scope="col">Price/kg</th>
+            <th scope="col">Total</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <% productData.forEach((order)=>{ %>
+            <tr>
+              <td><img style="height: 60px; width: 60px;" src="/adminimages/<%= order.productDetail._id %>.jpg"
+                  class="img-fluid" alt="" /></td>
+              <td>
+                <%= order.productDetail.product_name %>
+              </td>
+              <td>
+                <%= order.category_name.category_name%>
+              </td>
+              <td>
+                <%= order.productQuantity %> kg
+              </td>
+              <% var a=order.productQuantity%>
+                <% var b=order.productDetail.price%>
+                  <% var c=a*b %>
+                    <td>
+                      <%=order.productDetail.price%> ₹
+                    </td>
+                    <td>
+                      <%=c %> ₹ ( for <%= order.productQuantity%> kg )
+                    </td>
+
+            </tr>
+            <% }) %>
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+
+
+  <!--End Middle section -->
+
+  <!-- footer -->
+  <%- include('../partials/user_footer')%>
+    <!-- end footer -->
+
+
+
+    <!-- jquery -->
+    <script src="http://localhost:5000/assets/js/jquery-1.11.3.min.js"></script>
+    <!-- bootstrap -->
+    <script src="http://localhost:5000/assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- count down -->
+    <script src="http://localhost:5000/assets/js/jquery.countdown.js"></script>
+    <!-- isotope -->
+    <script src="http://localhost:5000/assets/js/jquery.isotope-3.0.6.min.js"></script>
+    <!-- waypoints -->
+    <script src="http://localhost:5000/assets/js/waypoints.js"></script>
+    <!-- owl carousel -->
+    <script src="http://localhost:5000/assets/js/owl.carousel.min.js"></script>
+    <!-- magnific popup -->
+    <script src="http://localhost:5000/assets/js/jquery.magnific-popup.min.js"></script>
+    <!-- mean menu -->
+    <script src="http://localhost:5000/assets/js/jquery.meanmenu.min.js"></script>
+    <!-- sticker js -->
+    <script src="http://localhost:5000/assets/js/sticker.js"></script>
+    <!-- main js -->
+    <script src="http://localhost:5000/assets/js/main.js"></script>
+
+    </body>
+
+    </html>
