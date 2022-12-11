@@ -7,8 +7,10 @@ const mailer = require("../middlewares/otpValidation");
 const order = require('../model/orderModal');
 const wishlist = require('../model/whishlist')
 const categories = require('../model/categoryModal')
+const instance = require("../middlewares/razorpay");
 const moment = require("moment");
 moment().format();
+
 
 
 let name;
@@ -269,6 +271,7 @@ module.exports = {
     }, 0);
 
     countInCart = productData.length;
+    console.log(productData);
 
     res.render("user/cart", { productData, sum, countInCart, countInWishlist });
 
@@ -399,8 +402,13 @@ module.exports = {
   changeQuantity: async (req, res, next) => {
 
     const data = req.body;
+    data.count = parseInt(data.count);
+    data.quantity = parseInt(data.quantity);
     const objId = mongoose.Types.ObjectId(data.product);
-    cart
+    if(data.count == -1 && data.quantity == 1){
+      res.json({ quantity: true })
+    }else{
+      cart
       .aggregate([
         {
           $unwind: "$product",
@@ -416,6 +424,8 @@ module.exports = {
       next();
     })
 
+    }
+    
 
 
   },
@@ -469,7 +479,10 @@ module.exports = {
         },
       },
     ]).exec();
+    console.log('hiiii');
+    
     res.json({ status: true, productData });
+
   },
 
   viewProfile: async (req, res) => {

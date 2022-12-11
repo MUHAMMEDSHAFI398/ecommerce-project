@@ -53,10 +53,11 @@
 										<td class="product-quantity">
 
 											<div class="container d-flex">
+												
 												<button style="height: 30px;"
-													class="cart-item-count  mr-3" 
+													class="js-btn-minus  mr-3" 
 													onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)">-</button>
-
+                                              
 												<p id="<%= product.productDetail._id %>" min="0" name="quantity"><%= product.productQuantity%></p>
 												
 												<button style="height: 30px;" class="cart-item-count ml-3 mr-3"
@@ -66,6 +67,7 @@
 											</div>
 
 										</td>
+										
 									</tr>
 
 									<% }) %>
