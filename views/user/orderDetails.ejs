@@ -49,13 +49,12 @@
 
                         
                         <!-- Button trigger modal -->
-                        <% if(order.orderStatus=='placed' || order.orderStatus=='Pending' || order.orderStatus=='Shipped' ){ %> 
+                        <% if(order.orderStatus=='placed' || order.orderStatus=='pending' || order.orderStatus=='Shipped' ){ %> 
                      <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                      data-bs-target="#exampleModal-<%=order._id%>">
                      Cancel
                    </button>
-                      <% }else{ %> 
-                        <button class="btn btn-primary">Cancelled</button>
+                      
                         <% } %> 
 
                    <!-- Modal -->

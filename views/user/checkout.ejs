@@ -91,7 +91,9 @@
 								<select class="form-select mt-2" required name="address" style="width: 20rem">
 									<% userData.addressDetails.forEach((address)=>{%>
 										<option name="address">
-											<%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>,<%= address.district %>,<%= address.pin %>,<%=address.state %>
+											<%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,
+														<%=address.area %>,<%= address.district %>,<%= address.pin %>,
+																	<%=address.state %>
 										</option>
 										<% }) %>
 								</select>
@@ -285,6 +287,8 @@
 			integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
 			crossorigin="anonymous"></script>
 		<script>
+
+
 			$("#placeOrder").submit((e) => {
 
 				e.preventDefault();
@@ -296,13 +300,73 @@
 
 						if (resposnse.success) {
 							location.href = "/orderSuccess";
-						}else{
-							location.href = "/viewCart";
+						} else {
+							razorPay(resposnse);
+
 						}
 
 					}
 				})
 			})
+			function razorPay(order) {
+				var options = {
+					"key": "rzp_test_4fGKqxVpJTRSh2", // Enter the Key ID generated from the Dashboard
+					"amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+					"currency": "INR",
+					"name": "Frutica",
+					"description": "Test Transaction",
+					"image": "/assets/img/logo.png",
+					"order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+					"handler": function (response) {
+						// alert(response.razorpay_payment_id);
+						// alert(response.razorpay_order_id);
+						// alert(response.razorpay_signature)
+						verifyPayment(response, order);
+					},
+					"prefill": {
+						"name": "shafi",
+						"email": "shafi@example.com",
+						"contact": "9999999999"
+					},
+					"notes": {
+						"address": "Razorpay Corporate Office"
+					},
+					"theme": {
+						"color": "#3399cc"
+					}
+				};
+				var rzp1 = new Razorpay(options);
+				rzp1.on('payment.failed', function (response) {
+					// alert(response.error.code);
+					// alert(response.error.description);
+					// alert(response.error.source);
+					// alert(response.error.step);
+					// alert(response.error.reason);
+					// alert(response.error.metadata.order_id);
+					// alert(response.error.metadata.payment_id);
+					location.href = "/paymentFail";
+				});
+				rzp1.open();
+
+			}
+			function verifyPayment(payment, order) {
+				console.log('hooo');
+				$.ajax({
+					url: "/verifyPayment",
+					data: {
+						payment,
+						order,
+					},
+					method: "post",
+					success: (response) => {
+						if (response.success) {
+							location.href = "/orderSuccess";
+						} else {
+							location.href = "/paymentFail";
+						}
+					},
+				});
+			}
 		</script>
 
 		</body>

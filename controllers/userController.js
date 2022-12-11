@@ -600,7 +600,7 @@ module.exports = {
     const userData = await user.findOne({ email: session })
     const cartData = await cart.findOne({ userId: userData._id });
     const status = req.body.paymentMethod === "COD" ? "placed" : "pending";
-
+    
     if (cartData) {
 
       const productData = await cart
@@ -658,10 +658,24 @@ module.exports = {
         deliveryDate: moment().add(3, "days").format("MMM Do YY")
       })
 
-
+      const amount = orderData.totalAmount 
       await cart.deleteOne({ userId: userData._id });
       if (req.body.paymentMethod === "COD") {
         res.json({ success: true });
+      }else{
+        let options = {
+          amount: amount,
+          currency: "INR",
+          receipt: "hi",
+        };
+        instance.orders.create(options, function (err, order){
+          // console.log(order);
+          if(err){
+            console.log(err);
+          }else{
+            res.json(order);
+          }
+        })
       }
 
     } else {
@@ -670,6 +684,9 @@ module.exports = {
     }
 
 
+  },
+  verifyPayment: async (req,res)=>{
+       console.log(req.body);
   },
   orderSuccess: async (req, res) => {
 
