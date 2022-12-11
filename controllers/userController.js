@@ -271,7 +271,7 @@ module.exports = {
     }, 0);
 
     countInCart = productData.length;
-    console.log(productData);
+    
 
     res.render("user/cart", { productData, sum, countInCart, countInWishlist });
 
@@ -405,6 +405,7 @@ module.exports = {
     data.count = parseInt(data.count);
     data.quantity = parseInt(data.quantity);
     const objId = mongoose.Types.ObjectId(data.product);
+
     if(data.count == -1 && data.quantity == 1){
       res.json({ quantity: true })
     }else{
@@ -530,10 +531,12 @@ module.exports = {
   getCheckOutPage: async (req, res) => {
     let session = req.session.user;
     const userData = await user.findOne({ email: session });
+    const userId=userData._id.toString()
+   
     const productData = await cart
       .aggregate([
         {
-          $match: { userId: userData.id },
+          $match: { userId: userId },
         },
         {
           $unwind: "$product",

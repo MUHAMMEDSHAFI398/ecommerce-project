@@ -37,7 +37,7 @@ function changeQuantity(cartId, productId, count) {
         document.getElementById(productId).innerHTML = quantity + count;
         document.getElementById("sum").innerText = response.productData[0].total + "₹";
         document.getElementById("netamount").innerText = response.productData[0].total + "₹";
-        console.log('man'+response);
+        // console.log('man'+response);
         document.getElementById("eachProprice").innerText = response.productData[0].productPrice + "₹";
         
       }
