@@ -29,6 +29,7 @@ userRouter.post('/postEditProfile', userController.postEditProfile);
 userRouter.post('/addNewAddress', userController.addNewAddress);
 userRouter.post("/placeOrder", verifyLogin.verifyLoginUser, userController.placeOrder);
 userRouter.post("/verifyPayment", verifyLogin.verifyLoginUser, userController.verifyPayment);
+userRouter.get('/paymentFail',verifyLogin.verifyLoginUser , userController.paymentFail);
 userRouter.get('/checkout',verifyLogin.verifyLoginUser , userController.getCheckOutPage);
 userRouter.get("/orderDetails", verifyLogin.verifyLoginUser, userController.orderDetails);
 userRouter.get('/orderSuccess',verifyLogin.verifyLoginUser,userController.orderSuccess);

@@ -7,6 +7,7 @@ const mailer = require("../middlewares/otpValidation");
 const order = require('../model/orderModal');
 const wishlist = require('../model/whishlist')
 const categories = require('../model/categoryModal')
+const crypto = require("crypto");
 const instance = require("../middlewares/razorpay");
 const moment = require("moment");
 moment().format();
@@ -271,7 +272,7 @@ module.exports = {
     }, 0);
 
     countInCart = productData.length;
-    
+
 
     res.render("user/cart", { productData, sum, countInCart, countInWishlist });
 
@@ -406,27 +407,27 @@ module.exports = {
     data.quantity = parseInt(data.quantity);
     const objId = mongoose.Types.ObjectId(data.product);
 
-    if(data.count == -1 && data.quantity == 1){
+    if (data.count == -1 && data.quantity == 1) {
       res.json({ quantity: true })
-    }else{
+    } else {
       cart
-      .aggregate([
-        {
-          $unwind: "$product",
-        },
-      ])
-      .then((data) => {
-        console.log(data);
-      });
-    cart.updateOne(
-      { _id: data.cart, "product.productId": objId },
-      { $inc: { "product.$.quantity": data.count } }
-    ).then(() => {
-      next();
-    })
+        .aggregate([
+          {
+            $unwind: "$product",
+          },
+        ])
+        .then((data) => {
+          console.log(data);
+        });
+      cart.updateOne(
+        { _id: data.cart, "product.productId": objId },
+        { $inc: { "product.$.quantity": data.count } }
+      ).then(() => {
+        next();
+      })
 
     }
-    
+
 
 
   },
@@ -481,7 +482,7 @@ module.exports = {
       },
     ]).exec();
     console.log('hiiii');
-    
+
     res.json({ status: true, productData });
 
   },
@@ -531,8 +532,8 @@ module.exports = {
   getCheckOutPage: async (req, res) => {
     let session = req.session.user;
     const userData = await user.findOne({ email: session });
-    const userId=userData._id.toString()
-   
+    const userId = userData._id.toString()
+
     const productData = await cart
       .aggregate([
         {
@@ -602,8 +603,7 @@ module.exports = {
     const session = req.session.user;
     const userData = await user.findOne({ email: session })
     const cartData = await cart.findOne({ userId: userData._id });
-    const status = req.body.paymentMethod === "COD" ? "placed" : "pending";
-    
+
     if (cartData) {
 
       const productData = await cart
@@ -649,6 +649,7 @@ module.exports = {
       }, 0);
 
       const orderData = await order.create({
+
         userId: userData._id,
         name: userData.name,
         phonenumber: userData.phonenumber,
@@ -656,26 +657,29 @@ module.exports = {
         orderItems: cartData.product,
         totalAmount: sum,
         paymentMethod: req.body.paymentMethod,
-        orderStatus: status,
         orderDate: moment().format("MMM Do YY"),
         deliveryDate: moment().add(3, "days").format("MMM Do YY")
-      })
 
-      const amount = orderData.totalAmount 
+      })
+      const amount = orderData.totalAmount * 100
+      const orderId = orderData._id
       await cart.deleteOne({ userId: userData._id });
+
       if (req.body.paymentMethod === "COD") {
+
         res.json({ success: true });
-      }else{
+
+      } else {
         let options = {
           amount: amount,
           currency: "INR",
-          receipt: "hi",
+          receipt: "" + orderId,
         };
-        instance.orders.create(options, function (err, order){
-          // console.log(order);
-          if(err){
+        instance.orders.create(options, function (err, order) {
+
+          if (err) {
             console.log(err);
-          }else{
+          } else {
             res.json(order);
           }
         })
@@ -688,13 +692,43 @@ module.exports = {
 
 
   },
-  verifyPayment: async (req,res)=>{
-       console.log(req.body);
+  verifyPayment: async (req, res) => {
+
+
+
+
+    const details = req.body;
+    let hmac = crypto.createHmac("sha256", process.env.KETSECRET);
+    hmac.update(details.payment.razorpay_order_id + "|" + details.payment.razorpay_payment_id);
+    hmac = hmac.digest("hex");
+
+    if (hmac == details.payment.razorpay_signature) {
+
+      const objId = mongoose.Types.ObjectId(details.order.receipt);
+      order.updateOne({ _id: objId }, { $set: { paymentStatus: "paid" } }).then(() => {
+
+        res.json({ success: true });
+
+      }).catch((err) => {
+        console.log(err);
+        res.json({ status: false, err_message: "payment failed" });
+      })
+
+    } else {
+      console.log(err);
+      res.json({ status: false, err_message: "payment failed" });
+    }
   },
   orderSuccess: async (req, res) => {
 
+    const countInCart = 0
     res.render('user/orderSuccess', { countInCart, countInWishlist })
   },
+  paymentFail: (req, res) => {
+
+    res.render("user/paymentFail", { countInWishlist, countInCart });
+  },
+
   orderDetails: async (req, res) => {
 
     const session = req.session.user
@@ -756,7 +790,7 @@ module.exports = {
       },
 
     ]);
-    
+
 
     res.render('user/orderedProduct', { productData, countInCart, countInWishlist })
 

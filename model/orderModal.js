@@ -38,15 +38,16 @@ const orderSchema = new Schema(
         },
         orderStatus: {
             type: String,
-            default: "pending",
+            default: "placed",
         },
         paymentMethod: {
             type: String,
-            // required: true,
+            required: true,
         },
         paymentStatus: {
             type: String,
-            default: "not paid",
+            default: "not paid"
+            
         },
         orderDate: {
             type: String,
