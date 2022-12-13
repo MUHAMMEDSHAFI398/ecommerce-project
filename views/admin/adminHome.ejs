@@ -1,20 +1,211 @@
 <!-- admin sidebar -->
 <%- include('../partials/admin-sidebar')%>
-<!-- end admin sidebar -->
+  <!-- end admin sidebar -->
 
 
 
-      <div class="col py-3">
-        <h1>Hi admin this is your home page</h1>
+  <div class="col py-3">
 
+    <div class="container">
+      <h2>Dashboard</h2>
+
+      <div class="d-flex align-items-center justify-content-between ">
+
+        <div class="shadow p-3 mb-3  rounded bg-white" style="height: 90px;width: 325px;">
+
+          <div class="d-flex align-items-center justify-content-center">
+            <h6 class="text-info">Today's Revenue</h6>
+          </div>
+          <div class="d-flex align-items-center justify-content-center">
+            <h2 class="">₹ <%=todayRevenue %>
+            </h2>
+          </div>
+
+        </div>
+
+        <div class=" shadow p-3 mb-3  rounded bg-white" style="height: 90px;width: 325px;">
+
+          <div class="d-flex align-items-center justify-content-center">
+            <h6 class="text-info">monthly Revenue</h6>
+          </div>
+          <div class="d-flex align-items-center justify-content-center">
+            <h2 class="">₹ <%=monthlyRevenue %>
+            </h2>
+          </div>
+
+        </div>
+
+        <div class=" shadow p-3 mb-3  rounded bg-white" style="height: 90px;width: 325px;">
+
+          <div class="d-flex align-items-center justify-content-center">
+            <h6 class="text-info">Total Revenue</h6>
+          </div>
+          <div class="d-flex align-items-center justify-content-center">
+            <h2 class="">₹ <%=totalRevenue %>
+            </h2>
+          </div>
+
+
+        </div>
 
       </div>
+
+      <div class="d-flex align-items-center justify-content-between ">
+
+        <div class="shadow p-3 mb-3  rounded bg-white" style="height: 90px;width: 325px;">
+
+          <div class="d-flex align-items-center justify-content-center">
+            <h6 class="text-info">Total orders</h6>
+          </div>
+          <div class="d-flex align-items-center justify-content-center">
+            <h2 class=""><%= allOrders %>
+            </h2>
+          </div>
+
+        </div>
+
+        <div class=" shadow p-3 mb-3  rounded bg-white" style="height: 90px;width: 325px;">
+
+          <div class="d-flex align-items-center justify-content-center">
+            <h6 class="text-info">Active users</h6>
+          </div>
+          <div class="d-flex align-items-center justify-content-center">
+            <h2 class=""><%=activeUsers %>
+            </h2>
+          </div>
+
+        </div>
+
+        <div class=" shadow p-3 mb-3  rounded bg-white" style="height: 90px;width: 325px;">
+
+          <div class="d-flex align-items-center justify-content-center">
+            <h6 class="text-info">Number of products</h6>
+          </div>
+          <div class="d-flex align-items-center justify-content-center">
+            <h2 class=""><%=product %>
+            </h2>
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+      <div class="d-flex align-items-center justify-content-between ">
+
+      
+        <div class=" shadow p-3 mb-1  rounded bg-white" style="height: 90px;width: 244px;">
+          <h6 class="text-info">Pending orders</h6>
+          <h4 id="pending">
+            <%= pending %>
+          </h4>
+
+        </div>
+
+        <div class=" shadow p-3 mb-1  rounded bg-white" style="height: 90px;width: 244px;">
+          <h6 class="text-info">Shippped orders </h6>
+          <h4 id="shipped">
+            <%= shipped %>
+          </h4>
+
+        </div>
+
+        <div class=" shadow p-3 mb-1  rounded bg-white" style="height: 90px;width: 244px;">
+          <h6 class="text-info">Delivered Orders </h6>
+          <h4 id="delivered">
+            <%= delivered %>
+          </h4>
+
+        </div>
+
+        <div class=" shadow p-3 mb-1  rounded bg-white" style="height: 90px;width: 244px;">
+          <h6 class="text-info">Cancelled orders </h6>
+          <h4 id="cancelled">
+            <%= cancelled %>
+          </h4>
+
+        </div>
+  
+      </div>
+      
+
     </div>
+        <input type="hidden" value="<%= online %>" id="online">
+        <input type="hidden" value="<%= cod %>" id="cod">
+
+    <div class="mt-5">
+      <div class="row">
+
+        <div class="col-xl-6 col-12">
+          <canvas id="myChart"></canvas>
+        </div>
+        <div class="col-xl-6 col-12">
+          <canvas id="salse-revenue"></canvas>
+        </div>
+  
+      </div>
+
+    </div>
+
+
+  </div>
+  </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
     crossorigin="anonymous"></script>
 
-</body>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+  <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
 
-</html>
+  <script>
+    let pending = document.getElementById("pending").innerHTML;
+    let shipped = document.getElementById("shipped").innerHTML;
+    let delivered = document.getElementById("delivered").innerHTML;
+    let cancelled = document.getElementById("cancelled").innerHTML
+  
+    var myChart5 = new Chart("myChart", {
+      type: "bar",
+      data: {
+        labels: ["Pending", "Shipped", "Delivered", 'cancelled'],
+        datasets: [
+          {
+            backgroundColor: ["#C2C9C8", "#0B6464", "#515454", "#3E5A5A"],
+            data: [pending, shipped, delivered, cancelled],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+   
+  }
+    });
+
+
+    let cod = document.getElementById("cod").value;
+    let online = document.getElementById("online").value;
+
+    var myChart6 = new Chart('salse-revenue', {
+      type: "bar",
+      data: {
+        labels: ["COD", "Online"],
+        datasets: [
+          {
+            backgroundColor: ["#C2C9C8", "#515454"],
+            data: [cod, online],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+      },
+    });
+  </script>
+ 
+
+
+  </body>
+
+  </html>

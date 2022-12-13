@@ -27,8 +27,8 @@ app.use(session({
     cookie: { maxAge: 6000000 },
     resave: false,
 }))
-//to prevent storing cache
 
+//to prevent storing cache
 app.use((req, res, next) => {
     res.set(
         "Cache-Control",
@@ -36,6 +36,7 @@ app.use((req, res, next) => {
     );
     next();
 })
+
 app.use(cookieParser());
 app.use(fileUpload());
 app.use(express.json());

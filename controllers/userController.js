@@ -481,7 +481,7 @@ module.exports = {
         },
       },
     ]).exec();
-    console.log('hiiii');
+    
 
     res.json({ status: true, productData });
 

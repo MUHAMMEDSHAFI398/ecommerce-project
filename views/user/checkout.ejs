@@ -91,9 +91,7 @@
 								<select class="form-select mt-2" required name="address" style="width: 20rem">
 									<% userData.addressDetails.forEach((address)=>{%>
 										<option name="address">
-											<%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,
-														<%=address.area %>,<%= address.district %>,<%= address.pin %>,
-																	<%=address.state %>
+											<%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>,<%= address.district %>,<%= address.pin %>,<%=address.state %>
 										</option>
 										<% }) %>
 								</select>

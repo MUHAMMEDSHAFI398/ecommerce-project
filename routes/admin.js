@@ -8,6 +8,7 @@ const verifyLogin = require("../middlewares/session");
 
 adminRouter.get('/', adminController.getAdminLogin);
 adminRouter.post('/postAdminLogin', adminController.postAdminLogin);
+adminRouter.get('/dashboard', verifyLogin.verifyLoginAdmin , adminController.getdashboard);
 adminRouter.get('/adminLogout', adminController.adminLogout);
 adminRouter.get('/userDetails', verifyLogin.verifyLoginAdmin , adminController.getAllusers);
 adminRouter.get('/blockUser/:id',verifyLogin.verifyLoginAdmin , adminController.blockUser);
