@@ -295,6 +295,9 @@ module.exports = {
         }
 
     },
+    getCoupenPage: async (req,res)=>{
+            res.render('admin/coupen')
+    },
     getOrders: async (req, res) => {
 
         order.aggregate([
