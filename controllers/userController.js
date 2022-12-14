@@ -599,7 +599,7 @@ module.exports = {
     res.redirect('/checkout')
   },
   placeOrder: async (req, res) => {
-
+    console.log(req.body)
     const session = req.session.user;
     const userData = await user.findOne({ email: session })
     const cartData = await cart.findOne({ userId: userData._id });

@@ -3,6 +3,7 @@ const products = require('../model/productModal');
 const categories = require('../model/categoryModal');
 const order = require('../model/orderModal')
 const mongoose = require("mongoose");
+const coupen= require('../model/coupen')
 const moment = require("moment");
 moment().format();
 
@@ -295,9 +296,35 @@ module.exports = {
         }
 
     },
-    getCoupenPage: async (req,res)=>{
-            res.render('admin/coupen')
+    getCouponPage: async (req,res)=>{
+      const couponData = await coupen.find()
+   
+       res.render('admin/coupon',{couponData})
     },
+    addCoupon: (req, res) => {
+        try {
+          const data = req.body;
+         
+          const dis = parseInt(data.discount);
+          const maxLimit= parseInt(data.maxLimit);
+          const discount = dis / 100;
+      
+          coupen.create({
+            
+              couponName: data.couponName,
+              discount: discount,
+              maxLimit: maxLimit,
+              expirationTime: data.expirationTime,
+            })
+            .then((data) => {
+              console.log(data);
+              res.redirect("/admin/coupon");
+            });
+        } catch {
+          console.error();
+          res.render("user/error");
+        }
+      },
     getOrders: async (req, res) => {
 
         order.aggregate([

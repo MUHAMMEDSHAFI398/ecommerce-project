@@ -25,7 +25,8 @@ adminRouter.post('/addCategory',verifyLogin.verifyLoginAdmin , adminController.a
 adminRouter.post('/editCategory/:id',verifyLogin.verifyLoginAdmin , adminController.editCategory);
 adminRouter.get('/deleteCategory/:id',verifyLogin.verifyLoginAdmin , adminController.deleteCategory);
 adminRouter.get('/restoreCategory/:id',verifyLogin.verifyLoginAdmin , adminController.restoreCategory);
-adminRouter.get('/coupen',verifyLogin.verifyLoginAdmin , adminController.getCoupenPage);
+adminRouter.get('/coupon',verifyLogin.verifyLoginAdmin , adminController.getCouponPage);
+adminRouter.post('/addCoupon',verifyLogin.verifyLoginAdmin,adminController.addCoupon);
 adminRouter.get('/order',verifyLogin.verifyLoginAdmin , adminController.getOrders);
 adminRouter.get('/orderedProduct/:id',verifyLogin.verifyLoginAdmin , adminController.getOrderedProduct);
 adminRouter.post('/orderStatuschange/:id',verifyLogin.verifyLoginAdmin , adminController.orderStatuschange);
