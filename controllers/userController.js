@@ -8,6 +8,7 @@ const order = require('../model/orderModal');
 const wishlist = require('../model/whishlist')
 const categories = require('../model/categoryModal')
 const crypto = require("crypto");
+const coupon = require('../model/coupen');
 const instance = require("../middlewares/razorpay");
 const moment = require("moment");
 moment().format();
@@ -29,6 +30,31 @@ const securepassword = async (password) => {
   } catch {
     console.log(error)
   }
+}
+function checkCoupon(data, id) {
+
+  return new Promise((resolve) => {
+    if (data.coupon) {
+      coupon
+        .find(
+          { couponName: data.coupon },
+          { users: { $elemMatch: { userId: id } } }
+        )
+        .then((exist) => {
+          console.log("exist" + exist);
+          if (exist[0].users.length) {
+            resolve(true);
+            console.log("exist" + exist[0].users.length)
+          } else {
+            coupon.find({ couponName: data.coupon }).then((discount) => {
+              resolve(discount);
+            });
+          }
+        });
+    } else {
+      resolve(false);
+    }
+  });
 }
 
 module.exports = {
@@ -481,7 +507,7 @@ module.exports = {
         },
       },
     ]).exec();
-    
+
 
     res.json({ status: true, productData });
 
@@ -599,103 +625,146 @@ module.exports = {
     res.redirect('/checkout')
   },
   placeOrder: async (req, res) => {
-    console.log(req.body)
+
+    const data = req.body
     const session = req.session.user;
     const userData = await user.findOne({ email: session })
+    const objId = mongoose.Types.ObjectId(userData._id);
+    
     const cartData = await cart.findOne({ userId: userData._id });
+     
+    if(data.coupon){
+      invalid = await coupon.findOne({ couponName: data.coupon });
+   }else{
+     invalid = 0;
+   } 
+   if (invalid == null) {
+   
+    res.json({ invalid: true });
+  }else{
+    const discount = await checkCoupon(data, objId);
+    console.log(discount);
+    if (discount == true) {  
+      res.json({ coupon: true });
+    } else {
+     
+      if (cartData) {
 
-    if (cartData) {
-
-      const productData = await cart
-        .aggregate([
-          {
-            $match: { userId: userData.id },
-          },
-          {
-            $unwind: "$product",
-          },
-          {
-            $project: {
-              productItem: "$product.productId",
-              productQuantity: "$product.quantity",
+        const productData = await cart
+          .aggregate([
+            {
+              $match: { userId: userData.id },
             },
-          },
-          {
-            $lookup: {
-              from: "products",
-              localField: "productItem",
-              foreignField: "_id",
-              as: "productDetail",
+            {
+              $unwind: "$product",
             },
-          },
-          {
-            $project: {
-              productItem: 1,
-              productQuantity: 1,
-              productDetail: { $arrayElemAt: ["$productDetail", 0] },
+            {
+              $project: {
+                productItem: "$product.productId",
+                productQuantity: "$product.quantity",
+              },
             },
-          },
-          {
-            $addFields: {
-              productPrice: {
-                $multiply: ["$productQuantity", "$productDetail.price"]
+            {
+              $lookup: {
+                from: "products",
+                localField: "productItem",
+                foreignField: "_id",
+                as: "productDetail",
+              },
+            },
+            {
+              $project: {
+                productItem: 1,
+                productQuantity: 1,
+                productDetail: { $arrayElemAt: ["$productDetail", 0] },
+              },
+            },
+            {
+              $addFields: {
+                productPrice: {
+                  $multiply: ["$productQuantity", "$productDetail.price"]
+                }
               }
             }
+          ])
+          .exec();
+        const sum = productData.reduce((accumulator, object) => {
+          return accumulator + object.productPrice;
+        }, 0);
+        if (discount == false) {
+          var total = sum;
+        } else {
+          var dis = sum * discount[0].discount;
+          if (dis > discount[0].maxLimit) {
+            total = sum - 100;
+          } else {
+            total = dis;
           }
-        ])
-        .exec();
-      const sum = productData.reduce((accumulator, object) => {
-        return accumulator + object.productPrice;
-      }, 0);
+        }
 
-      const orderData = await order.create({
+        const orderData = await order.create({
 
-        userId: userData._id,
-        name: userData.name,
-        phonenumber: userData.phonenumber,
-        address: req.body.address,
-        orderItems: cartData.product,
-        totalAmount: sum,
-        paymentMethod: req.body.paymentMethod,
-        orderDate: moment().format("MMM Do YY"),
-        deliveryDate: moment().add(3, "days").format("MMM Do YY")
+          userId: userData._id,
+          name: userData.name,
+          phonenumber: userData.phonenumber,
+          address: req.body.address,
+          orderItems: cartData.product,
+          totalAmount: total,
+          paymentMethod: req.body.paymentMethod,
+          orderDate: moment().format("MMM Do YY"),
+          deliveryDate: moment().add(3, "days").format("MMM Do YY")
 
-      })
-      const amount = orderData.totalAmount * 100
-      const orderId = orderData._id
-      await cart.deleteOne({ userId: userData._id });
+        })
+        const amount = orderData.totalAmount * 100
+        const orderId = orderData._id
+        await cart.deleteOne({ userId: userData._id });
 
-      if (req.body.paymentMethod === "COD") {
+        if (req.body.paymentMethod === "COD") {
 
-        res.json({ success: true });
+          res.json({ success: true });
+          coupon.updateOne(
+            { couponName: data.coupon },
+            { $push: { users: { userId: objId } } }
+          ).then((updated) => {
+            console.log(updated);
+          });
+            
+
+        } else {
+          let options = {
+            amount: amount,
+            currency: "INR",
+            receipt: "" + orderId,
+          };
+          instance.orders.create(options, function (err, order) {
+
+            if (err) {
+              console.log(err);
+            } else {
+              res.json(order);
+
+              coupon.updateOne(
+                { couponName: data.coupon },
+                { $push: { users: { userId: objId } } }
+              ).then((updated) => {
+                console.log(updated);
+              });
+            }
+          })
+
+        }
 
       } else {
-        let options = {
-          amount: amount,
-          currency: "INR",
-          receipt: "" + orderId,
-        };
-        instance.orders.create(options, function (err, order) {
 
-          if (err) {
-            console.log(err);
-          } else {
-            res.json(order);
-          }
-        })
+        res.redirect("/viewCart");
       }
-
-    } else {
-
-      res.redirect("/viewCart");
     }
 
+  } 
+    
 
   },
   verifyPayment: async (req, res) => {
-
-
-
 
     const details = req.body;
     let hmac = crypto.createHmac("sha256", process.env.KETSECRET);
