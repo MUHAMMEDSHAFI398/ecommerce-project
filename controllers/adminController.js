@@ -3,7 +3,7 @@ const products = require('../model/productModal');
 const categories = require('../model/categoryModal');
 const order = require('../model/orderModal')
 const mongoose = require("mongoose");
-const coupen= require('../model/coupen')
+const coupon= require('../model/coupen')
 const moment = require("moment");
 moment().format();
 
@@ -188,6 +188,20 @@ module.exports = {
         await products.updateOne({ _id: id }, { $set: { delete: false } })
         res.redirect('/admin/productdetails')
     },
+    deleteCoupon: async (req, res) => {
+
+        const id = req.params.id;
+        await coupon.updateOne({ _id: id }, { $set: { delete: true } })
+        res.redirect("/admin/coupon");
+
+    },
+    restoreCoupon: async (req, res) => {
+
+        const id = req.params.id;
+        await coupon.updateOne({ _id: id }, { $set: { delete: false } })
+        res.redirect("/admin/coupon");
+    },
+    
     getcategory: async (req, res) => {
 
         const Category = await categories.find()
@@ -297,7 +311,7 @@ module.exports = {
 
     },
     getCouponPage: async (req,res)=>{
-      const couponData = await coupen.find()
+      const couponData = await coupon.find()
    
        res.render('admin/coupon',{couponData})
     },
@@ -309,7 +323,7 @@ module.exports = {
           const maxLimit= parseInt(data.maxLimit);
           const discount = dis / 100;
       
-          coupen.create({
+          coupon.create({
             
               couponName: data.couponName,
               discount: discount,

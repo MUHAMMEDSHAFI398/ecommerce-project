@@ -25,6 +25,10 @@ const couponSchema = new Schema(
       type: String,
       required: true,
     },
+    delete: {
+      type: Boolean,
+      default: false,
+    },
     users: [
       {
         userId: {

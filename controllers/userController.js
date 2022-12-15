@@ -9,16 +9,14 @@ const wishlist = require('../model/whishlist')
 const categories = require('../model/categoryModal')
 const crypto = require("crypto");
 const coupon = require('../model/coupen');
+const otp = require('../model/otp')
 const instance = require("../middlewares/razorpay");
 const moment = require("moment");
 moment().format();
 
 
 
-let name;
-let email;
-let phonenumber;
-let password;
+
 let countInCart;
 let countInWishlist;
 
@@ -80,18 +78,20 @@ module.exports = {
 
   postSignup: async (req, res) => {
 
-
+    
     const spassword = await securepassword(req.body.password)
-    name = req.body.name,
-      email = req.body.email,
-      phonenumber = req.body.phonenumber,
-      password = spassword
-
+    const name = req.body.name
+    const email = req.body.email
+    const phonenumber  = req.body.phonenumber
+    const password  = spassword
+     
+    
+    const  OTP = `${Math.floor(1000 + Math.random() * 9000)}`
     const mailDetails = {
       from: 'mdshafi1120117@gmail.com',
       to: email,
       subject: "Otp for frutica",
-      html: `<p>Your OTP for registering in Fruitkha is ${mailer.OTP}</p>`,
+      html: `<p>Your OTP for registering in Fruitkha is ${OTP}</p>`,
     };
 
 
@@ -99,42 +99,64 @@ module.exports = {
     if (User) {
       res.render('user/signup', { err_message: 'User Already Exist' });
     } else {
-      mailer.mailTransporter.sendMail(mailDetails, function (err, data) {
-        if (err) {
-
-          console.log(err)
-        } else {
-          console.log("otp redirect");
-          res.redirect('/otpPage');
-        }
-      })
-    }
-  },
-
-  getOtpPage: (req, res) => {
-    res.render('user/otp');
-  },
-  postOtp: async (req, res) => {
-    let otp = req.body.otp;
-
-    if (mailer.OTP === otp) {
-      try {
-
-        const User = await user.create({
+     
+        const User = {
           name: name,
           email: email,
           phonenumber: phonenumber,
           password: password
 
-        })
-      } catch (error) {
-        console.log('Error occured');
-      }
-      res.redirect('/userLogin');
+        }
+     
+      mailer.mailTransporter.sendMail(mailDetails, function (err, data) {
+        if (err) {
 
+          console.log(err)
+        } else {
+          otp.create({
+            email: email,
+            otp: OTP
+        }).then((otpActive)=>{
+          
+          res.redirect(`/otpPage?name=${User.name}&email=${User.email}&phonenumber=${User.phonenumber}&password=${User.password}`);
+
+        })
+          
+        }
+      })
+    }
+  },
+
+  getOtpPage: async (req, res) => {
+ 
+    let userData= req.query
+    // console.log(req.query)
+    // const userData = await user.findOne({email:email})
+    res.render('user/otp', {userData});
+
+  },
+  postOtp: async (req, res) => {
+    const body=req.body
+    console.log(req.body)
+    
+    const sentOtp  =await otp.findOne({
+      email:body.email
+    })
+    console.log(sentOtp)
+    if (req.body.otp  == sentOtp.otp ) {
+
+      res.redirect('/userLogin');
+      const User = await user.create({
+        name: body.name,
+        email: body.email,
+        phonenumber: body.phonenumber,
+        password: body.password
+
+      })
+      
     } else {
 
-      res.render('user/otp', { invalid: 'invalid otp' });
+      res.render('user/otp', { invalid: 'invalid otp',userData });
     }
   },
 
