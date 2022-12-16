@@ -19,22 +19,22 @@
 
               <div class="d-flex flex-column">
                 <label>Coupencode</label>
-                <input class="rounded-2" name="couponName" style="width: 189px; height: 38px;" type="text">
+                <input class="rounded-2" required name="couponName" style="width: 189px; height: 38px;" type="text">
               </div>
 
               <div class="d-flex flex-column">
                 <label>Discount in %</label>
-                <input name="discount" class="rounded-2" style="width: 189px; height: 38px;" type="text">
+                <input name="discount" required class="rounded-2" style="width: 189px; height: 38px;" type="text">
               </div>
 
               <div class="d-flex flex-column">
                 <label>Maximum limit</label>
-                <input name="maxLimit" class="rounded-2" style="width: 189px; height: 38px;" type="text">
+                <input name="maxLimit" required  class="rounded-2" style="width: 189px; height: 38px;" type="text">
               </div>
 
               <div class="d-flex flex-column">
                 <label>Expiry date</label>
-                <input type="date" class="rounded-2" style="width: 189px; height: 38px;"
+                <input type="date" required  class="rounded-2" style="width: 189px; height: 38px;"
                   class="form-control border-secondary" id="exdate" name="expirationTime"
                   aria-describedby="emailHelp" />
               </div>
@@ -53,6 +53,7 @@
               <th scope="col">Coupen</th>
               <th scope="col">Expiry date</th>
               <th scope="col">Controlls</th>
+              
 
             </tr>
           </thead>
@@ -73,18 +74,20 @@
                   <td>
                     <%=element.expirationTime %>
                   </td>
+                   
 
+                  
                   <td>
                     <!-- <a href="" class="btn btn-success">Edit</a> -->
 
 
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModa-<%= element._id %>">
                       Edit
                     </button>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    <div class="modal fade" id="exampleModa-<%= element._id %>" tabindex="-1" aria-labelledby="exampleModalLabel"
                       aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
@@ -92,44 +95,62 @@
                             <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
-                          <div class="modal-body">
+                          <form  action="/admin/editCoupon/<%= element._id %>" method="post">
+                            <div class="modal-body">
 
-                            <div class="d-flex flex-column">
-                              <label>Coupencode</label>
-                              <input class="rounded-2" name="couponName" style="width: 189px; height: 38px;" type="text">
+                              <div class="d-flex justify-content-between" >
+  
+                                <div class="d-flex flex-column">
+                                  <label>Coupencode</label>
+                                  <input class="rounded-2" required   value="<%= element.couponName%>" name="couponName" style="width: 189px; height: 38px;"
+                                    type="text">
+                                </div>
+  
+                                <div class="d-flex flex-column">
+                                  <label>Discount in %</label>
+                                  <input name="discount" required  value="<%=element.discount*100%>" class="rounded-2" style="width: 189px; height: 38px;"
+                                    type="text">
+                                </div>
+  
+                              </div>
+  
+                              <div class="d-flex justify-content-between" >
+                                <div class="d-flex flex-column">
+                                  <label>Maximum limit</label>
+                                  <input name="maxLimit" required  value="<%= element.maxLimit%>" class="rounded-2" style="width: 189px; height: 38px;"
+                                    type="text">
+                                </div>
+  
+                                <div class="d-flex flex-column">
+                                  <label>Expiry date</label>
+                                  <input type="date" required  class="rounded-2" style="width: 189px; height: 38px;"
+                                    class="form-control border-secondary" value="<%= element.expirationTime%>" id="exdate" name="expirationTime"
+                                    aria-describedby="emailHelp" />
+                                </div>
+  
+                              </div>
                             </div>
-              
-                            <div class="d-flex flex-column">
-                              <label>Discount in %</label>
-                              <input name="discount" class="rounded-2" style="width: 189px; height: 38px;" type="text">
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="submit" id="submit" value="submit" class="btn btn-primary">Submit</button>
                             </div>
-              
-                            <div class="d-flex flex-column">
-                              <label>Maximum limit</label>
-                              <input name="maxLimit" class="rounded-2" style="width: 189px; height: 38px;" type="text">
-                            </div>
-              
-                            <div class="d-flex flex-column">
-                              <label>Expiry date</label>
-                              <input type="date" class="rounded-2" style="width: 189px; height: 38px;"
-                                class="form-control border-secondary" id="exdate" name="expirationTime"
-                                aria-describedby="emailHelp" />
-                            </div>
-                            ...
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                          </div>
+
+                          </form>
+                          
+
+
+
+
+                         
                         </div>
                       </div>
                     </div>
 
+                  
 
 
 
-
-
+                   
                     <!-- Button trigger modal -->
                     <% if(element.delete===false) { %>
 

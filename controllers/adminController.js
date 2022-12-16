@@ -175,6 +175,32 @@ module.exports = {
         res.render('admin/editproduct', { productData, category })
 
     },
+    postEditProduct: async (req, res) => {
+
+        const id = req.params.id;
+        await products.updateOne({ _id: id }, {
+            $set: {
+                product_name: req.body.product_name,
+                price: req.body.price,
+                category: req.body.category,
+                description: req.body.description,
+                stock: req.body.stock
+            }
+        });
+        if (req?.files?.product_image) {
+            const image = req.files.product_image;
+            image.mv('./public/adminimages/' + id + '.jpg', (err) => {
+                if (!err) {
+                    res.redirect('/admin/productdetails')
+                } else {
+                    console.log(err)
+                }
+            })
+        } else {
+            res.redirect('/admin/productdetails')
+        }
+
+    },
     deleteProduct: async (req, res) => {
 
         const id = req.params.id;
@@ -188,19 +214,7 @@ module.exports = {
         await products.updateOne({ _id: id }, { $set: { delete: false } })
         res.redirect('/admin/productdetails')
     },
-    deleteCoupon: async (req, res) => {
-
-        const id = req.params.id;
-        await coupon.updateOne({ _id: id }, { $set: { delete: true } })
-        res.redirect("/admin/coupon");
-
-    },
-    restoreCoupon: async (req, res) => {
-
-        const id = req.params.id;
-        await coupon.updateOne({ _id: id }, { $set: { delete: false } })
-        res.redirect("/admin/coupon");
-    },
+    
     
     getcategory: async (req, res) => {
 
@@ -284,32 +298,7 @@ module.exports = {
 
     },
 
-    postEditProduct: async (req, res) => {
-
-        const id = req.params.id;
-        await products.updateOne({ _id: id }, {
-            $set: {
-                product_name: req.body.product_name,
-                price: req.body.price,
-                category: req.body.category,
-                description: req.body.description,
-                stock: req.body.stock
-            }
-        });
-        if (req?.files?.product_image) {
-            const image = req.files.product_image;
-            image.mv('./public/adminimages/' + id + '.jpg', (err) => {
-                if (!err) {
-                    res.redirect('/admin/productdetails')
-                } else {
-                    console.log(err)
-                }
-            })
-        } else {
-            res.redirect('/admin/productdetails')
-        }
-
-    },
+    
     getCouponPage: async (req,res)=>{
       const couponData = await coupon.find()
    
@@ -318,7 +307,6 @@ module.exports = {
     addCoupon: (req, res) => {
         try {
           const data = req.body;
-         
           const dis = parseInt(data.discount);
           const maxLimit= parseInt(data.maxLimit);
           const discount = dis / 100;
@@ -338,7 +326,43 @@ module.exports = {
           console.error();
           res.render("user/error");
         }
-      },
+    },
+    deleteCoupon: async (req, res) => {
+
+        const id = req.params.id;
+        await coupon.updateOne({ _id: id }, { $set: { delete: true } })
+        res.redirect("/admin/coupon");
+
+    },
+    restoreCoupon: async (req, res) => {
+
+        const id = req.params.id;
+        await coupon.updateOne({ _id: id }, { $set: { delete: false } })
+        res.redirect("/admin/coupon");
+    },
+    editCoupon: async (req,res)=>{
+        try{
+            const id = req.params.id;
+            const data = req.body;
+            coupon
+              .updateOne(
+                { _id: id },
+                {
+                  couponName: data.couponName,
+                  discount: data.discount/100,
+                  maxLimit: data.maxLimit,
+                  expirationTime:data.expirationTime,
+                }
+              )
+              .then(() => {
+                res.redirect("/admin/coupon");
+              });
+            }catch{
+              console.error();
+             
+            }
+
+    },
     getOrders: async (req, res) => {
 
         order.aggregate([

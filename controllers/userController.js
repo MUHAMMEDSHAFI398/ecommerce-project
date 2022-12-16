@@ -648,22 +648,35 @@ module.exports = {
   },
   placeOrder: async (req, res) => {
 
+    let invalid;
+    let couponDeleted;
     const data = req.body
     const session = req.session.user;
     const userData = await user.findOne({ email: session })
     const objId = mongoose.Types.ObjectId(userData._id);
-    
     const cartData = await cart.findOne({ userId: userData._id });
      
     if(data.coupon){
       invalid = await coupon.findOne({ couponName: data.coupon });
+      if(invalid.delete == true){
+        couponDeleted = true
+      }
    }else{
      invalid = 0;
    } 
+
+
+
    if (invalid == null) {
-   
+
     res.json({ invalid: true });
-  }else{
+
+  }else if(couponDeleted){
+
+    res.json({couponDeleted:true})
+  }
+  else{
+    
     const discount = await checkCoupon(data, objId);
     console.log(discount);
     if (discount == true) {  

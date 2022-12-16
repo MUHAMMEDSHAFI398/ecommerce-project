@@ -35,6 +35,7 @@ adminRouter.post('/orderStatuschange/:id',verifyLogin.verifyLoginAdmin , adminCo
 
 adminRouter.get('/deleteCoupen/:id',verifyLogin.verifyLoginAdmin , adminController.deleteCoupon);
 adminRouter.get('/restoreCoupen/:id',verifyLogin.verifyLoginAdmin , adminController.restoreCoupon);
+adminRouter.post('/editCoupon/:id',verifyLogin.verifyLoginAdmin , adminController.editCoupon);
 
 
 

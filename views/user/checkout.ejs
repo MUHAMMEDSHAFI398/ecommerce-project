@@ -242,7 +242,17 @@
 					method: 'post',
 					data: $('#placeOrder').serialize(),
 					success: (response) => {
-						if (response.coupon) {
+						if(response.couponDeleted){
+							Swal.fire({
+								title: "Coupon no longer exist!",
+								icon: "error",
+								confirmButtonText: "continue",
+							}).then(function () {
+								location.reload()
+							});
+
+						}
+						else if (response.coupon) {
 							Swal.fire({
 								title: "Coupon already used!",
 								icon: "error",
@@ -250,7 +260,9 @@
 							}).then(function () {
 								location.reload()
 							});
-						} else if (response.invalid) {
+						} 
+						
+						else if (response.invalid) {
 							Swal.fire({
 								title: "Invalid Coupon!",
 								icon: "error",
