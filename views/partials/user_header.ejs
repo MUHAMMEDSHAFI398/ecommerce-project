@@ -52,7 +52,7 @@
                 <div class="main-menu-wrap">
                     <!-- logo -->
                     <div class="site-logo">
-                        <a href="index.html">
+                        <a href="/">
                             <img src="assets/img/logo.png" alt="">
                         </a>
                     </div>
@@ -62,8 +62,8 @@
                     <nav class="main-menu">
                         <ul>
                             <li class="current-list-item"><a href="/">Home</a></li>
-                            <li><a href="about.html">About</a></li>
-                            <li><a href="news.html">News</a></li>
+                            <li><a href="/">About</a></li>
+                            <li><a href="/">News</a></li>
                             <li><a href="/shop">Shop</a>
                                 <% if(customer) {%>
                             <li><a href="/orderDetails">orders</a>
@@ -81,15 +81,16 @@
                                         <a href="/viewProfile"><img height="17px" width="17px"
                                                 src="/adminimages/pro.png" alt=""></a>
                                         <a href="/viewWishlist">
-                                        
+                                            <% if(locals.countInWishlist){ %> 
                                             <span class="badge rounded-pill badge-notification bg-danger"><%=countInWishlist%></span>
-               
+                                            <% } %> 
                                             <i class="fa fa-heart" aria-hidden="true"></i>
                                         </a>
 
                                         <a class="shopping-cart" href="/viewCart">
-                                   
+                                             <% if(locals.countInCart){ %> 
                                             <span class="badge rounded-pill badge-notification bg-danger"><%=countInCart%></span>
+                                            <% } %> 
                               
                                             <i class="fas fa-shopping-cart"></i>
                                         </a>

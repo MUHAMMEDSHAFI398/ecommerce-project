@@ -47,5 +47,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/',userRouter);
 app.use('/admin',adminRouter)
 
+app.use((req, res) => {
+    res.status(404).render('user/404');
+});
+
 
 // SET PATH=C:\Program Files\Nodejs;%PATH

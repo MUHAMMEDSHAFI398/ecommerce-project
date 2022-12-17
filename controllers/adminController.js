@@ -11,8 +11,8 @@ moment().format();
 module.exports = {
     getAdminLogin: async (req, res) => {
         let admin = req.session.admin
-        if (admin) {
-            const orderData = await order.find();
+        if (admin) {      
+            const orderData = await order.find({orderStatus: { $ne: "cancelled" }});
 
             const totalRevenue = orderData.reduce((accumulator, object) => {
                 return accumulator + object.totalAmount;
@@ -25,6 +25,16 @@ module.exports = {
             const todayRevenue = todayOrder.reduce((accumulator, object) => {
                 return accumulator + object.totalAmount;
             }, 0);
+
+            const start = moment().startOf("month");
+        
+            const end = moment().endOf("month");
+            
+            const oneMonthOrder = await order.find({orderStatus: { $ne: "cancelled" },createdAt: {$gte: start,$lte: end},})
+  
+            const monthlyRevenue = oneMonthOrder.reduce((accumulator, object)=>{
+                return accumulator + object.totalAmount;
+            },0);
 
             const allOrders = orderData.length;
 
@@ -46,15 +56,7 @@ module.exports = {
             
             const allOrderDetails = await order.find({paymentStatus: "paid"},{orderStatus: "delivered"})
 
-            const start = moment().startOf("month");
-        
-            const end = moment().endOf("month");
-            
-            const oneMonthOrder = await order.find({createdAt: {$gte: start,$lte: end},})
-  
-            const monthlyRevenue = oneMonthOrder.reduce((accumulator, object)=>{
-                return accumulator + object.totalAmount;
-            },0);
+           
             
 
             
@@ -463,7 +465,63 @@ module.exports = {
             }
         )
         res.redirect("/admin/order");
-    }
+    },
+    salesReport: async (req, res) => {
+        try {
+          const allOrderDetails = await order.find({
+            paymentStatus: "paid",
+            orderStatus: "delivered",
+          });
+          res.render("admin/salesReport", { allOrderDetails });
+        } catch {
+          console.error();
+          
+        }
+      },
+      dailyReport: (req, res) => {
+        try {
+          order
+            .find({
+              $and: [
+                { paymentStatus: "paid", orderStatus: "delivered" },
+                {
+                  orderDate: moment().format("MMM Do YY"),
+                },
+              ],
+            })
+            .then((allOrderDetails) => {
+                console.log(allOrderDetails)
+              res.render("admin/salesReport", { allOrderDetails });
+            });
+        } catch {
+          console.error();
+          
+        }
+      },
+      monthlyReport: (req, res) => {
+        try {
+          const start = moment().startOf("month");
+          const end = moment().endOf("month");
+          order
+            .find({
+              $and: [
+                { paymentStatus: "paid", orderStatus: "delivered" },
+                {
+                  createdAt: {
+                    $gte: start,
+                    $lte: end,
+                  },
+                },
+              ],
+            })
+            .then((allOrderDetails) => {
+              res.render("admin/salesReport", { allOrderDetails });
+            });
+        } catch {
+          console.error();
+          
+        }
+      }
 
 
 }
