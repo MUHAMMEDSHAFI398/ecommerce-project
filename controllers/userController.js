@@ -39,10 +39,10 @@ function checkCoupon(data, id) {
           { users: { $elemMatch: { userId: id } } }
         )
         .then((exist) => {
-          console.log("exist" + exist);
+          console.log(exist);
           if (exist[0].users.length) {
             resolve(true);
-            console.log("exist" + exist[0].users.length)
+           
           } else {
             coupon.find({ couponName: data.coupon }).then((discount) => {
               resolve(discount);
@@ -651,6 +651,7 @@ module.exports = {
     let invalid;
     let couponDeleted;
     const data = req.body
+   
     const session = req.session.user;
     const userData = await user.findOne({ email: session })
     const objId = mongoose.Types.ObjectId(userData._id);
@@ -658,7 +659,7 @@ module.exports = {
      
     if(data.coupon){
       invalid = await coupon.findOne({ couponName: data.coupon });
-      if(invalid.delete == true){
+      if(invalid?.delete == true){
         couponDeleted = true
       }
    }else{
