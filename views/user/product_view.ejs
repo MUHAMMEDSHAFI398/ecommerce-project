@@ -31,8 +31,8 @@
 						<p class="single-product-pricing"> <%=product.price%>/kg</p>
 						<p><%=product.description%></p>
 						<div class="single-product-form">						
-							<a href="/cart/<%= product._id %>" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-							<a href="/wishlist/<%=product._id%>"><img style="width:30px; height:30px"  src="/adminimages/wishnew.png" alt=""></a>
+							<a onclick="addToCart('<%= product._id %>')" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+							<a onclick="addToWishlist('<%= product._id %>')"><img style="width:30px; height:30px" src="/adminimages/wishnew.png" alt=""></a>	
 							<p><strong>Category :</strong><%= product?.category.category_name %></p>
 						</div>
 					
@@ -76,6 +76,12 @@
 	<script src="http://localhost:5000/assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="http://localhost:5000/assets/js/main.js"></script>
+
+	<!-- ajax request -->
+	<script src="http://localhost:5000/assets/js/ajaxrequests.js"></script>
+
+
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 </html>

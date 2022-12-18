@@ -28,6 +28,11 @@ app.use(session({
     resave: false,
 }))
 
+app.use(cookieParser());
+app.use(fileUpload());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 //to prevent storing cache
 app.use((req, res, next) => {
     res.set(
@@ -37,10 +42,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use(cookieParser());
-app.use(fileUpload());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
 
 
 

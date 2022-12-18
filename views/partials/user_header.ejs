@@ -65,10 +65,11 @@
                             <li><a href="/">About</a></li>
                             <li><a href="/">News</a></li>
                             <li><a href="/shop">Shop</a>
-                                <% if(customer) {%>
+                                 
+                                <% if(locals.customer) {%>
                             <li><a href="/orderDetails">orders</a>
                                 <% } %>
-                                    <% if(customer) {%>
+                                    <% if(locals.customer) {%>
                             <li><a href="/userLogout">Logout</a>
                                 <%} else { %>
                             <li><a href="/userLogin">Login</a>
@@ -77,7 +78,7 @@
                             </li>
                             <li>
                                 <div class="header-icons">
-                                    <% if(customer) {%>
+                                    <% if(locals.customer) {%>
                                         <a href="/viewProfile"><img height="17px" width="17px"
                                                 src="/adminimages/pro.png" alt=""></a>
                                         <a href="/viewWishlist">

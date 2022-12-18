@@ -1,5 +1,5 @@
 <%- include('../partials/user_header')%>
-	
+
 	<!-- breadcrumb-section -->
 	<div class="breadcrumb-section breadcrumb-bg">
 		<div class="container">
@@ -20,90 +20,112 @@
 		<div class="container">
 
 			<div class="row">
-                <div class="col-md-12">
-                    <div class="product-filters">
-                        <ul>
-                            <a href="/shop"><li >All</li></a>
-							<% category.forEach((categories)=>{ %> 
-                            <a href="/category/<%=categories._id%>"><li ><%=categories.category_name %> </li></a>
-							<% }) %> 
-                            
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-			<div class="row product-lists">
-
-				<% product.forEach((products) =>{ %>
-				<div class="col-lg-4 col-md-6 text-center strawberry">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="/productview/<%=products._id%>"><img style="width:300px; height:225px" src="/adminimages/<%=products._id%>.jpg" alt=""></a>
-							<% if(locals.exist){ %> 
-								
-							<% } %> 
-						</div>
-						<p class="product-price"><%= products?.product_name %></p>
-						<p><%= products?.category.category_name %></p>
-						<p class="product-price"> <%= products?.price %>₹  </p>
-						<h5>Per kg</h5>
-						<a href="/wishlist/<%=products._id%>"><img style="width:30px; height:30px"  src="/adminimages/wishnew.png" alt=""></a>
-						<a href="/productview/<%=products._id%>" class="btn btn-success">Buy now</a>
-					</div>
-				</div>
-				<% }) %>
-
-			<div class="row">
-				<div class="col-lg-12 text-center">
-					<div class="pagination-wrap">
+				<div class="col-md-12">
+					<div class="product-filters">
 						<ul>
-							<li><a href="#">Prev</a></li>
-							<li><a href="#">1</a></li>
-							<li><a class="active" href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">Next</a></li>
+							<a href="/shop">
+								<li>All</li>
+							</a>
+							<% category.forEach((categories)=>{ %>
+								<a href="/category/<%=categories._id%>">
+									<li>
+										<%=categories.category_name %>
+									</li>
+								</a>
+								<% }) %>
+
 						</ul>
 					</div>
 				</div>
 			</div>
+
+			<div class="row product-lists">
+
+				<% product.forEach((products)=>{ %>
+					<div class="col-lg-4 col-md-6 text-center strawberry">
+						<div class="single-product-item">
+							<div class="product-image">
+								<a href="/productview/<%=products._id%>"><img style="width:300px; height:225px"
+										src="/adminimages/<%=products._id%>.jpg" alt=""></a>
+								<% if(locals.exist){ %>
+
+									<% } %>
+							</div>
+							<p class="product-price">
+								<%= products?.product_name %>
+							</p>
+							<p>
+								<%= products?.category.category_name %>
+							</p>
+							<p class="product-price">
+								<%= products?.price %>₹
+							</p>
+							<h5>Per kg</h5>
+							<a onclick="addToWishlist('<%= products._id %>')"><img style="width:30px; height:30px" src="/adminimages/wishnew.png" alt=""></a>	
+							<a onclick="addToCart('<%= products._id %>')" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+
+						</div>
+					</div>
+					<% }) %>
+
+						<div class="row">
+							<div class="col-lg-12 text-center">
+								<div class="pagination-wrap">
+									<ul>
+										<li><a href="#">Prev</a></li>
+										<li><a href="#">1</a></li>
+										<li><a class="active" href="#">2</a></li>
+										<li><a href="#">3</a></li>
+										<li><a href="#">Next</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+			</div>
 		</div>
-	</div>
-	<!-- end products -->
+		<!-- end products -->
 
-	<!-- logo carousel -->
-	<!-- end logo carousel -->
+		<!-- logo carousel -->
+		<!-- end logo carousel -->
 
-	<!-- footer -->
-	<%- include('../partials/user_footer')%>
+		<!-- footer -->
+		<%- include('../partials/user_footer')%>
 
-	<!-- end footer -->
+			<!-- end footer -->
 
-	
-	<!-- copyright -->
 
-	<!-- end copyright -->
-	
-	<!-- jquery -->
-	<script src="http://localhost:5000/assets/js/jquery-1.11.3.min.js"></script>
-	<!-- bootstrap -->
-	<script src="http://localhost:5000/assets/bootstrap/js/bootstrap.min.js"></script>
-	<!-- count down -->
-	<script src="http://localhost:5000/assets/js/jquery.countdown.js"></script>
-	<!-- isotope -->
-	<script src="http://localhost:5000/assets/js/jquery.isotope-3.0.6.min.js"></script>
-	<!-- waypoints -->
-	<script src="http://localhost:5000/assets/js/waypoints.js"></script>
-	<!-- owl carousel -->
-	<script src="http://localhost:5000/assets/js/owl.carousel.min.js"></script>
-	<!-- magnific popup -->
-	<script src="http://localhost:5000/assets/js/jquery.magnific-popup.min.js"></script>
-	<!-- mean menu -->
-	<script src="http://localhost:5000/assets/js/jquery.meanmenu.min.js"></script>
-	<!-- sticker js -->
-	<script src="http://localhost:5000/assets/js/sticker.js"></script>
-	<!-- main js -->
-	<script src="http://localhost:5000/assets/js/main.js"></script>
+			<!-- copyright -->
 
-</body>
-</html>
+			<!-- end copyright -->
+
+			<!-- jquery -->
+			<script src="http://localhost:5000/assets/js/jquery-1.11.3.min.js"></script>
+			<!-- bootstrap -->
+			<script src="http://localhost:5000/assets/bootstrap/js/bootstrap.min.js"></script>
+			<!-- count down -->
+			<script src="http://localhost:5000/assets/js/jquery.countdown.js"></script>
+			<!-- isotope -->
+			<script src="http://localhost:5000/assets/js/jquery.isotope-3.0.6.min.js"></script>
+			<!-- waypoints -->
+			<script src="http://localhost:5000/assets/js/waypoints.js"></script>
+			<!-- owl carousel -->
+			<script src="http://localhost:5000/assets/js/owl.carousel.min.js"></script>
+			<!-- magnific popup -->
+			<script src="http://localhost:5000/assets/js/jquery.magnific-popup.min.js"></script>
+			<!-- mean menu -->
+			<script src="http://localhost:5000/assets/js/jquery.meanmenu.min.js"></script>
+			<!-- sticker js -->
+			<script src="http://localhost:5000/assets/js/sticker.js"></script>
+			<!-- main js -->
+			<script src="http://localhost:5000/assets/js/main.js"></script>
+
+			<!-- ajax request -->
+			<script src="http://localhost:5000/assets/js/ajaxrequests.js"></script>
+
+
+			<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+			
+
+			</body>
+
+			</html>

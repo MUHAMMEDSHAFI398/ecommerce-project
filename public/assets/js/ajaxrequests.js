@@ -72,3 +72,71 @@ function removeFromWishlist(wishlistId, productId) {
     },
   });
 }
+
+function removeWishlistProduct(wishlistId, productId) {
+  $.ajax({
+    url: "/removewishlistProduct",
+    method: "post",
+    data: {
+      wishlistId,
+      productId,
+    },
+    success: () => {
+      Swal.fire({
+        title: "Product removed from wishlist!",
+        icon: "success",
+        confirmButtonText: "continue",
+      }).then(function () {
+        location.reload();
+      });
+    },
+  });
+}
+
+function addToWishlist(proId) {
+					$.ajax({
+						url: "/addToWishlist/" + proId,
+						method: "get",
+						success: (response) => {
+							if (response.status) {
+								Swal.fire({
+									title: "Added to wishlist",
+									icon: "success",
+									confirmButtonText: "continue",
+								});
+							}
+							if (response.productExist) {
+								Swal.fire({
+									title: "Alredy Exist in wishlist",
+									icon: "error",
+									confirmButtonText: "continue",
+								});
+
+							}
+						},
+					});
+				}
+
+        function addToCart(proId) {
+					$.ajax({
+						url: "/addToCart/" + proId,
+						method: "get",
+						success: (response) => {
+							if (response.status) {
+								Swal.fire({
+									title: "Added to cart",
+									icon: "success",
+									confirmButtonText: "continue",
+								});
+							}
+							if (response.productExist) {
+								Swal.fire({
+									title: "Alredy Exist in cart",
+									icon: "error",
+									confirmButtonText: "continue",
+								});
+
+							}
+						},
+					});
+				}

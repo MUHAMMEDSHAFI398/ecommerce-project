@@ -231,25 +231,14 @@ module.exports = {
         (product) => product.productId == id
       );
       if (proExist != -1) {
-        await cart.aggregate([
-          {
-            $unwind: "$product",
-          },
-        ]);
-        await cart.updateOne(
-          { userId: userData._id, "product.productId": objId },
-          { $inc: { "product.$.quantity": 1 } }
-        );
-        res.redirect("/viewcart");
-
+       
+        res.json({productExist:true})
 
       } else {
         cart
           .updateOne({ userId: userData._id }, { $push: { product: proObj } })
           .then(() => {
-
-            res.redirect("/viewcart");
-
+            res.json({status:true})
 
           });
       }
@@ -264,11 +253,9 @@ module.exports = {
         ],
       });
       newCart.save().then(() => {
+        res.json({status:true})
 
-        res.redirect("/viewcart");
-        res.end()
-
-
+       
       });
     }
 
@@ -354,8 +341,7 @@ module.exports = {
     };
     const userData = await user.findOne({ email: session });
     const userWishlist = await wishlist.findOne({ userId: userData._id });
-    console.log(userData);
-    console.log(userWishlist);
+    
 
     if (userWishlist) {
 
@@ -364,13 +350,13 @@ module.exports = {
       );
       if (proExist != -1) {
 
-        res.redirect('/viewWishlist')
+        res.json({ productExist: true });
       } else {
 
         wishlist.updateOne(
           { userId: userData._id }, { $push: { product: proObj } }
         ).then(() => {
-          res.redirect('/viewWishlist')
+          res.json({ status: true });
         });
       }
     } else {
@@ -384,7 +370,7 @@ module.exports = {
         ],
       });
       newWishlist.save().then(() => {
-        res.redirect('/viewWishlist')
+        res.json({ status: true });
       });
     }
 

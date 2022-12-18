@@ -55,8 +55,8 @@
 											₹ <%= product.productDetail.price %>
 										</td>
 										<td class="product-quantity">
-											<a class="bt btn-warning" href="/cart/<%= product.productDetail._id %>">Add to cart</a>
-											
+											<a onclick="addToCart('<%= product.productDetail._id %>')" class="cart-btn"><i class="fas fa-shopping-cart"></i> </a>
+
 										</td>
 
 									</tr>
