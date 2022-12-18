@@ -27,6 +27,7 @@ const securepassword = async (password) => {
     return passwordhash
   } catch {
     console.log(error)
+    res.render('user/500')
   }
 }
 function checkCoupon(data, id) {
@@ -42,7 +43,7 @@ function checkCoupon(data, id) {
           console.log(exist);
           if (exist[0].users.length) {
             resolve(true);
-           
+
           } else {
             coupon.find({ couponName: data.coupon }).then((discount) => {
               resolve(discount);
@@ -58,14 +59,20 @@ function checkCoupon(data, id) {
 module.exports = {
 
   getHome: async (req, res) => {
-    let session = req.session.user
-    let product = await products.find({ delete: false }).populate('category')
-    if (session) {
-      customer = true
-    } else {
-      customer = false
+    try {
+      let session = req.session.user
+      let product = await products.find({ delete: false }).populate('category')
+      if (session) {
+        customer = true
+      } else {
+        customer = false
+      }
+      res.render('user/index', { customer, product, countInCart, countInWishlist });
+
+    } catch {
+      console.log(error)
     }
-    res.render('user/index', { customer, product, countInCart, countInWishlist });
+
   },
 
   getUserLogin: (req, res) => {
@@ -78,28 +85,28 @@ module.exports = {
 
   postSignup: async (req, res) => {
 
-    
-    const spassword = await securepassword(req.body.password)
-    const name = req.body.name
-    const email = req.body.email
-    const phonenumber  = req.body.phonenumber
-    const password  = spassword
-     
-    
-    const  OTP = `${Math.floor(1000 + Math.random() * 9000)}`
-    const mailDetails = {
-      from: 'mdshafi1120117@gmail.com',
-      to: email,
-      subject: "Otp for frutica",
-      html: `<p>Your OTP for registering in Fruitkha is ${OTP}</p>`,
-    };
+    try {
+      const spassword = await securepassword(req.body.password)
+      const name = req.body.name
+      const email = req.body.email
+      const phonenumber = req.body.phonenumber
+      const password = spassword
 
 
-    const User = await user.findOne({ email: email });
-    if (User) {
-      res.render('user/signup', { err_message: 'User Already Exist' });
-    } else {
-     
+      const OTP = `${Math.floor(1000 + Math.random() * 9000)}`
+      const mailDetails = {
+        from: 'mdshafi1120117@gmail.com',
+        to: email,
+        subject: "Otp for frutica",
+        html: `<p>Your OTP for registering in Fruitkha is ${OTP}</p>`,
+      };
+
+
+      const User = await user.findOne({ email: email });
+      if (User) {
+        res.render('user/signup', { err_message: 'User Already Exist' });
+      } else {
+
         const User = {
           name: name,
           email: email,
@@ -107,65 +114,74 @@ module.exports = {
           password: password
 
         }
-     
-      mailer.mailTransporter.sendMail(mailDetails, function (err, data) {
-        if (err) {
 
-          console.log(err)
-        } else {
-          otp.create({
-            email: email,
-            otp: OTP
-        }).then((otpActive)=>{
-          
-          res.redirect(`/otpPage?name=${User.name}&email=${User.email}&phonenumber=${User.phonenumber}&password=${User.password}`);
+        mailer.mailTransporter.sendMail(mailDetails, function (err, data) {
+          if (err) {
 
+            console.log(err)
+          } else {
+            otp.create({
+              email: email,
+              otp: OTP
+            }).then((otpActive) => {
+
+              res.redirect(`/otpPage?name=${User.name}&email=${User.email}&phonenumber=${User.phonenumber}&password=${User.password}`);
+
+            })
+
+          }
         })
-          
-        }
-      })
+      }
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
     }
+
   },
 
-  getOtpPage: async (req, res) => {
- 
-    let userData= req.query
-    // console.log(req.query)
-    // const userData = await user.findOne({email:email})
-    res.render('user/otp', {userData});
+  getOtpPage: (req, res) => {
+
+    let userData = req.query
+    res.render('user/otp', { userData });
 
   },
   postOtp: async (req, res) => {
-    const body=req.body
-    console.log(req.body)
-    
-    const sentOtp  =await otp.findOne({
-      email:body.email
-    })
-    console.log(sentOtp)
-    if (req.body.otp  == sentOtp.otp ) {
+    try {
+      const body = req.body
+      console.log(req.body)
 
-      res.redirect('/userLogin');
-      const User = await user.create({
-        name: body.name,
-        email: body.email,
-        phonenumber: body.phonenumber,
-        password: body.password
-
+      const sentOtp = await otp.findOne({
+        email: body.email
       })
-      
-    } else {
+      console.log(sentOtp)
+      if (req.body.otp == sentOtp.otp) {
 
-      res.render('user/otp', { invalid: 'invalid otp',userData });
+        res.redirect('/userLogin');
+        const User = await user.create({
+          name: body.name,
+          email: body.email,
+          phonenumber: body.phonenumber,
+          password: body.password
+
+        })
+
+      } else {
+
+        res.render('user/otp', { invalid: 'invalid otp', userData });
+      }
+
+    } catch {
+      console.log(error);
+      res.rendor('user/500')
     }
+
   },
 
   postLogin: async (req, res) => {
+
     const email = req.body.email
     const password = req.body.password
     const userData = await user.findOne({ email: email });
-
-
 
     try {
       if (userData) {
@@ -185,6 +201,7 @@ module.exports = {
       }
     } catch (error) {
       console.log(error)
+      res.rendor('user/')
     }
 
 
@@ -195,77 +212,361 @@ module.exports = {
   },
 
   getShopPage: async (req, res) => {
-    let category = await categories.find()
-    let product = await products.find({ delete: false }).populate('category')
-    res.render('user/shop', { product, countInCart, category, countInWishlist });
+
+    try {
+      let category = await categories.find()
+      let product = await products.find({ delete: false }).populate('category')
+      res.render('user/shop', { product, countInCart, category, countInWishlist });
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
+
 
   },
   getCategoryWisePage: async (req, res) => {
 
-    const id = req.params.id
-    const category = await categories.find();
-    const product = await products.find({ category: id, delete: false }).populate('category')
-    res.render('user/shop', { product, countInCart, category, countInWishlist })
+    try {
+      const id = req.params.id
+      const category = await categories.find();
+      const product = await products.find({ category: id, delete: false }).populate('category')
+      res.render('user/shop', { product, countInCart, category, countInWishlist })
+
+    } catch {
+
+      console.log(error)
+      res.rendor('user/500')
+
+    }
+
 
   },
   getProductViewPage: async (req, res) => {
 
-    let id = req.params.id
-    let product = await products.findOne({ _id: id }).populate('category')
-    res.render('user/product_view', { product, countInCart, countInWishlist });
+    try {
+      let id = req.params.id
+      let product = await products.findOne({ _id: id }).populate('category')
+      res.render('user/product_view', { product, countInCart, countInWishlist });
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
+
 
   },
 
   addToCart: async (req, res) => {
-    const id = req.params.id;
-    const objId = mongoose.Types.ObjectId(id);
-    const session = req.session.user;
-    let proObj = {
-      productId: objId,
-      quantity: 1,
-    };
-    const userData = await user.findOne({ email: session });
-    const userCart = await cart.findOne({ userId: userData._id });
-    if (userCart) {
-      let proExist = userCart.product.findIndex(
-        (product) => product.productId == id
-      );
-      if (proExist != -1) {
-       
-        res.json({productExist:true})
+    try {
+      const id = req.params.id;
+      const objId = mongoose.Types.ObjectId(id);
+      const session = req.session.user;
+      let proObj = {
+        productId: objId,
+        quantity: 1,
+      };
+      const userData = await user.findOne({ email: session });
+      const userCart = await cart.findOne({ userId: userData._id });
+      if (userCart) {
+        let proExist = userCart.product.findIndex(
+          (product) => product.productId == id
+        );
+        if (proExist != -1) {
 
+          res.json({ productExist: true })
+
+        } else {
+          cart
+            .updateOne({ userId: userData._id }, { $push: { product: proObj } })
+            .then(() => {
+              res.json({ status: true })
+
+            });
+        }
       } else {
-        cart
-          .updateOne({ userId: userData._id }, { $push: { product: proObj } })
-          .then(() => {
-            res.json({status:true})
+        const newCart = new cart({
+          userId: userData._id,
+          product: [
+            {
+              productId: objId,
+              quantity: 1,
+            },
+          ],
+        });
+        newCart.save().then(() => {
+          res.json({ status: true })
 
-          });
+
+        });
       }
-    } else {
-      const newCart = new cart({
-        userId: userData._id,
-        product: [
-          {
-            productId: objId,
-            quantity: 1,
-          },
-        ],
-      });
-      newCart.save().then(() => {
-        res.json({status:true})
 
-       
-      });
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
     }
+
 
   },
   viewCart: async (req, res) => {
 
-    const session = req.session.user;
-    const userData = await user.findOne({ email: session });
-    const productData = await cart
-      .aggregate([
+    try {
+      const session = req.session.user;
+      const userData = await user.findOne({ email: session });
+      const productData = await cart
+        .aggregate([
+          {
+            $match: { userId: userData.id },
+          },
+          {
+            $unwind: "$product",
+          },
+          {
+            $project: {
+              productItem: "$product.productId",
+              productQuantity: "$product.quantity",
+            },
+          },
+          {
+            $lookup: {
+              from: "products",
+              localField: "productItem",
+              foreignField: "_id",
+              as: "productDetail",
+            },
+          },
+          {
+            $project: {
+              productItem: 1,
+              productQuantity: 1,
+              productDetail: { $arrayElemAt: ["$productDetail", 0] },
+            },
+          },
+          {
+            $addFields: {
+              productPrice: {
+                $multiply: ["$productQuantity", "$productDetail.price"]
+              }
+            }
+          }
+        ])
+        .exec();
+      const sum = productData.reduce((accumulator, object) => {
+        return accumulator + object.productPrice;
+      }, 0);
+
+      countInCart = productData.length;
+
+
+      res.render("user/cart", { productData, sum, countInCart, countInWishlist });
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
+
+
+
+  },
+  removeProduct: async (req, res) => {
+    try {
+      const data = req.body;
+      const objId = mongoose.Types.ObjectId(data.product);
+      await cart.aggregate([
+        {
+          $unwind: "$product"
+        }
+      ])
+      await cart
+        .updateOne(
+          { _id: data.cart, "product.productId": objId },
+          { $pull: { product: { productId: objId } } }
+        )
+        .then(() => {
+          res.json({ status: true });
+        });
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
+
+  },
+  addToWishlist: async (req, res) => {
+
+    try {
+      const id = req.params.id;
+      const objId = mongoose.Types.ObjectId(id);
+      const session = req.session.user;
+
+      let proObj = {
+        productId: objId,
+      };
+      const userData = await user.findOne({ email: session });
+      const userWishlist = await wishlist.findOne({ userId: userData._id });
+
+
+      if (userWishlist) {
+
+        let proExist = userWishlist.product.findIndex(
+          (product) => product.productId == id
+        );
+        if (proExist != -1) {
+
+          res.json({ productExist: true });
+        } else {
+
+          wishlist.updateOne(
+            { userId: userData._id }, { $push: { product: proObj } }
+          ).then(() => {
+            res.json({ status: true });
+          });
+        }
+      } else {
+        const newWishlist = new wishlist({
+          userId: userData._id,
+          product: [
+            {
+              productId: objId,
+
+            },
+          ],
+        });
+        newWishlist.save().then(() => {
+          res.json({ status: true });
+        });
+      }
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
+
+
+
+  },
+  viewWishlist: async (req, res) => {
+
+    try {
+      const session = req.session.user;
+      const userData = await user.findOne({ email: session })
+      const userId = mongoose.Types.ObjectId(userData._id);;
+
+      const wishlistData = await wishlist
+        .aggregate([
+          {
+            $match: { userId: userId }
+          },
+          {
+            $unwind: "$product",
+          },
+          {
+            $project: {
+              productItem: "$product.productId",
+
+            }
+          },
+          {
+            $lookup: {
+              from: "products",
+              localField: "productItem",
+              foreignField: "_id",
+              as: "productDetail",
+            }
+          },
+          {
+            $project: {
+              productItem: 1,
+              productDetail: { $arrayElemAt: ["$productDetail", 0] }
+            }
+          }
+
+        ])
+      countInWishlist = wishlistData.length
+      res.render('user/wishlist', { wishlistData, countInWishlist, countInCart })
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+
+    }
+
+
+
+  },
+  removeFromWishlist: async (req, res) => {
+    try {
+      const data = req.body;
+      const objId = mongoose.Types.ObjectId(data.productId);
+      await wishlist.aggregate([
+        {
+          $unwind: "$product",
+        },
+      ]);
+      await wishlist
+        .updateOne(
+          { _id: data.wishlistId, "product.productId": objId },
+          { $pull: { product: { productId: objId } } }
+        )
+        .then(() => {
+          res.json({ status: true });
+        });
+
+    } catch {
+
+      console.log(error)
+      res.rendor('user/500')
+
+    }
+
+  },
+
+
+  changeQuantity: async (req, res, next) => {
+
+    try {
+      const data = req.body;
+      data.count = parseInt(data.count);
+      data.quantity = parseInt(data.quantity);
+      const objId = mongoose.Types.ObjectId(data.product);
+
+      if (data.count == -1 && data.quantity == 1) {
+        res.json({ quantity: true })
+      } else {
+        cart
+          .aggregate([
+            {
+              $unwind: "$product",
+            },
+          ])
+          .then((data) => {
+            console.log(data);
+          });
+        cart.updateOne(
+          { _id: data.cart, "product.productId": objId },
+          { $inc: { "product.$.quantity": data.count } }
+        ).then(() => {
+          next();
+        })
+
+      }
+
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
+
+
+
+
+  },
+
+  totalAmount: async (req, res) => {
+
+    try {
+      let session = req.session.user;
+      const userData = await user.findOne({ email: session });
+      const productData = await cart.aggregate([
         {
           $match: { userId: userData.id },
         },
@@ -296,494 +597,335 @@ module.exports = {
         {
           $addFields: {
             productPrice: {
-              $multiply: ["$productQuantity", "$productDetail.price"]
-            }
-          }
-        }
-      ])
-      .exec();
-    const sum = productData.reduce((accumulator, object) => {
-      return accumulator + object.productPrice;
-    }, 0);
-
-    countInCart = productData.length;
-
-
-    res.render("user/cart", { productData, sum, countInCart, countInWishlist });
-
-
-  },
-  removeProduct: async (req, res) => {
-    const data = req.body;
-    const objId = mongoose.Types.ObjectId(data.product);
-    await cart.aggregate([
-      {
-        $unwind: "$product"
-      }
-    ])
-    await cart
-      .updateOne(
-        { _id: data.cart, "product.productId": objId },
-        { $pull: { product: { productId: objId } } }
-      )
-      .then(() => {
-        res.json({ status: true });
-      });
-  },
-  addToWishlist: async (req, res) => {
-
-    const id = req.params.id;
-    const objId = mongoose.Types.ObjectId(id);
-    const session = req.session.user;
-
-    let proObj = {
-      productId: objId,
-    };
-    const userData = await user.findOne({ email: session });
-    const userWishlist = await wishlist.findOne({ userId: userData._id });
-    
-
-    if (userWishlist) {
-
-      let proExist = userWishlist.product.findIndex(
-        (product) => product.productId == id
-      );
-      if (proExist != -1) {
-
-        res.json({ productExist: true });
-      } else {
-
-        wishlist.updateOne(
-          { userId: userData._id }, { $push: { product: proObj } }
-        ).then(() => {
-          res.json({ status: true });
-        });
-      }
-    } else {
-      const newWishlist = new wishlist({
-        userId: userData._id,
-        product: [
-          {
-            productId: objId,
-
+              $multiply: ["$productQuantity", "$productDetail.price"],
+            },
           },
-        ],
-      });
-      newWishlist.save().then(() => {
-        res.json({ status: true });
-      });
+        },
+        {
+          $group: {
+            _id: userData.id,
+            total: {
+              $sum: { $multiply: ["$productQuantity", "$productDetail.price"] },
+            },
+          },
+        },
+      ]).exec();
+
+
+      res.json({ status: true, productData });
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
     }
 
-  },
-  viewWishlist: async (req, res) => {
-
-    const session = req.session.user;
-    const userData = await user.findOne({ email: session })
-    const userId = mongoose.Types.ObjectId(userData._id);;
-
-    const wishlistData = await wishlist
-      .aggregate([
-        {
-          $match: { userId: userId }
-        },
-        {
-          $unwind: "$product",
-        },
-        {
-          $project: {
-            productItem: "$product.productId",
-
-          }
-        },
-        {
-          $lookup: {
-            from: "products",
-            localField: "productItem",
-            foreignField: "_id",
-            as: "productDetail",
-          }
-        },
-        {
-          $project: {
-            productItem: 1,
-            productDetail: { $arrayElemAt: ["$productDetail", 0] }
-          }
-        }
-
-      ])
-    countInWishlist = wishlistData.length
-    res.render('user/wishlist', { wishlistData, countInWishlist, countInCart })
-
-  },
-  removeFromWishlist: async (req, res) => {
-    const data = req.body;
-    const objId = mongoose.Types.ObjectId(data.productId);
-    await wishlist.aggregate([
-      {
-        $unwind: "$product",
-      },
-    ]);
-    await wishlist
-      .updateOne(
-        { _id: data.wishlistId, "product.productId": objId },
-        { $pull: { product: { productId: objId } } }
-      )
-      .then(() => {
-        res.json({ status: true });
-      });
-  },
-
-
-  changeQuantity: async (req, res, next) => {
-
-    const data = req.body;
-    data.count = parseInt(data.count);
-    data.quantity = parseInt(data.quantity);
-    const objId = mongoose.Types.ObjectId(data.product);
-
-    if (data.count == -1 && data.quantity == 1) {
-      res.json({ quantity: true })
-    } else {
-      cart
-        .aggregate([
-          {
-            $unwind: "$product",
-          },
-        ])
-        .then((data) => {
-          console.log(data);
-        });
-      cart.updateOne(
-        { _id: data.cart, "product.productId": objId },
-        { $inc: { "product.$.quantity": data.count } }
-      ).then(() => {
-        next();
-      })
-
-    }
-
-
-
-  },
-
-  totalAmount: async (req, res) => {
-
-
-    let session = req.session.user;
-    const userData = await user.findOne({ email: session });
-    const productData = await cart.aggregate([
-      {
-        $match: { userId: userData.id },
-      },
-      {
-        $unwind: "$product",
-      },
-      {
-        $project: {
-          productItem: "$product.productId",
-          productQuantity: "$product.quantity",
-        },
-      },
-      {
-        $lookup: {
-          from: "products",
-          localField: "productItem",
-          foreignField: "_id",
-          as: "productDetail",
-        },
-      },
-      {
-        $project: {
-          productItem: 1,
-          productQuantity: 1,
-          productDetail: { $arrayElemAt: ["$productDetail", 0] },
-        },
-      },
-      {
-        $addFields: {
-          productPrice: {
-            $multiply: ["$productQuantity", "$productDetail.price"],
-          },
-        },
-      },
-      {
-        $group: {
-          _id: userData.id,
-          total: {
-            $sum: { $multiply: ["$productQuantity", "$productDetail.price"] },
-          },
-        },
-      },
-    ]).exec();
-
-
-    res.json({ status: true, productData });
 
   },
 
   viewProfile: async (req, res) => {
+    try {
+      const session = req.session.user;
+      let userData = await user.findOne({ email: session })
+      res.render('user/profile', { userData, countInCart, countInWishlist })
 
-    const session = req.session.user;
-    let userData = await user.findOne({ email: session })
-    res.render('user/profile', { userData, countInCart, countInWishlist })
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
+
 
   },
   editProfile: async (req, res) => {
-    const session = req.session.user;
-    let userData = await user.findOne({ email: session })
-    res.render('user/editprofile', { userData, countInCart, countInWishlist })
+    try {
+      const session = req.session.user;
+      let userData = await user.findOne({ email: session })
+      res.render('user/editprofile', { userData, countInCart, countInWishlist })
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
+
   },
   postEditProfile: async (req, res) => {
-
-    const session = req.session.user;
-    await user.updateOne(
-      { email: session },
-      {
-        $set: {
-
-          name: req.body.name,
-          phonenumber: req.body.phonenumber,
-          addressDetails: [
-            {
-              housename: req.body.housename,
-              area: req.body.area,
-              landmark: req.body.landmark,
-              district: req.body.district,
-              state: req.body.state,
-              postoffice: req.body.postoffice,
-              pin: req.body.pin
-
-
-            }
-          ]
-
-        }
-      }
-    );
-
-    res.redirect('/viewProfile')
-  },
-  getCheckOutPage: async (req, res) => {
-    let session = req.session.user;
-    const userData = await user.findOne({ email: session });
-    const userId = userData._id.toString()
-
-    const productData = await cart
-      .aggregate([
+    try {
+      const session = req.session.user;
+      await user.updateOne(
+        { email: session },
         {
-          $match: { userId: userId },
-        },
-        {
-          $unwind: "$product",
-        },
-        {
-          $project: {
-            productItem: "$product.productId",
-            productQuantity: "$product.quantity",
-          },
-        },
-        {
-          $lookup: {
-            from: "products",
-            localField: "productItem",
-            foreignField: "_id",
-            as: "productDetail",
-          },
-        },
-        {
-          $project: {
-            productItem: 1,
-            productQuantity: 1,
-            productDetail: { $arrayElemAt: ["$productDetail", 0] },
-          },
-        },
-        {
-          $addFields: {
-            productPrice: {
-              $multiply: ["$productQuantity", "$productDetail.price"]
-            }
+          $set: {
+
+            name: req.body.name,
+            phonenumber: req.body.phonenumber,
+            addressDetails: [
+              {
+                housename: req.body.housename,
+                area: req.body.area,
+                landmark: req.body.landmark,
+                district: req.body.district,
+                state: req.body.state,
+                postoffice: req.body.postoffice,
+                pin: req.body.pin
+
+
+              }
+            ]
+
           }
         }
-      ])
-      .exec();
-    const sum = productData.reduce((accumulator, object) => {
-      return accumulator + object.productPrice;
-    }, 0);
+      );
 
-
-    res.render("user/checkout", { productData, sum, countInCart, countInWishlist, userData });
-
+      res.redirect('/viewProfile')
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
 
   },
-  addNewAddress: async (req, res) => {
-    const session = req.session.user
-    const addObj = {
+  getCheckOutPage: async (req, res) => {
 
-      housename: req.body.housename,
-      area: req.body.area,
-      landmark: req.body.landmark,
-      district: req.body.district,
-      state: req.body.state,
-      postoffice: req.body.postoffice,
-      pin: req.body.pin
+    try {
+      let session = req.session.user;
+      const userData = await user.findOne({ email: session });
+      const userId = userData._id.toString()
+
+      const productData = await cart
+        .aggregate([
+          {
+            $match: { userId: userId },
+          },
+          {
+            $unwind: "$product",
+          },
+          {
+            $project: {
+              productItem: "$product.productId",
+              productQuantity: "$product.quantity",
+            },
+          },
+          {
+            $lookup: {
+              from: "products",
+              localField: "productItem",
+              foreignField: "_id",
+              as: "productDetail",
+            },
+          },
+          {
+            $project: {
+              productItem: 1,
+              productQuantity: 1,
+              productDetail: { $arrayElemAt: ["$productDetail", 0] },
+            },
+          },
+          {
+            $addFields: {
+              productPrice: {
+                $multiply: ["$productQuantity", "$productDetail.price"]
+              }
+            }
+          }
+        ])
+        .exec();
+      const sum = productData.reduce((accumulator, object) => {
+        return accumulator + object.productPrice;
+      }, 0);
+
+
+      res.render("user/checkout", { productData, sum, countInCart, countInWishlist, userData });
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
+
+  },
+
+
+  addNewAddress: async (req, res) => {
+
+    try {
+      const session = req.session.user
+      const addObj = {
+
+        housename: req.body.housename,
+        area: req.body.area,
+        landmark: req.body.landmark,
+        district: req.body.district,
+        state: req.body.state,
+        postoffice: req.body.postoffice,
+        pin: req.body.pin
+
+      }
+
+      await user.updateOne({ email: session }, { $push: { addressDetails: addObj } })
+      res.redirect('/checkout')
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
 
     }
 
-    await user.updateOne({ email: session }, { $push: { addressDetails: addObj } })
-    res.redirect('/checkout')
   },
   placeOrder: async (req, res) => {
 
-    let invalid;
-    let couponDeleted;
-    const data = req.body
-   
-    const session = req.session.user;
-    const userData = await user.findOne({ email: session })
-    const objId = mongoose.Types.ObjectId(userData._id);
-    const cartData = await cart.findOne({ userId: userData._id });
-     
-    if(data.coupon){
-      invalid = await coupon.findOne({ couponName: data.coupon });
-      if(invalid?.delete == true){
-        couponDeleted = true
+    try {
+      let invalid;
+      let couponDeleted;
+      const data = req.body
+      const session = req.session.user;
+      const userData = await user.findOne({ email: session })
+      const objId = mongoose.Types.ObjectId(userData._id);
+      const cartData = await cart.findOne({ userId: userData._id });
+
+      if (data.coupon) {
+        invalid = await coupon.findOne({ couponName: data.coupon });
+        if (invalid?.delete == true) {
+          couponDeleted = true
+        }
+      } else {
+        invalid = 0;
       }
-   }else{
-     invalid = 0;
-   } 
 
 
 
-   if (invalid == null) {
+      if (invalid == null) {
 
-    res.json({ invalid: true });
+        res.json({ invalid: true });
 
-  }else if(couponDeleted){
+      } else if (couponDeleted) {
 
-    res.json({couponDeleted:true})
-  }
-  else{
-    
-    const discount = await checkCoupon(data, objId);
-    console.log(discount);
-    if (discount == true) {  
-      res.json({ coupon: true });
-    } else {
-     
-      if (cartData) {
+        res.json({ couponDeleted: true })
+      }
+      else {
 
-        const productData = await cart
-          .aggregate([
-            {
-              $match: { userId: userData.id },
-            },
-            {
-              $unwind: "$product",
-            },
-            {
-              $project: {
-                productItem: "$product.productId",
-                productQuantity: "$product.quantity",
-              },
-            },
-            {
-              $lookup: {
-                from: "products",
-                localField: "productItem",
-                foreignField: "_id",
-                as: "productDetail",
-              },
-            },
-            {
-              $project: {
-                productItem: 1,
-                productQuantity: 1,
-                productDetail: { $arrayElemAt: ["$productDetail", 0] },
-              },
-            },
-            {
-              $addFields: {
-                productPrice: {
-                  $multiply: ["$productQuantity", "$productDetail.price"]
+        const discount = await checkCoupon(data, objId);
+        console.log(discount);
+        if (discount == true) {
+          res.json({ coupon: true });
+        } else {
+
+          if (cartData) {
+
+            const productData = await cart
+              .aggregate([
+                {
+                  $match: { userId: userData.id },
+                },
+                {
+                  $unwind: "$product",
+                },
+                {
+                  $project: {
+                    productItem: "$product.productId",
+                    productQuantity: "$product.quantity",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "products",
+                    localField: "productItem",
+                    foreignField: "_id",
+                    as: "productDetail",
+                  },
+                },
+                {
+                  $project: {
+                    productItem: 1,
+                    productQuantity: 1,
+                    productDetail: { $arrayElemAt: ["$productDetail", 0] },
+                  },
+                },
+                {
+                  $addFields: {
+                    productPrice: {
+                      $multiply: ["$productQuantity", "$productDetail.price"]
+                    }
+                  }
                 }
+              ])
+              .exec();
+            const sum = productData.reduce((accumulator, object) => {
+              return accumulator + object.productPrice;
+            }, 0);
+            if (discount == false) {
+              var total = sum;
+            } else {
+              var dis = sum * discount[0].discount;
+              if (dis > discount[0].maxLimit) {
+                total = sum - 100;
+              } else {
+                total = dis;
               }
             }
-          ])
-          .exec();
-        const sum = productData.reduce((accumulator, object) => {
-          return accumulator + object.productPrice;
-        }, 0);
-        if (discount == false) {
-          var total = sum;
-        } else {
-          var dis = sum * discount[0].discount;
-          if (dis > discount[0].maxLimit) {
-            total = sum - 100;
-          } else {
-            total = dis;
-          }
-        }
 
-        const orderData = await order.create({
+            const orderData = await order.create({
 
-          userId: userData._id,
-          name: userData.name,
-          phonenumber: userData.phonenumber,
-          address: req.body.address,
-          orderItems: cartData.product,
-          totalAmount: total,
-          paymentMethod: req.body.paymentMethod,
-          orderDate: moment().format("MMM Do YY"),
-          deliveryDate: moment().add(3, "days").format("MMM Do YY")
+              userId: userData._id,
+              name: userData.name,
+              phonenumber: userData.phonenumber,
+              address: req.body.address,
+              orderItems: cartData.product,
+              totalAmount: total,
+              paymentMethod: req.body.paymentMethod,
+              orderDate: moment().format("MMM Do YY"),
+              deliveryDate: moment().add(3, "days").format("MMM Do YY")
 
-        })
-        const amount = orderData.totalAmount * 100
-        const orderId = orderData._id
-        await cart.deleteOne({ userId: userData._id });
+            })
+            const amount = orderData.totalAmount * 100
+            const orderId = orderData._id
+            await cart.deleteOne({ userId: userData._id });
 
-        if (req.body.paymentMethod === "COD") {
+            if (req.body.paymentMethod === "COD") {
 
-          res.json({ success: true });
-          coupon.updateOne(
-            { couponName: data.coupon },
-            { $push: { users: { userId: objId } } }
-          ).then((updated) => {
-            console.log(updated);
-          });
-            
-
-        } else {
-          let options = {
-            amount: amount,
-            currency: "INR",
-            receipt: "" + orderId,
-          };
-          instance.orders.create(options, function (err, order) {
-
-            if (err) {
-              console.log(err);
-            } else {
-              res.json(order);
-
+              res.json({ success: true });
               coupon.updateOne(
                 { couponName: data.coupon },
                 { $push: { users: { userId: objId } } }
               ).then((updated) => {
                 console.log(updated);
               });
-            }
-          })
 
+
+            } else {
+              let options = {
+                amount: amount,
+                currency: "INR",
+                receipt: "" + orderId,
+              };
+              instance.orders.create(options, function (err, order) {
+
+                if (err) {
+                  console.log(err);
+                } else {
+                  res.json(order);
+
+                  coupon.updateOne(
+                    { couponName: data.coupon },
+                    { $push: { users: { userId: objId } } }
+                  ).then((updated) => {
+                    console.log(updated);
+                  });
+                }
+              })
+
+            }
+
+          } else {
+
+            res.redirect("/viewCart");
+          }
         }
 
-      } else {
-
-        res.redirect("/viewCart");
       }
+
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
     }
 
-  } 
-    
 
   },
   verifyPayment: async (req, res) => {
@@ -810,87 +952,108 @@ module.exports = {
       res.json({ status: false, err_message: "payment failed" });
     }
   },
-  orderSuccess: async (req, res) => {
+  orderSuccess: (req, res) => {
 
     const countInCart = 0
     res.render('user/orderSuccess', { countInCart, countInWishlist })
   },
   paymentFail: (req, res) => {
-
+   
     res.render("user/paymentFail", { countInWishlist, countInCart });
   },
 
   orderDetails: async (req, res) => {
 
-    const session = req.session.user
-    const userData = await user.findOne({ email: session });
-    order.find({ userId: userData._id }).sort({ createdAt: -1 }).then((orderDetails) => {
-      res.render('user/orderDetails', { orderDetails, countInCart, countInWishlist })
-    })
+    try {
 
+      const session = req.session.user
+      const userData = await user.findOne({ email: session });
+      order.find({ userId: userData._id }).sort({ createdAt: -1 }).then((orderDetails) => {
+        res.render('user/orderDetails', { orderDetails, countInCart, countInWishlist })
+      })
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
 
   },
   orderedProduct: async (req, res) => {
-    const id = req.params.id;
-    const objId = mongoose.Types.ObjectId(id);
-    const productData = await order.aggregate([
-      {
-        $match: { _id: objId },
-      },
-      {
-        $unwind: "$orderItems",
-      },
-      {
-        $project: {
-          productItem: "$orderItems.productId",
-          productQuantity: "$orderItems.quantity",
-          address: 1,
-          name: 1,
-          phonenumber: 1
-        }
-      },
-      {
-        $lookup: {
-          from: "products",
-          localField: "productItem",
-          foreignField: "_id",
-          as: "productDetail",
-        }
-      },
 
-      {
-        $project: {
-          productItem: 1,
-          productQuantity: 1,
-          name: 1,
-          phonenumber: 1,
-          address: 1,
-          productDetail: { $arrayElemAt: ["$productDetail", 0] },
-        }
-      },
-      {
-        $lookup: {
-          from: 'categories',
-          localField: 'productDetail.category',
-          foreignField: "_id",
-          as: "category_name"
-        }
-      },
-      {
-        $unwind: "$category_name"
-      },
+    try {
+      const id = req.params.id;
+      const objId = mongoose.Types.ObjectId(id);
+      const productData = await order.aggregate([
+        {
+          $match: { _id: objId },
+        },
+        {
+          $unwind: "$orderItems",
+        },
+        {
+          $project: {
+            productItem: "$orderItems.productId",
+            productQuantity: "$orderItems.quantity",
+            address: 1,
+            name: 1,
+            phonenumber: 1
+          }
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "productItem",
+            foreignField: "_id",
+            as: "productDetail",
+          }
+        },
 
-    ]);
+        {
+          $project: {
+            productItem: 1,
+            productQuantity: 1,
+            name: 1,
+            phonenumber: 1,
+            address: 1,
+            productDetail: { $arrayElemAt: ["$productDetail", 0] },
+          }
+        },
+        {
+          $lookup: {
+            from: 'categories',
+            localField: 'productDetail.category',
+            foreignField: "_id",
+            as: "category_name"
+          }
+        },
+        {
+          $unwind: "$category_name"
+        },
+
+      ]);
 
 
-    res.render('user/orderedProduct', { productData, countInCart, countInWishlist })
+      res.render('user/orderedProduct', { productData, countInCart, countInWishlist })
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
+
 
   },
 
   cancelOrder: async (req, res) => {
-    const data = req.params.id;
-    await order.updateOne({ _id: data }, { $set: { orderStatus: "cancelled" } })
-    res.redirect("/orderDetails");
+    try {
+      const data = req.params.id;
+      await order.updateOne({ _id: data }, { $set: { orderStatus: "cancelled" } })
+      res.redirect("/orderDetails");
+
+    } catch {
+      console.log(error)
+      res.rendor('user/500')
+    }
+
 
   },
 

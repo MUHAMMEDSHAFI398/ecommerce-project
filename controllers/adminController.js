@@ -56,11 +56,6 @@ module.exports = {
             
             const allOrderDetails = await order.find({paymentStatus: "paid"},{orderStatus: "delivered"})
 
-           
-            
-
-            
-           
 
 
             res.render('admin/adminHome',
