@@ -38,7 +38,7 @@ const orderSchema = new Schema(
         },
         orderStatus: {
             type: String,
-            default: "placed",
+            default: "waitting for payment",
         },
         paymentMethod: {
             type: String,

@@ -40,6 +40,7 @@ function checkCoupon(data, id) {
           { users: { $elemMatch: { userId: id } } }
         )
         .then((exist) => {
+         
           console.log(exist);
           if (exist[0].users.length) {
             resolve(true);
@@ -95,7 +96,7 @@ module.exports = {
 
       const OTP = `${Math.floor(1000 + Math.random() * 9000)}`
       const mailDetails = {
-        from: 'mdshafi1120117@gmail.com',
+        from: process.env.nodemailer_email,
         to: email,
         subject: "Otp for frutica",
         html: `<p>Your OTP for registering in Fruitkha is ${OTP}</p>`,
@@ -878,7 +879,8 @@ module.exports = {
             await cart.deleteOne({ userId: userData._id });
 
             if (req.body.paymentMethod === "COD") {
-
+            await order.updateOne({_id:orderId},{$set:{orderStatus:'placed'}})  
+  
               res.json({ success: true });
               coupon.updateOne(
                 { couponName: data.coupon },
@@ -938,7 +940,7 @@ module.exports = {
     if (hmac == details.payment.razorpay_signature) {
 
       const objId = mongoose.Types.ObjectId(details.order.receipt);
-      order.updateOne({ _id: objId }, { $set: { paymentStatus: "paid" } }).then(() => {
+      order.updateOne({ _id: objId }, { $set: { paymentStatus: "paid",orderStatus:'placed' } }).then(() => {
 
         res.json({ success: true });
 
@@ -1056,8 +1058,6 @@ module.exports = {
 
 
   },
-
-
 
 
 }
