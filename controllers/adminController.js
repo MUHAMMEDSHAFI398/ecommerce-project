@@ -88,28 +88,7 @@ module.exports = {
         }
 
     },
-    getdashboard: async (req, res) => {
-        try {
-            const cod = await order.find({ paymentMethod: "COD" }).count();
-
-            const online = await order.find({ paymentMethod: "Online" }).count();
-
-            const pending = await order.find({ orderStatus: "pending" }).count();
-
-            const shipped = await order.find({ orderStatus: "shipped" }).count();
-
-            const delivered = await order.find({ orderStatus: "delivered" }).count();
-
-            const cancelled = await order.find({ orderStatus: "cancelled" }).count();
-
-            res.render('admin/dashboard', { cod, pending, shipped, delivered, cancelled, online })
-        } catch {
-            console.log(error)
-            res.render('user/500')
-        }
-
-
-    },
+    
     postAdminLogin: (req, res) => {
         try {
             if (req.body.email === process.env.admin_email && req.body.password === process.env.admin_pass) {
