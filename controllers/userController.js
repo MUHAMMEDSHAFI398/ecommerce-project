@@ -84,7 +84,7 @@ module.exports = {
   },
 
   getUserSignup: (req, res) => {
-    res.render('user/Signup')
+    res.render('user/signup')
   },
 
   postSignup: async (req, res) => {
