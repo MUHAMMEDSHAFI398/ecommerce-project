@@ -32,12 +32,18 @@ adminRouter.post('/addCoupon',verifyLogin.verifyLoginAdmin,adminController.addCo
 adminRouter.get('/order',verifyLogin.verifyLoginAdmin , adminController.getOrders);
 adminRouter.get('/orderedProduct/:id',verifyLogin.verifyLoginAdmin , adminController.getOrderedProduct);
 adminRouter.post('/orderStatuschange/:id',verifyLogin.verifyLoginAdmin , adminController.orderStatuschange);
-
-
-
 adminRouter.get('/deleteCoupen/:id',verifyLogin.verifyLoginAdmin , adminController.deleteCoupon);
 adminRouter.get('/restoreCoupen/:id',verifyLogin.verifyLoginAdmin , adminController.restoreCoupon);
 adminRouter.post('/editCoupon/:id',verifyLogin.verifyLoginAdmin , adminController.editCoupon);
+
+adminRouter.get('/getBanner',verifyLogin.verifyLoginAdmin , adminController.getBanner);
+adminRouter.post('/addBanner',verifyLogin.verifyLoginAdmin , adminController.addBanner);
+adminRouter.post('/editBanner/:id',verifyLogin.verifyLoginAdmin , adminController.editBanner);
+adminRouter.get('/deleteBanner/:id',verifyLogin.verifyLoginAdmin , adminController.deleteBanner);
+adminRouter.get('/restoreBanner/:id',verifyLogin.verifyLoginAdmin , adminController.restoreBanner);
+
+
+
 
 
 

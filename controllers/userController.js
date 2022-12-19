@@ -135,7 +135,7 @@ module.exports = {
       }
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
   },
@@ -173,7 +173,7 @@ module.exports = {
 
     } catch {
       console.log(error);
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
   },
@@ -202,7 +202,7 @@ module.exports = {
       }
     } catch (error) {
       console.log(error)
-      res.rendor('user/')
+      res.render('user/')
     }
 
 
@@ -221,7 +221,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
 
@@ -237,7 +237,7 @@ module.exports = {
     } catch {
 
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
 
     }
 
@@ -252,7 +252,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
 
@@ -304,7 +304,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
 
@@ -363,7 +363,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
 
@@ -389,7 +389,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
   },
@@ -439,7 +439,7 @@ module.exports = {
       }
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
 
@@ -487,7 +487,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
 
     }
 
@@ -515,7 +515,7 @@ module.exports = {
     } catch {
 
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
 
     }
 
@@ -554,7 +554,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
 
@@ -617,7 +617,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
 
@@ -631,7 +631,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
 
@@ -644,7 +644,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
   },
@@ -679,7 +679,7 @@ module.exports = {
       res.redirect('/viewProfile')
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
   },
@@ -737,7 +737,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
   },
@@ -764,7 +764,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
 
     }
 
@@ -925,7 +925,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
 
@@ -976,7 +976,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
   },
@@ -1039,7 +1039,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
 
@@ -1053,7 +1053,7 @@ module.exports = {
 
     } catch {
       console.log(error)
-      res.rendor('user/500')
+      res.render('user/500')
     }
 
 

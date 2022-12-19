@@ -4,6 +4,7 @@ const categories = require('../model/categoryModal');
 const order = require('../model/orderModal')
 const mongoose = require("mongoose");
 const coupon = require('../model/coupen')
+const banner = require('../model/banner')
 const moment = require("moment");
 moment().format();
 
@@ -675,11 +676,85 @@ module.exports = {
             res.render('user/500')
 
         }
-    }
+    },
+    getBanner: async (req, res) => {
+        try {
+            const banners = await banner.find()
+            res.render('admin/banners', { banners })
 
+        } catch {
+            console.error()
+        }
 
+    },
+    addBanner: async (req, res) => {
+
+        try {
+            await banner.create({
+                offerType: req.body.offerType,
+                bannerText: req.body.bannerText,
+                couponName: req.body.couponName
+            })
+            res.redirect('/admin/getBanner')
+        } catch {
+            console.error()
+            res.render('user/500')
+        }
+
+    },
+    editBanner: async (req, res) => {
+        try {
+            const bannerId = req.params.id
+            await banner.updateOne(
+                { _id: bannerId },
+                {
+                    $set: {
+                        offerType: req.body.offerType,
+                        bannerText: req.body.bannerText,
+                        couponName: req.body.couponName
+                    }
+                }
+            )
+            res.redirect('/admin/getBanner')
+
+        }catch{
+            console.error()
+            res.render('user/500')
+        }
+    },
+    deleteBanner:async (req,res)=>{
+        try {
+            const bannerId = req.params.id
+            await banner.updateOne(
+                { _id: bannerId },
+                {$set:{isDeleted:true}}
+            ) 
+            res.redirect('/admin/getBanner')
+
+        }catch{
+            console.error()
+            res.render('user/500')
+        }
+
+    }, 
+    restoreBanner:async (req,res)=>{
+        try {
+            const bannerId = req.params.id
+            await banner.updateOne(
+                { _id: bannerId },
+                {$set:{isDeleted:false}}
+            ) 
+            res.redirect('/admin/getBanner')
+
+        }catch{
+            console.error()
+            res.render('user/500')
+        }
+
+    },
+
+    
 }
-
 
 
 
