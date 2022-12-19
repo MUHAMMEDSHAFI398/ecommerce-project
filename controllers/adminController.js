@@ -718,43 +718,43 @@ module.exports = {
             )
             res.redirect('/admin/getBanner')
 
-        }catch{
+        } catch {
             console.error()
             res.render('user/500')
         }
     },
-    deleteBanner:async (req,res)=>{
+    deleteBanner: async (req, res) => {
         try {
             const bannerId = req.params.id
             await banner.updateOne(
                 { _id: bannerId },
-                {$set:{isDeleted:true}}
-            ) 
+                { $set: { isDeleted: true } }
+            )
             res.redirect('/admin/getBanner')
 
-        }catch{
-            console.error()
-            res.render('user/500')
-        }
-
-    }, 
-    restoreBanner:async (req,res)=>{
-        try {
-            const bannerId = req.params.id
-            await banner.updateOne(
-                { _id: bannerId },
-                {$set:{isDeleted:false}}
-            ) 
-            res.redirect('/admin/getBanner')
-
-        }catch{
+        } catch {
             console.error()
             res.render('user/500')
         }
 
     },
+    restoreBanner: async (req, res) => {
+        try {
+            const bannerId = req.params.id
+            await banner.updateOne(
+                { _id: bannerId },
+                { $set: { isDeleted: false } }
+            )
+            res.redirect('/admin/getBanner')
 
-    
+        } catch {
+            console.error()
+            res.render('user/500')
+        }
+
+    },
+
+
 }
 
 

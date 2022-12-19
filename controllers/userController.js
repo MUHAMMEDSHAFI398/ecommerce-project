@@ -41,7 +41,7 @@ function checkCoupon(data, id) {
           { users: { $elemMatch: { userId: id } } }
         )
         .then((exist) => {
-         
+
           console.log(exist);
           if (exist[0].users.length) {
             resolve(true);
@@ -69,8 +69,8 @@ module.exports = {
       } else {
         customer = false
       }
-      const bannerData =await banner.find().sort({createdAt:-1}).limit(1)
-      res.render('user/index', { customer, product, countInCart, countInWishlist,bannerData });
+      const bannerData = await banner.find().sort({ createdAt: -1 }).limit(1)
+      res.render('user/index', { customer, product, countInCart, countInWishlist, bannerData });
 
     } catch {
       console.error()
@@ -882,8 +882,8 @@ module.exports = {
             await cart.deleteOne({ userId: userData._id });
 
             if (req.body.paymentMethod === "COD") {
-            await order.updateOne({_id:orderId},{$set:{orderStatus:'placed'}})  
-  
+              await order.updateOne({ _id: orderId }, { $set: { orderStatus: 'placed' } })
+
               res.json({ success: true });
               coupon.updateOne(
                 { couponName: data.coupon },
@@ -943,7 +943,7 @@ module.exports = {
     if (hmac == details.payment.razorpay_signature) {
 
       const objId = mongoose.Types.ObjectId(details.order.receipt);
-      order.updateOne({ _id: objId }, { $set: { paymentStatus: "paid",orderStatus:'placed' } }).then(() => {
+      order.updateOne({ _id: objId }, { $set: { paymentStatus: "paid", orderStatus: 'placed' } }).then(() => {
 
         res.json({ success: true });
 
@@ -963,7 +963,7 @@ module.exports = {
     res.render('user/orderSuccess', { countInCart, countInWishlist })
   },
   paymentFail: (req, res) => {
-   
+
     res.render("user/paymentFail", { countInWishlist, countInCart });
   },
 
