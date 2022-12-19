@@ -10,6 +10,7 @@ const categories = require('../model/categoryModal')
 const crypto = require("crypto");
 const coupon = require('../model/coupen');
 const otp = require('../model/otp')
+const banner = require('../model/banner')
 const instance = require("../middlewares/razorpay");
 const moment = require("moment");
 moment().format();
@@ -26,7 +27,7 @@ const securepassword = async (password) => {
     const passwordhash = await bcrypt.hash(password, 10)
     return passwordhash
   } catch {
-    console.log(error)
+    console.error()
     res.render('user/500')
   }
 }
@@ -68,10 +69,12 @@ module.exports = {
       } else {
         customer = false
       }
-      res.render('user/index', { customer, product, countInCart, countInWishlist });
+      const bannerData =await banner.find().sort({createdAt:-1}).limit(1)
+      res.render('user/index', { customer, product, countInCart, countInWishlist,bannerData });
 
     } catch {
-      console.log(error)
+      console.error()
+      res.render('user/500')
     }
 
   },
@@ -134,7 +137,7 @@ module.exports = {
         })
       }
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -172,7 +175,7 @@ module.exports = {
       }
 
     } catch {
-      console.log(error);
+      console.error()
       res.render('user/500')
     }
 
@@ -201,8 +204,8 @@ module.exports = {
         res.render('user/login', { invalid: "invalid username or password" });
       }
     } catch (error) {
-      console.log(error)
-      res.render('user/')
+      console.error()
+      res.render('user/500')
     }
 
 
@@ -220,7 +223,7 @@ module.exports = {
       res.render('user/shop', { product, countInCart, category, countInWishlist });
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -236,7 +239,7 @@ module.exports = {
 
     } catch {
 
-      console.log(error)
+      console.error()
       res.render('user/500')
 
     }
@@ -251,7 +254,7 @@ module.exports = {
       res.render('user/product_view', { product, countInCart, countInWishlist });
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -303,7 +306,7 @@ module.exports = {
       }
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -362,7 +365,7 @@ module.exports = {
       res.render("user/cart", { productData, sum, countInCart, countInWishlist });
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -388,7 +391,7 @@ module.exports = {
         });
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -438,7 +441,7 @@ module.exports = {
         });
       }
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -486,7 +489,7 @@ module.exports = {
       res.render('user/wishlist', { wishlistData, countInWishlist, countInCart })
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
 
     }
@@ -514,7 +517,7 @@ module.exports = {
 
     } catch {
 
-      console.log(error)
+      console.error()
       res.render('user/500')
 
     }
@@ -553,7 +556,7 @@ module.exports = {
 
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -616,7 +619,7 @@ module.exports = {
       res.json({ status: true, productData });
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -630,7 +633,7 @@ module.exports = {
       res.render('user/profile', { userData, countInCart, countInWishlist })
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -643,7 +646,7 @@ module.exports = {
       res.render('user/editprofile', { userData, countInCart, countInWishlist })
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -678,7 +681,7 @@ module.exports = {
 
       res.redirect('/viewProfile')
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -736,7 +739,7 @@ module.exports = {
       res.render("user/checkout", { productData, sum, countInCart, countInWishlist, userData });
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -763,7 +766,7 @@ module.exports = {
       res.redirect('/checkout')
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
 
     }
@@ -975,7 +978,7 @@ module.exports = {
       })
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -1038,7 +1041,7 @@ module.exports = {
       res.render('user/orderedProduct', { productData, countInCart, countInWishlist })
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 
@@ -1052,7 +1055,7 @@ module.exports = {
       res.redirect("/orderDetails");
 
     } catch {
-      console.log(error)
+      console.error()
       res.render('user/500')
     }
 

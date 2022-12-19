@@ -593,7 +593,7 @@ module.exports = {
 
 
         } catch {
-            console.log(error)
+            console.error()
             res.render('user/500')
         }
 
@@ -615,7 +615,7 @@ module.exports = {
             res.redirect("/admin/order");
 
         } catch {
-            console.log(error)
+            console.error()
             res.render('user/500')
         }
 
@@ -628,7 +628,7 @@ module.exports = {
             });
             res.render("admin/salesReport", { allOrderDetails });
         } catch {
-            console.log(error)
+            console.error()
             res.render('user/500')
 
         }
@@ -649,7 +649,7 @@ module.exports = {
                     res.render("admin/salesReport", { allOrderDetails });
                 });
         } catch {
-            console.log(error)
+            console.error()
             res.render('user/500')
 
         }
@@ -672,7 +672,7 @@ module.exports = {
                 res.render("admin/salesReport", { allOrderDetails });
             });
         } catch {
-            console.log(error)
+            console.error()
             res.render('user/500')
 
         }
@@ -684,6 +684,7 @@ module.exports = {
 
         } catch {
             console.error()
+            res.render('user/500')
         }
 
     },
