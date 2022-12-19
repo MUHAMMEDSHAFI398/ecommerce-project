@@ -38,99 +38,102 @@
         </p>
         <% } %>
     </div>
-
-    <table class="table table-success table-striped" id="table">
-      <thead>
-        <tr>
-          <th scope="col">No</th>
-          <th scope="col">Category</th>
-          <th scope="col">Edit</th>
-          <th scope="col">Delete</th>
-
-        </tr>
-      </thead>
-
-
-      <tbody>
-        <% count=1 %>
-          <% Category.forEach((catg)=>{ %>
-            <tr>
-              <td>
-                <%= count %>
-              </td>
-              <td>
-                <%= catg.category_name %>
-              </td>
-              <td>
-                <form action="/admin/editCategory/<%=catg._id%>" method="post">
-
-                  <div class="d-flex">
-
-                    <input placeholder="Edit category name" name="category_name" type="text" class="form-control w-50">
-                    <button type="submit" class="btn btn-success">Submit</button>
-
-                  </div>
-
-                </form>
-
-              </td>
-              <td>
-                <!-- Button trigger modal -->
-                <% if(catg.delete==false){ %>
-                  <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal-<%=catg._id%>">
-                    Delete
-                  </button>
-                  <% }else{ %>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+    <div class="table-responsive">
+      <table class="table table-success table-striped" id="table">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Category</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+  
+          </tr>
+        </thead>
+  
+  
+        <tbody>
+          <% count=1 %>
+            <% Category.forEach((catg)=>{ %>
+              <tr>
+                <td>
+                  <%= count %>
+                </td>
+                <td>
+                  <%= catg.category_name %>
+                </td>
+                <td>
+                  <form action="/admin/editCategory/<%=catg._id%>" method="post">
+  
+                    <div class="d-flex">
+  
+                      <input placeholder="Edit category name" name="category_name" type="text" class="form-control w-50">
+                      <button type="submit" class="btn btn-success">Submit</button>
+  
+                    </div>
+  
+                  </form>
+  
+                </td>
+                <td>
+                  <!-- Button trigger modal -->
+                  <% if(catg.delete==false){ %>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                       data-bs-target="#exampleModal-<%=catg._id%>">
-                      Restore
+                      Delete
                     </button>
-                    <% } %>
-
-                      <!-- Modal -->
-                      <div class="modal fade" id="exampleModal-<%=catg._id%>" tabindex="-1"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="exampleModalLabel">Delete confirmation</h1>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                            </div>
-                            <% if(catg.delete==false){ %>
-                              <div class="modal-body">
-                                Are you sure you want to delete this category <%= catg.category_name %>?
+                    <% }else{ %>
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal-<%=catg._id%>">
+                        Restore
+                      </button>
+                      <% } %>
+  
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal-<%=catg._id%>" tabindex="-1"
+                          aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete confirmation</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
                               </div>
-                              <% }else{ %>
+                              <% if(catg.delete==false){ %>
                                 <div class="modal-body">
-                                  Are you sure you want to restore this category <%= catg.category_name %>?
+                                  Are you sure you want to delete this category <%= catg.category_name %>?
                                 </div>
-                                <% } %>
-                                  <div class="modal-footer">
-                                    <% if(catg.delete==false){ %>
-                                      <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                      <a href="/admin/deleteCategory/<%=catg._id%>"><button type="button"
-                                          class="btn btn-danger">Delete</button></a>
-                                      <% }else{ %>
+                                <% }else{ %>
+                                  <div class="modal-body">
+                                    Are you sure you want to restore this category <%= catg.category_name %>?
+                                  </div>
+                                  <% } %>
+                                    <div class="modal-footer">
+                                      <% if(catg.delete==false){ %>
                                         <button type="button" class="btn btn-secondary"
                                           data-bs-dismiss="modal">Close</button>
-                                        <a href="/admin/restoreCategory/<%=catg._id%>"><button type="button"
-                                            class="btn btn-primary">Restore</button></a>
-                                        <% } %>
-                                  </div>
+                                        <a href="/admin/deleteCategory/<%=catg._id%>"><button type="button"
+                                            class="btn btn-danger">Delete</button></a>
+                                        <% }else{ %>
+                                          <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                          <a href="/admin/restoreCategory/<%=catg._id%>"><button type="button"
+                                              class="btn btn-primary">Restore</button></a>
+                                          <% } %>
+                                    </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-              </td>
+                </td>
+  
+              </tr>
+              <% count++ %>
+                <% }) %>
+        </tbody>
+  
+      </table>
 
-            </tr>
-            <% count++ %>
-              <% }) %>
-      </tbody>
-
-    </table>
+    </div>
+    
 
 
   </div>

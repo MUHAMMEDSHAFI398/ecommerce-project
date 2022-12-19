@@ -6,49 +6,53 @@
     <div class="d-flex align-items-center justify-content-center">
       <h1 class="text-decoration-underline">User details</h1>
     </div>
-    <table class="table table-success table-striped mt-5" id="table">
-      <thead>
-        <tr>
-          <th scope="col">No</th>
-          <th scope="col">name</th>
-          <th scope="col">email</th>
-          <th scope="col">Mobile</th>
-          <th scope="col">Controlls</th>
+    <div class="table-responsive">
+      <table class="table table-success table-striped mt-5" id="table">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">name</th>
+            <th scope="col">email</th>
+            <th scope="col">Mobile</th>
+            <th scope="col">Controlls</th>
+  
+          </tr>
+        </thead>
+        <tbody>
+          <% let count=1 %>
+            <% users.forEach((user)=>{ %>
+              <tr>
+                <td>
+                  <%= count %>
+                </td>
+                <td>
+                  <%=user.name %>
+                </td>
+                <td>
+                  <%=user.email %>
+                </td>
+  
+                <td>
+                  <%=user.phonenumber %>
+                </td>
+                <td>
+                  <% if(user.isBlocked===false) { %>
+                    <a href="/admin/blockUser/<%= user._id%>" class="btn btn-danger">Block</a>
+                    <% }else{ %>
+                      <a href="/admin/unblockUser/<%= user._id%>" class="btn btn-success">Unblock</a>
+                      <%}%>
+  
+                </td>
+              </tr>
+              <% count++ %>
+                <% }) %>
+  
+  
+        </tbody>
+      </table>
 
-        </tr>
-      </thead>
-      <tbody>
-        <% let count=1 %>
-          <% users.forEach((user)=>{ %>
-            <tr>
-              <td>
-                <%= count %>
-              </td>
-              <td>
-                <%=user.name %>
-              </td>
-              <td>
-                <%=user.email %>
-              </td>
-
-              <td>
-                <%=user.phonenumber %>
-              </td>
-              <td>
-                <% if(user.isBlocked===false) { %>
-                  <a href="/admin/blockUser/<%= user._id%>" class="btn btn-danger">Block</a>
-                  <% }else{ %>
-                    <a href="/admin/unblockUser/<%= user._id%>" class="btn btn-success">Unblock</a>
-                    <%}%>
-
-              </td>
-            </tr>
-            <% count++ %>
-              <% }) %>
-
-
-      </tbody>
-    </table>
+    </div>
+   
 
   </div>
   </div>

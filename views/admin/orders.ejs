@@ -9,116 +9,120 @@
                 <div class=" mt-100 mb-5 d-flex align-items-center justify-content-center">
                     <h3 class="text-decoration-underline">Order details</h3>
                 </div>
-                <table class="table table-success table-striped mb-100" id="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Customer name</th>
-                            
-                            <th scope="col">Order date</th>
-                            <th scope="col">Payment method</th>
-                            <th scope="col">Payment status</th>
-                            <th scope="col">Order status</th>
-                            <th scope="col">Delivery  date</th>
-                            <th scope="col">Total amount</th>
-                            <th scope="col">Order controlls</th>
-
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% orderDetails.forEach((order)=>{ %>
+                <div class="table-responsive">
+                    <table class="table table-success table-striped mb-100" id="table">
+                        <thead>
                             <tr>
-                                <td>
-                                    <%= order.name %>
-                                </td>
+                                <th scope="col">Customer name</th>
                                 
-                                <td>
-                                    <%= order.orderDate %>
-                                </td>
-                                <td>
-                                    <%= order.paymentMethod %>
-                                </td>
-                                <td>
-                                    <%= order.paymentStatus %>
-                                </td>
-                                <td>
-                                    <%= order.orderStatus %>
-                                </td>
-                                <td>
-                                    <%= order.deliveryDate %>
-                                </td>
-                                <td>₹ <%= order.totalAmount %>
-                                </td>
-
-                                <td>
-                                    <a href="/admin/orderedProduct/<%=order._id%> " class="btn btn-secondary ">View</a>
-                                    <!-- <a href="" class="btn btn-success ">Edit</a> -->
-
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal-<%= order._id %>">
-                                        Edit
-                                    </button>
-                               
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModal-<%= order._id %>" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit orders</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                <th scope="col">Order date</th>
+                                <th scope="col">Payment method</th>
+                                <th scope="col">Payment status</th>
+                                <th scope="col">Order status</th>
+                                <th scope="col">Delivery  date</th>
+                                <th scope="col">Total amount</th>
+                                <th scope="col">Order controlls</th>
+    
+    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orderDetails.forEach((order)=>{ %>
+                                <tr>
+                                    <td>
+                                        <%= order.name %>
+                                    </td>
+                                    
+                                    <td>
+                                        <%= order.orderDate %>
+                                    </td>
+                                    <td>
+                                        <%= order.paymentMethod %>
+                                    </td>
+                                    <td>
+                                        <%= order.paymentStatus %>
+                                    </td>
+                                    <td>
+                                        <%= order.orderStatus %>
+                                    </td>
+                                    <td>
+                                        <%= order.deliveryDate %>
+                                    </td>
+                                    <td>₹ <%= order.totalAmount %>
+                                    </td>
+    
+                                    <td>
+                                        <a href="/admin/orderedProduct/<%=order._id%> " class="btn btn-secondary ">View</a>
+                                        <!-- <a href="" class="btn btn-success ">Edit</a> -->
+    
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal-<%= order._id %>">
+                                            Edit
+                                        </button>
+                                   
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal-<%= order._id %>" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit orders</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="/admin/orderStatuschange/<%= order._id %>" method="post">
+                                                            <div class="mb-3">
+                                                                <label for="recipient-name" name="orderStatus"
+                                                                    class="col-form-label"> Order Status</label>
+                                                                <select class="form-select" name="orderStatus" aria-label="Default select example" id="">
+                                                                    
+                                                                    <option selected><%= order.orderStatus %></option>
+                                                                    <option value="pending" name="orderStatus">Pending</option>
+                                                                    <option value="shipped" name="orderStatus">Shipped</option>
+                                                                    <option value="delivered" name="orderStatus">Delivered</option>
+                                                                    <option value="cancelled" name="orderStatus">Cancel</option>
+                                                                   
+                                                                </select>
+                                                            </div>
+    
+                                                            <div class="mb-3">
+    
+                                                                <label for="message-text" name="orderStatus "class="col-form-label">Payment status</label>
+                                                                <select  name="paymentStatus" class="form-select" id="">
+                                                                    
+                                                                    <option selected><%= order.paymentStatus %></option>
+                                                                    <option value="not paid" name="paymentStatus">not paid</option>
+                                                                    <option value="paid" name="paymentStatus">paid</option>
+                                                                   
+                                                                </select>
+                                                            </div>
+    
+                                                            <div class="modal-footer">
+    
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-success">Save changes</button>
+                                                                    
+                                                            </div>
+                                                        </form>
+    
+                                                    </div>
+    
                                                 </div>
-                                                <div class="modal-body">
-                                                    <form action="/admin/orderStatuschange/<%= order._id %>" method="post">
-                                                        <div class="mb-3">
-                                                            <label for="recipient-name" name="orderStatus"
-                                                                class="col-form-label"> Order Status</label>
-                                                            <select class="form-select" name="orderStatus" aria-label="Default select example" id="">
-                                                                
-                                                                <option selected><%= order.orderStatus %></option>
-                                                                <option value="pending" name="orderStatus">Pending</option>
-                                                                <option value="shipped" name="orderStatus">Shipped</option>
-                                                                <option value="delivered" name="orderStatus">Delivered</option>
-                                                                <option value="cancelled" name="orderStatus">Cancel</option>
-                                                               
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="mb-3">
-
-                                                            <label for="message-text" name="orderStatus "class="col-form-label">Payment status</label>
-                                                            <select  name="paymentStatus" class="form-select" id="">
-                                                                
-                                                                <option selected><%= order.paymentStatus %></option>
-                                                                <option value="not paid" name="paymentStatus">not paid</option>
-                                                                <option value="paid" name="paymentStatus">paid</option>
-                                                               
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="modal-footer">
-
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-success">Save changes</button>
-                                                                
-                                                        </div>
-                                                    </form>
-
-                                                </div>
-
                                             </div>
                                         </div>
-                                    </div>
+    
+    
+                                    </td>
+                                </tr>
+                                <% }) %>
+    
+                        </tbody>
+                    </table>
 
-
-                                </td>
-                            </tr>
-                            <% }) %>
-
-                    </tbody>
-                </table>
+                </div>
+                
         </section>
 
 
