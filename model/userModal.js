@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
     name: {
         type: String,
         required: true,
-        trim: true
+        
     },
     email: {
         type: String,
