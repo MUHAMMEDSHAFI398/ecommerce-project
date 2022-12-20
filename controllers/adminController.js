@@ -22,6 +22,7 @@ module.exports = {
 
                 const todayOrder = await order.find({
                     orderDate: moment().format("MMM Do YY"),
+                    orderStatus: { $ne: "cancelled" }
                 });
 
                 const todayRevenue = todayOrder.reduce((accumulator, object) => {

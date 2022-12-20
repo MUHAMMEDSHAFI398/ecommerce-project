@@ -61,8 +61,9 @@
 		</div>
 	</div>
 	<!-- end home page slider -->
-
+  
 	<!-- shop banner -->
+	<% if(bannerData.length){ %> 
 	<section class="shop-banner">
 		<div class="container">
 			<h4 class=""><%= bannerData[0].bannerText %> <br> Order on <span class="orange-text">FRUTICA...</span></h4>
@@ -70,6 +71,7 @@
 			<a href="/shop" class="cart-btn btn-lg">Shop Now</a>
 		</div>
 	</section>
+	<% } %> 
 	<!-- end shop banner -->
 
 	<!-- product section -->

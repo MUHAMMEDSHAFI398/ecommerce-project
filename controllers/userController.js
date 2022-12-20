@@ -69,7 +69,8 @@ module.exports = {
       } else {
         customer = false
       }
-      const bannerData = await banner.find().sort({ createdAt: -1 }).limit(1)
+      const bannerData = await banner.find({isDeleted:false}).sort({ createdAt: -1 }).limit(1)
+      
       res.render('user/index', { customer, product, countInCart, countInWishlist, bannerData });
 
     } catch {
