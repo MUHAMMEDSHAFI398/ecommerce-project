@@ -84,7 +84,7 @@ module.exports = {
             }
 
         } catch {
-            console.log(error)
+            
             res.render('user/500')
         }
 
@@ -102,7 +102,7 @@ module.exports = {
             }
 
         } catch {
-            console.log(error)
+            
             res.render('user/500')
         }
 
@@ -116,7 +116,7 @@ module.exports = {
             let users = await user.find()
             res.render('admin/userDetails', { users })
         } catch {
-            console.log(error)
+            
             res.render('user/500')
 
         }
@@ -131,7 +131,7 @@ module.exports = {
                 res.redirect("/admin/userDetails");
             })
         } catch {
-            console.log(error)
+           
             res.render('user/500')
         }
 
@@ -145,7 +145,7 @@ module.exports = {
             })
 
         } catch {
-            console.log(error)
+            
             res.render('user/500')
         }
 
@@ -155,7 +155,7 @@ module.exports = {
             let category = await categories.find()
             res.render('admin/addproducts', { category })
         } catch {
-            console.log(error)
+           
             res.render('user/500')
         }
 
@@ -167,7 +167,7 @@ module.exports = {
             res.render("admin/productdetails", { product })
 
         } catch {
-            console.log(error)
+           
             res.render('user/500')
         }
 
@@ -199,7 +199,7 @@ module.exports = {
             }
 
         } catch {
-            console.log(error)
+            
             res.render('user/500')
         }
 
@@ -213,7 +213,7 @@ module.exports = {
             res.render('admin/editproduct', { productData, category })
 
         } catch {
-            console.log(error)
+        
             res.render('user/500')
         }
 
@@ -246,7 +246,7 @@ module.exports = {
             }
 
         } catch {
-            console.log(error)
+           
             res.render('user/500')
         }
 
@@ -260,7 +260,7 @@ module.exports = {
             await products.updateOne({ _id: id }, { $set: { delete: true } })
             res.redirect('/admin/productdetails')
         } catch {
-            console.log(error)
+           
             res.render('user/500')
         }
 
@@ -272,7 +272,7 @@ module.exports = {
             res.redirect('/admin/productdetails')
 
         } catch {
-            console.log(error)
+           
             res.render('user/500')
         }
 
@@ -299,7 +299,7 @@ module.exports = {
             res.render('admin/category', { Category, fieldEmpty, categoryExist, editFieldEmpty, editCategoryExist })
 
         } catch {
-            console.log(error)
+     
             res.render('user/500')
         }
 
@@ -327,7 +327,7 @@ module.exports = {
                 res.redirect('/admin/category')
             }
         } catch {
-            console.log(error)
+           
             res.render('user/500')
         }
 
@@ -359,7 +359,7 @@ module.exports = {
                 res.redirect('/admin/category')
             }
         } catch {
-            console.log(error)
+           
             res.render('user/500')
         }
 
@@ -373,7 +373,7 @@ module.exports = {
             await categories.updateOne({ _id: id }, { $set: { delete: true } })
             res.redirect('/admin/category')
         } catch {
-            console.log(error)
+          
             res.render('user/500')
         }
 
@@ -385,7 +385,7 @@ module.exports = {
             await categories.updateOne({ _id: id }, { $set: { delete: false } })
             res.redirect('/admin/category')
         } catch {
-            console.log(error)
+        
             res.render('user/500')
         }
 
@@ -398,7 +398,7 @@ module.exports = {
             const couponData = await coupon.find()
             res.render('admin/coupon', { couponData })
         } catch {
-            console.log(error)
+        
             res.render('user/500')
         }
 
@@ -422,7 +422,7 @@ module.exports = {
                     res.redirect("/admin/coupon");
                 });
         } catch {
-            console.log(error)
+       
             res.render('user/500')
         }
     },
@@ -433,7 +433,7 @@ module.exports = {
             res.redirect("/admin/coupon");
 
         } catch {
-            console.log(error)
+       
             res.render('user/500')
         }
 
@@ -447,7 +447,7 @@ module.exports = {
             res.redirect("/admin/coupon");
 
         } catch {
-            console.log(error)
+          
             res.render('user/500')
         }
 
@@ -470,7 +470,7 @@ module.exports = {
                     res.redirect("/admin/coupon");
                 });
         } catch {
-            console.log(error)
+         
             res.render('user/500')
 
         }
@@ -508,7 +508,7 @@ module.exports = {
             })
 
         } catch {
-            console.log(error)
+          
             res.render('user/500')
 
         }
@@ -573,7 +573,7 @@ module.exports = {
 
 
         } catch {
-            console.error()
+           
             res.render('user/500')
         }
 
@@ -595,7 +595,7 @@ module.exports = {
             res.redirect("/admin/order");
 
         } catch {
-            console.error()
+          
             res.render('user/500')
         }
 
@@ -608,7 +608,7 @@ module.exports = {
             });
             res.render("admin/salesReport", { allOrderDetails });
         } catch {
-            console.error()
+          
             res.render('user/500')
 
         }
@@ -629,7 +629,7 @@ module.exports = {
                     res.render("admin/salesReport", { allOrderDetails });
                 });
         } catch {
-            console.error()
+         
             res.render('user/500')
 
         }
@@ -652,7 +652,7 @@ module.exports = {
                 res.render("admin/salesReport", { allOrderDetails });
             });
         } catch {
-            console.error()
+    
             res.render('user/500')
 
         }
@@ -663,7 +663,7 @@ module.exports = {
             res.render('admin/banners', { banners })
 
         } catch {
-            console.error()
+          
             res.render('user/500')
         }
 
@@ -678,7 +678,7 @@ module.exports = {
             })
             res.redirect('/admin/getBanner')
         } catch {
-            console.error()
+           
             res.render('user/500')
         }
 
@@ -699,7 +699,7 @@ module.exports = {
             res.redirect('/admin/getBanner')
 
         } catch {
-            console.error()
+        
             res.render('user/500')
         }
     },
@@ -713,7 +713,7 @@ module.exports = {
             res.redirect('/admin/getBanner')
 
         } catch {
-            console.error()
+        
             res.render('user/500')
         }
 
@@ -728,7 +728,7 @@ module.exports = {
             res.redirect('/admin/getBanner')
 
         } catch {
-            console.error()
+         
             res.render('user/500')
         }
 
