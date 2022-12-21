@@ -69,8 +69,8 @@ module.exports = {
       } else {
         customer = false
       }
-      const bannerData = await banner.find({isDeleted:false}).sort({ createdAt: -1 }).limit(1)
-      
+      const bannerData = await banner.find({ isDeleted: false }).sort({ createdAt: -1 }).limit(1)
+
       res.render('user/index', { customer, product, countInCart, countInWishlist, bannerData });
 
     } catch {
@@ -120,19 +120,39 @@ module.exports = {
 
         }
 
-        mailer.mailTransporter.sendMail(mailDetails, function (err, data) {
+        mailer.mailTransporter.sendMail(mailDetails, async function (err, data) {
           if (err) {
 
             console.log(err)
           } else {
-            otp.create({
-              email: email,
-              otp: OTP
-            }).then((otpActive) => {
 
-              res.redirect(`/otpPage?name=${User.name}&email=${User.email}&phonenumber=${User.phonenumber}&password=${User.password}`);
+            const userFound = await otp.findOne({ email: email })
 
-            })
+            if (userFound) {
+              otp.deleteOne({ email: email }).then(() => {
+
+                otp.create({
+                  email: email,
+                  otp: OTP
+                }).then((otpActive) => {
+
+                  res.redirect(`/otpPage?name=${User.name}&email=${User.email}&phonenumber=${User.phonenumber}&password=${User.password}`);
+
+                })
+
+              })
+            } else {
+
+              otp.create({
+                email: email,
+                otp: OTP
+              }).then((otpActive) => {
+
+                res.redirect(`/otpPage?name=${User.name}&email=${User.email}&phonenumber=${User.phonenumber}&password=${User.password}`);
+
+              })
+
+            }
 
           }
         })
@@ -154,6 +174,13 @@ module.exports = {
     try {
       const body = req.body
       console.log(req.body)
+
+      const userData = {
+        name: body.name,
+        email: body.email,
+        phonenumber: body.phonenumber,
+        password: body.password
+      }
 
       const sentOtp = await otp.findOne({
         email: body.email
