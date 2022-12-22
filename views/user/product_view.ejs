@@ -1,5 +1,5 @@
 <%- include('../partials/user_header')%>
-	
+
 	<!-- breadcrumb-section -->
 	<div class="breadcrumb-section breadcrumb-bg">
 		<div class="container">
@@ -16,26 +16,67 @@
 	<!-- end breadcrumb section -->
 
 	<!-- single product -->
+	<style>
+		figure.zoom {
+			background-position: 50% 50%;
+			position: relative;
+			width: 450px;
+			overflow: hidden;
+			cursor: zoom-in;
+		}
+
+		figure.zoom img:hover {
+			opacity: 0;
+		}
+
+		figure.zoom img {
+			transition: opacity .5s;
+			display: block;
+			width: 100%;
+		}
+	</style>
+
 	<div class="single-product mt-150 mb-150">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-5">
 					<div class="single-product-img">
-						<img src="/adminimages/<%=product._id%>.jpg" style="width: 443px; height: 443px;" alt="">
+
+
+
+
+						<figure id="zoomer" class="zoom" onmousemove="zoom(event)"
+							style="background-image: url(/adminimages/<%=product._id%>.jpg);width: 350px; height: 300px;">
+							<img id="main-image" style="width: 350px;height: 300px;"
+								src="/adminimages/<%=product._id%>.jpg" />
+						</figure>
+
+
+
 					</div>
 				</div>
 				<div class="col-md-7">
 					<div class="single-product-content">
 						<h3>This is a good fruit for health</h3>
-						<h2><%=product.product_name%></h2>
-						<p class="single-product-pricing"> <%=product.price%>/kg</p>
-						<p><%=product.description%></p>
-						<div class="single-product-form">						
-							<a onclick="addToCart('<%= product._id %>')" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-							<a onclick="addToWishlist('<%= product._id %>')"><img style="width:30px; height:30px" src="/adminimages/wishnew.png" alt=""></a>	
-							<p><strong>Category :</strong><%= product?.category.category_name %></p>
+						<h2>
+							<%=product.product_name%>
+						</h2>
+						<p class="single-product-pricing">
+							<%=product.price%>/kg
+						</p>
+						<p>
+							<%=product.description%>
+						</p>
+						<div class="single-product-form">
+							<a onclick="addToCart('<%= product._id %>')" class="cart-btn"><i
+									class="fas fa-shopping-cart"></i> Add to Cart</a>
+							<a onclick="addToWishlist('<%= product._id %>')"><img style="width:30px; height:30px"
+									src="/adminimages/wishnew.png" alt=""></a>
+							<p><strong>Category :</strong>
+								<%= product?.category.category_name %>
+							</p>
 						</div>
-					
+
 					</div>
 				</div>
 			</div>
@@ -51,36 +92,53 @@
 
 	<!-- footer -->
 	<%- include('../partials/user_footer')%>
-	<!-- end footer -->
-	
-	<!-- copyright -->
-	<!-- end copyright -->
-	
-	<!-- jquery -->
-	<script src="/assets/js/jquery-1.11.3.min.js"></script>
-	<!-- bootstrap -->
-	<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-	<!-- count down -->
-	<script src="/assets/js/jquery.countdown.js"></script>
-	<!-- isotope -->
-	<script src="/assets/js/jquery.isotope-3.0.6.min.js"></script>
-	<!-- waypoints -->
-	<script src="/assets/js/waypoints.js"></script>
-	<!-- owl carousel -->
-	<script src="/assets/js/owl.carousel.min.js"></script>
-	<!-- magnific popup -->
-	<script src="/assets/js/jquery.magnific-popup.min.js"></script>
-	<!-- mean menu -->
-	<script src="/assets/js/jquery.meanmenu.min.js"></script>
-	<!-- sticker js -->
-	<script src="/assets/js/sticker.js"></script>
-	<!-- main js -->
-	<script src="/assets/js/main.js"></script>
+		<!-- end footer -->
 
-	<!-- ajax request -->
-	<script src="/assets/js/ajaxrequests.js"></script>
-	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-			
+		<!-- copyright -->
+		<!-- end copyright -->
 
-</body>
-</html>
+		<!-- jquery -->
+		<script src="/assets/js/jquery-1.11.3.min.js"></script>
+		<!-- bootstrap -->
+		<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+		<!-- count down -->
+		<script src="/assets/js/jquery.countdown.js"></script>
+		<!-- isotope -->
+		<script src="/assets/js/jquery.isotope-3.0.6.min.js"></script>
+		<!-- waypoints -->
+		<script src="/assets/js/waypoints.js"></script>
+		<!-- owl carousel -->
+		<script src="/assets/js/owl.carousel.min.js"></script>
+		<!-- magnific popup -->
+		<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+		<!-- mean menu -->
+		<script src="/assets/js/jquery.meanmenu.min.js"></script>
+		<!-- sticker js -->
+		<script src="/assets/js/sticker.js"></script>
+		<!-- main js -->
+		<script src="/assets/js/main.js"></script>
+
+		<!-- ajax request -->
+		<script src="/assets/js/ajaxrequests.js"></script>
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+		<script>
+
+			function offZoom(e) {
+				img.style.transformOrigin = `center center`;
+				img.style.transform = "scale(1)";
+			}
+			function zoom(e) {
+				var zoomer = e.currentTarget;
+				e.offsetX ? offsetX = e.offsetX : offsetX = e.touches[0].pageX
+				e.offsetY ? offsetY = e.offsetY : offsetX = e.touches[0].pageX
+				x = offsetX / zoomer.offsetWidth * 100
+				y = offsetY / zoomer.offsetHeight * 100
+				zoomer.style.backgroundPosition = x + '% ' + y + '%';
+			}
+		</script>
+
+
+		</body>
+
+		</html>
