@@ -39,7 +39,7 @@ module.exports = {
                     return accumulator + object.totalAmount;
                 }, 0);
 
-                const allOrders = orderData.length;
+                
 
                 const pending = await order.find({ orderStatus: "pending" }).count();
 
@@ -57,7 +57,9 @@ module.exports = {
 
                 const product = await products.find({ delete: false }).count();
 
-                const allOrderDetails = await order.find({ paymentStatus: "paid" }, { orderStatus: "delivered" })
+                const allOrders = await order.find().count();
+
+                
 
 
 

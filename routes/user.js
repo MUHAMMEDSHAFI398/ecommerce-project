@@ -29,25 +29,25 @@ userRouter.get('/viewWishlist', verifyLogin.verifyLoginUser ,userController.view
 
 userRouter.post('/removeFromWishlist', verifyLogin.verifyLoginUser ,userController.removeFromWishlist);
 
-userRouter.get('/category/:id', userController.getCategoryWisePage);
+userRouter.get('/category/:id',verifyLogin.verifyLoginUser, userController.getCategoryWisePage);
 
 userRouter.get('/productview/:id', verifyLogin.verifyLoginUser , userController.getProductViewPage);
 
-userRouter.get('/addToCart/:id', userController.addToCart);
+userRouter.get('/addToCart/:id',verifyLogin.verifyLoginUser, userController.addToCart);
 
 userRouter.get('/viewCart',verifyLogin.verifyLoginUser , userController.viewCart);
 
-userRouter.post('/changeQuantity',userController.changeQuantity,userController.totalAmount);
+userRouter.post('/changeQuantity',verifyLogin.verifyLoginUser ,userController.changeQuantity,userController.totalAmount);
 
-userRouter.post('/removeProduct', userController. removeProduct);
+userRouter.post('/removeProduct', verifyLogin.verifyLoginUser ,userController. removeProduct);
 
 userRouter.get('/viewProfile',verifyLogin.verifyLoginUser , userController.viewProfile);
 
 userRouter.get('/editProfile',verifyLogin.verifyLoginUser , userController.editProfile);
 
-userRouter.post('/postEditProfile', userController.postEditProfile);
+userRouter.post('/postEditProfile',verifyLogin.verifyLoginUser , userController.postEditProfile);
 
-userRouter.post('/addNewAddress', userController.addNewAddress);
+userRouter.post('/addNewAddress',verifyLogin.verifyLoginUser , userController.addNewAddress);
 
 userRouter.post("/placeOrder", verifyLogin.verifyLoginUser, userController.placeOrder);
 
@@ -63,7 +63,7 @@ userRouter.get('/orderSuccess',verifyLogin.verifyLoginUser,userController.orderS
 
 userRouter.get('/orderedProduct/:id',verifyLogin.verifyLoginUser,userController.orderedProduct);
 
-userRouter.get('/cancelOrder/:id', userController.cancelOrder);
+userRouter.get('/cancelOrder/:id',verifyLogin.verifyLoginUser , userController.cancelOrder);
 
 
 

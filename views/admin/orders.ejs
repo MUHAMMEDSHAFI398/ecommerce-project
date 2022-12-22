@@ -53,13 +53,14 @@
     
                                     <td>
                                         <a href="/admin/orderedProduct/<%=order._id%> " class="btn btn-secondary ">View</a>
-                                        <!-- <a href="" class="btn btn-success ">Edit</a> -->
-    
+                                      
+                                        <% if(order.orderStatus!=="delivered"){ %> 
                                         <!-- Button trigger modal -->
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                             data-bs-target="#exampleModal-<%= order._id %>">
                                             Edit
                                         </button>
+                                        <% } %> 
                                    
                                         <!-- Modal -->
                                         <div class="modal fade" id="exampleModal-<%= order._id %>" tabindex="-1"
@@ -135,10 +136,7 @@
         crossorigin="anonymous"></script>
 
 
-    <!-- data table -->
-   
-
-    <!--end data table -->
+    
 
     </body>
 
