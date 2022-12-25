@@ -13,6 +13,7 @@ const otp = require('../model/otp')
 const banner = require('../model/banner')
 const instance = require("../middlewares/razorpay");
 const moment = require("moment");
+const { findOne } = require('../model/userModal');
 moment().format();
 
 
@@ -27,7 +28,7 @@ const securepassword = async (password) => {
     const passwordhash = await bcrypt.hash(password, 10)
     return passwordhash
   } catch {
-    
+
     res.render('user/500')
   }
 }
@@ -74,7 +75,7 @@ module.exports = {
       res.render('user/index', { customer, product, countInCart, countInWishlist, bannerData });
 
     } catch {
-   
+
       res.render('user/500')
     }
 
@@ -158,7 +159,7 @@ module.exports = {
         })
       }
     } catch {
-   
+
       res.render('user/500')
     }
 
@@ -203,7 +204,7 @@ module.exports = {
       }
 
     } catch {
-     
+
       res.render('user/500')
     }
 
@@ -231,8 +232,8 @@ module.exports = {
       } else {
         res.render('user/login', { invalid: "invalid username or password" });
       }
-    } catch  {
-     
+    } catch {
+
       res.render('user/500')
     }
 
@@ -251,7 +252,7 @@ module.exports = {
       res.render('user/shop', { product, countInCart, category, countInWishlist });
 
     } catch {
-    
+
       res.render('user/500')
     }
 
@@ -267,7 +268,7 @@ module.exports = {
 
     } catch {
 
-    
+
       res.render('user/500')
 
     }
@@ -282,7 +283,7 @@ module.exports = {
       res.render('user/product_view', { product, countInCart, countInWishlist });
 
     } catch {
-     
+
       res.render('user/500')
     }
 
@@ -334,7 +335,7 @@ module.exports = {
       }
 
     } catch {
-   
+
       res.render('user/500')
     }
 
@@ -419,7 +420,7 @@ module.exports = {
         });
 
     } catch {
-    
+
       res.render('user/500')
     }
 
@@ -469,7 +470,7 @@ module.exports = {
         });
       }
     } catch {
-     
+
       res.render('user/500')
     }
 
@@ -517,7 +518,7 @@ module.exports = {
       res.render('user/wishlist', { wishlistData, countInWishlist, countInCart })
 
     } catch {
-    
+
       res.render('user/500')
 
     }
@@ -545,7 +546,7 @@ module.exports = {
 
     } catch {
 
-    
+
       res.render('user/500')
 
     }
@@ -584,7 +585,7 @@ module.exports = {
 
 
     } catch {
-    
+
       res.render('user/500')
     }
 
@@ -647,7 +648,7 @@ module.exports = {
       res.json({ status: true, productData });
 
     } catch {
-     
+
       res.render('user/500')
     }
 
@@ -661,7 +662,7 @@ module.exports = {
       res.render('user/profile', { userData, countInCart, countInWishlist })
 
     } catch {
-     
+
       res.render('user/500')
     }
 
@@ -674,7 +675,7 @@ module.exports = {
       res.render('user/editprofile', { userData, countInCart, countInWishlist })
 
     } catch {
-     
+
       res.render('user/500')
     }
 
@@ -709,9 +710,50 @@ module.exports = {
 
       res.redirect('/viewProfile')
     } catch {
-    
+
       res.render('user/500')
     }
+
+  },
+  getChangePassword: (req, res) => {
+    res.render('user/changePassword')
+
+  },
+  postChangePassword: async (req, res) => {
+
+    try {
+      const data = req.body
+      const session = req.session.user
+
+      if (data.newPassword === data.conNewPassword) {
+
+        const userData = await user.findOne({ email: session })
+        const passwordMatch = await bcrypt.compare(data.currentPassword, userData.password)
+
+        if (passwordMatch) {
+
+          const spassword = await securepassword(data.newPassword)
+
+          user.updateOne({ email: session }, { $set: { password: spassword } }).then(() => {
+
+            req.session.destroy();
+            res.redirect("/");
+
+          });
+        } else {
+          res.render('user/changePassword', { invalid: "Incorrect password" })
+        }
+
+
+      } else {
+        res.render('user/changePassword', { invalid: "Password must be same " })
+      }
+
+
+    } catch {
+      res.render('user/500')
+    }
+
 
   },
   getCheckOutPage: async (req, res) => {
@@ -767,7 +809,7 @@ module.exports = {
       res.render("user/checkout", { productData, sum, countInCart, countInWishlist, userData });
 
     } catch {
-  
+
       res.render('user/500')
     }
 
@@ -794,7 +836,7 @@ module.exports = {
       res.redirect('/checkout')
 
     } catch {
-   
+
       res.render('user/500')
 
     }
@@ -955,7 +997,7 @@ module.exports = {
 
 
     } catch {
-   
+
       res.render('user/500')
     }
 
@@ -1006,7 +1048,7 @@ module.exports = {
       })
 
     } catch {
-      
+
       res.render('user/500')
     }
 
@@ -1069,7 +1111,7 @@ module.exports = {
       res.render('user/orderedProduct', { productData, countInCart, countInWishlist })
 
     } catch {
-   
+
       res.render('user/500')
     }
 
@@ -1083,7 +1125,7 @@ module.exports = {
       res.redirect("/orderDetails");
 
     } catch {
-      
+
       res.render('user/500')
     }
 

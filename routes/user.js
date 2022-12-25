@@ -47,6 +47,10 @@ userRouter.get('/editProfile',verifyLogin.verifyLoginUser , userController.editP
 
 userRouter.post('/postEditProfile',verifyLogin.verifyLoginUser , userController.postEditProfile);
 
+userRouter.get('/changePassword',verifyLogin.verifyLoginUser , userController.getChangePassword);
+
+userRouter.post('/postChangePassword',verifyLogin.verifyLoginUser , userController.postChangePassword);
+
 userRouter.post('/addNewAddress',verifyLogin.verifyLoginUser , userController.addNewAddress);
 
 userRouter.post("/placeOrder", verifyLogin.verifyLoginUser, userController.placeOrder);
