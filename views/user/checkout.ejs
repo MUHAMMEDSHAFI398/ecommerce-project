@@ -24,45 +24,7 @@
 				<div class="col-md-8 order-md-1">
 					<section>
 						<div class="container">
-							<form id="placeOrder">
-								<label class="col-xs-3 control-label">Select Shipping Address</label>
-
-								<select class="form-select mt-2" required name="address" style="width: 20rem">
-									<% userData.addressDetails.forEach((address)=>{%>
-										<option name="address">
-											<%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>,<%= address.district %>,<%= address.pin %>,<%=address.state %>
-														
-																	
-										</option>
-										<% }) %>
-								</select>
-
-								<label class="mt-3" for="">Apply Coupon</label>
-								<p><input name="coupon" type="text" placeholder="Coupon"></p>
-
-								<div class="d-block my-3">
-									<div class="custom-control custom-radio">
-										<input id="credit" name="paymentMethod" type="radio" value="COD"
-											class="custom-control-input" checked required />
-										<label class="custom-control-label" for="credit">COD</label>
-									</div>
-
-									<div class="custom-control custom-radio">
-										<input id="debit" name="paymentMethod" type="radio" value="Online"
-											class="custom-control-input" required />
-										<label class="custom-control-label" for="debit">Online</label>
-									</div>
-
-									<button type="submit" value="submit" class="btn btn-secondary mt-5">
-										Place order
-									</button>
-
-								</div>
-							</form>
-
-
-
-							<button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+							<button type="button" class="btn btn-secondary mb-5" data-bs-toggle="modal"
 								data-bs-target="#exampleModal" data-bs-whatever="@mdo">
 								Add new address
 							</button>
@@ -143,6 +105,45 @@
 									</div>
 								</div>
 							</div>
+							<form id="placeOrder">
+								<label class="col-xs-3 control-label">Select Shipping Address</label>
+
+								<select class="form-select mt-2" required name="address" style="width: 20rem">
+									<% userData.addressDetails.forEach((address)=>{%>
+										<option name="address">
+											<%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>,<%= address.district %>,<%= address.pin %>,<%=address.state %>
+														
+																	
+										</option>
+										<% }) %>
+								</select>
+
+								<label class="mt-3" for="">Apply Coupon</label>
+								<p><input name="coupon" type="text" placeholder="Coupon"></p>
+
+								<div class="d-block my-3">
+									<div class="custom-control custom-radio">
+										<input id="credit" name="paymentMethod" type="radio" value="COD"
+											class="custom-control-input" checked required />
+										<label class="custom-control-label" for="credit">COD</label>
+									</div>
+
+									<div class="custom-control custom-radio">
+										<input id="debit" name="paymentMethod" type="radio" value="Online"
+											class="custom-control-input" required />
+										<label class="custom-control-label" for="debit">Online</label>
+									</div>
+
+									<button style="border: none; background-color: orange; color: aliceblue;" type="submit" value="submit" class="mt-5">
+										Place order
+									</button>
+
+								</div>
+							</form>
+
+
+
+							
 						</div>
 					</section>
 				</div>
