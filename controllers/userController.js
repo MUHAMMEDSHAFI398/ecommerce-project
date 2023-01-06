@@ -189,7 +189,7 @@ module.exports = {
       console.log(sentOtp)
       if (req.body.otp == sentOtp.otp) {
 
-        res.redirect('/userLogin');
+       
         const User = await user.create({
           name: body.name,
           email: body.email,
@@ -197,6 +197,7 @@ module.exports = {
           password: body.password
 
         })
+        res.redirect('/userLogin');
 
       } else {
 
@@ -238,6 +239,94 @@ module.exports = {
     }
 
 
+  },
+  getForgotPassword:(req,res)=>{
+   
+    res.render('user/forgotPassword')
+  },
+  postForgotPassword:(req,res)=>{
+
+    userData=req.body
+    console.log( userData);
+
+
+    user.findOne({email:userData.email}).then((userExist)=>{
+
+      if(userExist){
+
+        const OTP = `${Math.floor(1000 + Math.random() * 9000)}`
+        const mailDetails = {
+          from: process.env.nodemailer_email,
+          to: userData.email,
+          subject: "Otp for changing your password",
+          html: `<p>Your OTP for changing your password is ${OTP}</p>`,
+        };
+       
+        mailer.mailTransporter.sendMail(mailDetails, async function (err, data){
+
+          if(err){
+            console.log(err)
+          }else{
+            const userFound = await otp.findOne({ email: userData.email })
+            
+            if (userFound) {
+              otp.deleteOne({ email: userData.email}).then(() => {
+
+                otp.create({
+                  email: userData.email,
+                  otp: OTP
+                }).then((otpActive) => {
+
+                  res.redirect(`/forgotOtpPage?password=${userData.password}&email=${userData.email}`);
+
+                })
+
+              })
+            } else{
+              
+              otp.create({
+                email:userData.email,
+                otp: OTP
+              }).then((otpActive) => {
+
+                res.redirect(`/forgotOtpPage?password=${userData.password}&email=${userData.email}`);
+
+              })
+            }    
+
+          }
+        })
+      }else{
+
+       res.render('user/forgotPassword',{invalid:'invalid email'})
+      }
+    })
+    
+
+  },
+  forgotOtpPage:(req,res)=>{
+    const userData=req.query
+    res.render('user/forgotOtpPage',{userData})
+  },
+  postForgotOtp:async(req,res)=>{
+
+    const userData =req.body
+    const spassword = await securepassword(userData.password)
+    const sentOtp = await otp.findOne({
+      email: userData.email
+    })
+    console.log(sentOtp)
+      if (userData.otp == sentOtp.otp) {
+         
+        await user.updateOne({email:userData.email},{$set:{password:spassword}})
+        
+        res.render('user/login')
+
+      } else {
+
+        res.render('user/otp', { invalid: 'invalid otp', userData });
+      }
+ 
   },
   userLogout: (req, res) => {
     req.session.destroy();

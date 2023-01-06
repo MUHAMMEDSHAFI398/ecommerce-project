@@ -17,6 +17,14 @@ userRouter.post('/postSignup', userController.postSignup);
 
 userRouter.get('/otpPage', userController.getOtpPage);
 
+userRouter.get('/getForgotPassword', userController.getForgotPassword);
+
+userRouter.post('/postForgotPassword', userController.postForgotPassword);
+
+userRouter.get('/forgotOtpPage', userController.forgotOtpPage);
+
+userRouter.post('/postForgotOtp', userController.postForgotOtp);
+
 userRouter.post('/otp', userController.postOtp);
 
 userRouter.get('/userLogout', userController.userLogout);
