@@ -22,76 +22,80 @@
              
             <h3 class="text-decoration-underline">Order details</h3>
         </div>
-        <table class="table table-success table-striped mb-100" id="table">
-            <thead>
-                <tr>
-                    <th scope="col">Order date</th>
-                    
-                    <th scope="col">Payment method</th>
-                    <th scope="col">Payment status</th>
-                    <th scope="col">Order status</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Delivery date</th>
-                    <th scope="col">Controlls</th>
-    
-    
-                </tr>
-            </thead>
-            <tbody>
-                <% orderDetails.forEach((order)=>{ %>  
-                <tr>
-                    <td><%= order.orderDate %></td>
-                    
-                    <td><%= order.paymentMethod %></td>
-                    <td><%= order.paymentStatus %></td>
-                    <td><%= order.orderStatus %></td>
-                    <td> <%= order.totalAmount %>  ₹ </td>
-                    <td><%= order.deliveryDate %></td>
-                    <td>
-
+        <div class="table-responsive">
+            <table class="table table-success table-striped mb-100" id="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Order date</th>
                         
-                        <!-- Button trigger modal -->
-                        <% if(order.orderStatus=='placed' || order.orderStatus=='pending' || order.orderStatus=='shipped' ){ %> 
-                     <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                     data-bs-target="#exampleModal-<%=order._id%>">
-                     Cancel
-                   </button>
-                      
-                        <% } %> 
-
-                   <!-- Modal -->
-                   <div class="modal fade" id="exampleModal-<%=order._id%>" tabindex="-1"
-                     aria-labelledby="exampleModalLabel" aria-hidden="true">
-                     <div class="modal-dialog">
-                       <div class="modal-content">
-                         <div class="modal-header">
-                           <h1 class="modal-title fs-5" id="exampleModalLabel">Delete confirmation</h1>
-                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                         </div>
-                         <div class="modal-body">
-                           Are you sure you want to cancel this order ?
-                         </div>
-                         <div class="modal-footer">
-                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                           <a href="/cancelOrder/<%=order._id%>"><button type="button"
-                               class="btn btn-danger">Cancel</button></a>
+                        <th scope="col">Payment method</th>
+                        <th scope="col">Payment status</th>
+                        <th scope="col">Order status</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Delivery date</th>
+                        <th scope="col">Controlls</th>
+        
+        
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orderDetails.forEach((order)=>{ %>  
+                    <tr>
+                        <td><%= order.orderDate %></td>
+                        
+                        <td><%= order.paymentMethod %></td>
+                        <td><%= order.paymentStatus %></td>
+                        <td><%= order.orderStatus %></td>
+                        <td> <%= order.totalAmount %>  ₹ </td>
+                        <td><%= order.deliveryDate %></td>
+                        <td>
+    
+                            
+                            <!-- Button trigger modal -->
+                            <% if(order.orderStatus=='placed' || order.orderStatus=='pending' || order.orderStatus=='shipped' ){ %> 
+                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                         data-bs-target="#exampleModal-<%=order._id%>">
+                         Cancel
+                       </button>
+                          
+                            <% } %> 
+    
+                       <!-- Modal -->
+                       <div class="modal fade" id="exampleModal-<%=order._id%>" tabindex="-1"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                         <div class="modal-dialog">
+                           <div class="modal-content">
+                             <div class="modal-header">
+                               <h1 class="modal-title fs-5" id="exampleModalLabel">Delete confirmation</h1>
+                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                             </div>
+                             <div class="modal-body">
+                               Are you sure you want to cancel this order ?
+                             </div>
+                             <div class="modal-footer">
+                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                               <a href="/cancelOrder/<%=order._id%>"><button type="button"
+                                   class="btn btn-danger">Cancel</button></a>
+                             </div>
+                           </div>
                          </div>
                        </div>
-                     </div>
-                   </div>
+    
+    
+                            <a href="/orderedProduct/<%= order._id %>" class="btn btn-secondary">View</a>
+                            
+        
+                        </td>      
+                    </tr>
+                    <% }) %> 
+        
+           
+        
+                </tbody>
+            </table>
 
-
-                        <a href="/orderedProduct/<%= order._id %>" class="btn btn-secondary">View</a>
-                        
-    
-                    </td>      
-                </tr>
-                <% }) %> 
-    
-       
-    
-            </tbody>
-        </table>
+        </div>
+        
         <% }else{ %> 
             <div class="d-flex align-items-center justify-content-center mt-100">
                 <h2 class="text-danger">You have no orders yet</h2>
